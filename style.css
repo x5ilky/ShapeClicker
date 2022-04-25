@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+@keyframes small {
+    from {
+        width: 12rem;
+        height: 12rem;
+    }
+    to {
+        width: 10rem;
+        height: 10rem;
+    }
+}
+
+body {
+    margin: 0;
+}
+
+#shape>img {
+    width: 10rem;
+    height: auto;
+    
+}
+
+.bounce {
+    animation: small 0.5s ease-out;
+}
+
+#upgradediv {
+    position: absolute;
+    display: block;
+    grid-template-columns: repeat(5, 1fr);
+    right: 0%;
+    bottom: 0%;
+    width: 20vw;
+    height: 97vh;
+    background: #5D4037;
+    border-left: 1rem solid black;
+}
+
+#botsdiv {
+    position: absolute;
+    top: 10%;
+    display: table;
+    height: 40vh;
+
+    overflow-y: scroll;
+}
+#upgradesdiv {
+    position: absolute;
+    display: table;
+    height: 35vh;
+    top: 60%;
+    overflow-y: scroll;
+}
+
+.bot {
+    width: calc(18vw - 1rem);
+    background: black;
+    height: 10vh;
+    display: flex;
+    position: relative;
+    align-items: center;
+    padding-left: 1rem;
+}
+
+#auto, #upgrades {
+    height: calc(97vh / 2 - 1rem);
+    margin: 0;
+    display: flex;
+    padding-left: 1rem;
+    padding-top: 1rem;
+
+}
+
+#auto > *, #upgrades > * {
+    margin: 0;
+    color: white;
+}
+
+#clickdiv {
+    background: rgb(0, 0, 0);
+    background: -moz-linear-gradient(166deg, rgba(0, 0, 0, 1) 0%, rgba(121, 79, 0, 1) 67%);
+    background: -webkit-linear-gradient(166deg, rgba(0, 0, 0, 1) 0%, rgba(121, 79, 0, 1) 67%);
+    background: linear-gradient(166deg, rgba(0, 0, 0, 1) 0%, rgba(121, 79, 0, 1) 67%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#794f00", GradientType=1);
+
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    width: 80vw;
+    height: 97vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.spsbot {
+    bottom: 0.8rem;
+    left: 3rem;
+    font-size: 0.5rem;
+    position: absolute;
+}
+.botprice {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-40%, -50%);
+    font-size: 0.5rem;
+}
+
+.botamount {
+    position: absolute;
+    right: 1rem;
+    font-size: 2rem;
+}
+
+#shapecount {
+    position: absolute;
+    top: 22%;
+    color: white;
+    
+}
+#sps {
+    position: absolute;
+    top: 27%;
+    font-size: 1rem;
+    transform: rotate(-15deg);
+    left: 50%;
+    color: white;
+}
+#topbar {
+    background: black;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    height: 3vh;
+    width: 100vw;
+    color: white;
+    font-size: 0.5rem;
+    font-family: consolas, monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+#version, #copyright {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+*:not(#topbar) {
+    font-family: 'Poppins', sans-serif;
+}
+
+.upgrade {
+    width: 3.8rem;
+    height: 3.8rem;
+    border: 0.2rem ridge rgb(94, 42, 0);
+    display: inline-grid;
+    image-rendering: pixelated;
+}
+.upgrade > img {
+    width: 3.8rem;
+    height: 3.8rem;
+}
+#hover {
+    position: absolute;
+    background-color: rgb(138, 0, 0);
+    color: white;
+    padding: 1rem;
+    margin: 0;
+    right: calc(20vw + 1rem);
+    width: 20vw;
+
+    display: none;
+
+    bottom: 0%;
+}
+h1 {
+    margin: 0;
+}
