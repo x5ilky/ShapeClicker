@@ -40,10 +40,11 @@ body {
 #botsdiv {
     position: absolute;
     top: 10%;
-    display: table;
+    transform: translate(-1%, 0);
     height: 40vh;
-
-    overflow-y: scroll;
+    width: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 #upgradesdiv {
     position: absolute;
@@ -69,7 +70,7 @@ body {
     display: flex;
     padding-left: 1rem;
     padding-top: 1rem;
-
+    
 }
 
 #auto > *, #upgrades > * {
