@@ -27,6 +27,20 @@ function load() {
     Game = JSON.parse(b64Decode(prompt('Enter save string:')))
 }
 
+var browserName = (function (agent) {        switch (true) {
+    case agent.indexOf("edge") > -1: return "MS Edge";
+    case agent.indexOf("edg/") > -1: return "Edge ( chromium based)";
+    case agent.indexOf("opr") > -1 && !!window.opr: return "Opera";
+    case agent.indexOf("chrome") > -1 && !!window.chrome: return "Chrome";
+    case agent.indexOf("trident") > -1: return "MS IE";
+    case agent.indexOf("firefox") > -1: return "Mozilla Firefox";
+    case agent.indexOf("safari") > -1: return "Safari";
+    default: return "other";
+}
+})(window.navigator.userAgent.toLowerCase());
+
+
+
 function toShortScale(number) {
     const rounded = Math.floor(number)
     const length = rounded.toString().length
@@ -61,10 +75,14 @@ Assets.init = () => {
     Assets.bots.prices.cursor = 15;
     Assets.bots.prices.ruler = 100;
     Assets.bots.prices.builder = 1500;
+    Assets.bots.prices.factory = 30000;
+    Assets.bots.prices.distrubution = 150000;
 
     Assets.bots.sps.cursor = 0.1;
     Assets.bots.sps.ruler = 1;
     Assets.bots.sps.builder = 15;
+    Assets.bots.sps.factory = 45;
+    Assets.bots.sps.distrubution = 150;
 
     Assets.bots.cursor = (cursorFunc) => {
         var thing =  Assets.bots.createBotObj('Cursor', '', Assets.bots.prices.cursor, Assets.bots.sps.cursor)
@@ -79,6 +97,16 @@ Assets.init = () => {
     Assets.bots.builder = (builderFunc) => {
         var thing =  Assets.bots.createBotObj('Builder', '', Assets.bots.prices.builder, Assets.bots.sps.builder)
         thing.addEventListener('click', builderFunc);
+        return thing
+    }
+    Assets.bots.factory = (factoryFunc) => {
+        var thing =  Assets.bots.createBotObj('Factory', '', Assets.bots.prices.factory, Assets.bots.sps.factory)
+        thing.addEventListener('click', factoryFunc);
+        return thing
+    }
+    Assets.bots.distrubution = (disFunc) => {
+        var thing =  Assets.bots.createBotObj('Distrubution', '', Assets.bots.prices.distrubution, Assets.bots.sps.distrubution)
+        thing.addEventListener('click', disFunc);
         return thing
     }
 
@@ -109,6 +137,7 @@ const VERSION = 'v0.0.0'
 
 Game.launch = () => {
     console.log("Launching Game...")
+
     Game.increaseRate = 1.15;
     Game.lastLoop = new Date();
 
@@ -162,39 +191,51 @@ Game.launch = () => {
         }
     }
 
-
-    // Prices
-    Game.bots.prices.cursor = 15;
-    Game.bots.prices.ruler = 100;
-    Game.bots.prices.builder = 1500;
-
     Game.spsa = {}
 
     Game.bots.cursor = () => {
-        if (Game.shapes >= Game.bots.getPrice(Game.bots.prices.cursor, Game.cursors)) {
-            Game.shapes -= Game.bots.getPrice(Game.bots.prices.cursor, Game.cursors);
+        if (Game.shapes >= Game.bots.getPrice(Assets.bots.prices.cursor, Game.cursors)) {
+            Game.shapes -= Game.bots.getPrice(Assets.bots.prices.cursor, Game.cursors);
             Game.cursors++;
 
             Game.cursorObj.amountCount.textContent = Game.cursors.toString();
-            Game.cursorObj.priceCount.textContent = `${toShortScale(Game.bots.getPrice(Game.bots.prices.cursor, Game.cursors))} Shapes`
+            Game.cursorObj.priceCount.textContent = `${toShortScale(Game.bots.getPrice(Assets.bots.prices.cursor, Game.cursors))} Shapes`
         }
     }
     Game.bots.ruler = () => {
-        if (Game.shapes >= Game.bots.getPrice(Game.bots.prices.ruler, Game.rulers)) {
-            Game.shapes -= Game.bots.getPrice(Game.bots.prices.ruler, Game.rulers);
+        if (Game.shapes >= Game.bots.getPrice(Assets.bots.prices.ruler, Game.rulers)) {
+            Game.shapes -= Game.bots.getPrice(Assets.bots.prices.ruler, Game.rulers);
             Game.rulers++;
 
             Game.rulerObj.amountCount.textContent = Game.rulers.toString();
-            Game.rulerObj.priceCount.textContent = `${toShortScale(Game.bots.getPrice(Game.bots.prices.ruler, Game.rulers))} Shapes`
+            Game.rulerObj.priceCount.textContent = `${toShortScale(Game.bots.getPrice(Assets.bots.prices.ruler, Game.rulers))} Shapes`
         }
     }
     Game.bots.builder = () => {
-        if (Game.shapes >= Game.bots.getPrice(Game.bots.prices.builder, Game.builders)) {
-            Game.shapes -= Game.bots.getPrice(Game.bots.prices.builder, Game.builders);
+        if (Game.shapes >= Game.bots.getPrice(Assets.bots.prices.builder, Game.builders)) {
+            Game.shapes -= Game.bots.getPrice(Assets.bots.prices.builder, Game.builders);
             Game.builders++;
 
             Game.builderObj.amountCount.textContent = Game.builders.toString();
-            Game.builderObj.priceCount.textContent = `${toShortScale(Game.bots.getPrice(Game.bots.prices.builder, Game.builders))} Shapes`
+            Game.builderObj.priceCount.textContent = `${toShortScale(Game.bots.getPrice(Assets.bots.prices.builder, Game.builders))} Shapes`
+        }
+    }
+    Game.bots.factory = () => {
+        if (Game.shapes >= Game.bots.getPrice(Assets.bots.prices.factory, Game.factorys)) {
+            Game.shapes -= Game.bots.getPrice(Assets.bots.prices.factory, Game.factorys);
+            Game.factorys++;
+
+            Game.factoryObj.amountCount.textContent = Game.factorys.toString();
+            Game.factoryObj.priceCount.textContent = `${toShortScale(Game.bots.getPrice(Assets.bots.prices.factory, Game.factorys))} Shapes`
+        }
+    }
+    Game.bots.distrubution = () => {
+        if (Game.shapes >= Game.bots.getPrice(Assets.bots.prices.distrubution, Game.distrubutions)) {
+            Game.shapes -= Game.bots.getPrice(Assets.bots.prices.distrubution, Game.distrubutions);
+            Game.distrubutions++;
+
+            Game.distrubutionObj.amountCount.textContent = Game.distrubutions.toString();
+            Game.distrubutionObj.priceCount.textContent = `${toShortScale(Game.bots.getPrice(Assets.bots.prices.distrubution, Game.distrubutions))} Shapes`
         }
     }
 
@@ -202,6 +243,8 @@ Game.launch = () => {
         Game.cursorObj = document.getElementById('botsdiv').appendChild(Assets.bots.cursor(Game.bots.cursor));
         Game.rulerObj = document.getElementById('botsdiv').appendChild(Assets.bots.ruler(Game.bots.ruler));
         Game.builderObj = document.getElementById('botsdiv').appendChild(Assets.bots.builder(Game.bots.builder));
+        Game.factoryObj = document.getElementById('botsdiv').appendChild(Assets.bots.factory(Game.bots.factory));
+        Game.distrubutionObj = document.getElementById('botsdiv').appendChild(Assets.bots.distrubution(Game.bots.distrubution));
     }
     Game.shapeClicked = () => {
         Game.shapes += Game.shapesPerClick
@@ -214,9 +257,11 @@ Game.launch = () => {
         Game.fps = 1000 / (Game.thisLoop - Game.lastLoop);
         Game.lastLoop = Game.thisLoop;
 
-        Game.spsa.cursor = 0.1;
-        Game.spsa.ruler = 1;
-        Game.spsa.builder = 15;
+        Game.spsa.cursor = Assets.bots.sps.cursor;
+        Game.spsa.ruler = Assets.bots.sps.ruler;
+        Game.spsa.builder = Assets.bots.sps.builder;
+        Game.spsa.factory = Assets.bots.sps.factory;
+        Game.spsa.distrubution = Assets.bots.sps.distrubution;
         
         Game.shapesPerClick = 1
 
@@ -224,7 +269,7 @@ Game.launch = () => {
         Game.boughtUpgrades.forEach(upgrade => {
             upgrade.effects()
         })
-        Game.sps = Game.cursors * Game.spsa.cursor + Game.rulers * Game.spsa.ruler + Game.builders * Game.spsa.builder;
+        Game.sps = Game.cursors * Game.spsa.cursor + Game.rulers * Game.spsa.ruler + Game.builders * Game.spsa.builder + Game.factorys * Game.spsa.factory + Game.distrubutions * Game.spsa.distrubution;
         
 
         Game.shapeCount.textContent = `${toShortScale(Game.shapes)} Shapes`
@@ -285,11 +330,15 @@ Game.launch = () => {
     Game.totalUpgrades.push(new Game.Upgrade('Bisect MK2', `Bisects your shape to give double shapes per click again!`, 500, 'img/upgrades/bisectmk2.png', () => {Game.shapesPerClick *= 2}, "Game.clicks >= 200"));
     Game.totalUpgrades.push(new Game.Upgrade('Double Click', `Makes your cursors click twice!`, 200, 'img/upgrades/doubleclick.png', () => {Game.spsa.cursor *= 2}, "Game.cursors >= 5"))
     Game.totalUpgrades.push(new Game.Upgrade('Protractor', `Makes shapes constructed by the ruler more accurate (doubles ruler sps)`, 1000, 'img/upgrades/protractor.png', () => {Game.spsa.ruler *= 2}, "Game.rulers > 0"))
-    Game.totalUpgrades.push(new Game.Upgrade('Better Tools', `Double efficiency for builders with upgraded tools`, 10000, `img/upgrades/betterttools.png`, (Game.spsa.builder *= 2), "Game.builders > 0"))
+    Game.totalUpgrades.push(new Game.Upgrade('Better Tools', `Double efficiency for builders with upgraded tools`, 10000, `img/upgrades/bettertools.png`, () => {Game.spsa.builder *= 2}, "Game.builders > 0"))
 
     setInterval(Game.tick, 10)
     setInterval(Game.slowTick, 500)
     setInterval(Game.tickSecond, 1000)
+
+    document.ontouchmove = function(event){
+        event.preventDefault();
+    }
 
     console.log("Game Launched!")
 }
@@ -309,15 +358,27 @@ Game.init = () => {
     Game.cursors = 0;
     Game.rulers = 0;
     Game.builders = 0;
+    Game.factorys = 0;
+    Game.distrubutions = 0;
+
+
     Game.clicks = 0;
+
     
     Game.cursorObj = Assets.bots.cursor;
     Game.rulerObj = Assets.bots.ruler;
+    Game.builderObj = Assets.bots.builder;
+    Game.factoryObj = Assets.bots.factory;
+    Game.distrubutionObj = Assets.bots.distrubution;
 
     Game.shape = 'Square'
 
     Game.launch()
     console.log("Game Intitalised!")
+}
+
+if (browserName === "MS IE") {
+    
 }
 
 Game.init()
