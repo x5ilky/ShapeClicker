@@ -1,9 +1,9 @@
 function b64Encode(str) {
-    return btoa(encodeURIComponent(str));
+    return window.btoa(unescape(encodeURIComponent(str)));
 };
 
 function b64Decode(str) {
-    return decodeURIComponent(atob(str));
+    return decodeURIComponent(escape(window.atob(str)));
 };
 
 var instances = 0;
@@ -24,6 +24,8 @@ function save() {
     prompt("Savecode: ", b64Encode(JSON.stringify(Game)))
 }
 function load() {
+    console.log(JSON.parse(b64Decode(prompt('Enter save string:'))))
+    console.log(Game)
     Game = JSON.parse(b64Decode(prompt('Enter save string:')))
 }
 
@@ -240,11 +242,11 @@ Game.launch = () => {
     }
 
     Game.initBots = () => {
-        Game.cursorObj = document.getElementById('botsdiv').appendChild(Assets.bots.cursor(Game.bots.cursor));
-        Game.rulerObj = document.getElementById('botsdiv').appendChild(Assets.bots.ruler(Game.bots.ruler));
-        Game.builderObj = document.getElementById('botsdiv').appendChild(Assets.bots.builder(Game.bots.builder));
-        Game.factoryObj = document.getElementById('botsdiv').appendChild(Assets.bots.factory(Game.bots.factory));
-        Game.distrubutionObj = document.getElementById('botsdiv').appendChild(Assets.bots.distrubution(Game.bots.distrubution));
+        Game.cursorObj = document.querySelector('#botsdiv').appendChild(Assets.bots.cursor(Game.bots.cursor));
+        Game.rulerObj = document.querySelector('#botsdiv').appendChild(Assets.bots.ruler(Game.bots.ruler));
+        Game.builderObj = document.querySelector('#botsdiv').appendChild(Assets.bots.builder(Game.bots.builder));
+        Game.factoryObj = document.querySelector('#botsdiv').appendChild(Assets.bots.factory(Game.bots.factory));
+        Game.distrubutionObj = document.querySelector('#botsdiv').appendChild(Assets.bots.distrubution(Game.bots.distrubution));
     }
     Game.shapeClicked = () => {
         Game.shapes += Game.shapesPerClick
@@ -296,7 +298,7 @@ Game.launch = () => {
                 
             }
         })
-        document.getElementById('upgradesdiv').innerHTML = ''
+        $('#upgradesdiv').html('')
         Game.curUpgrades.forEach(upgrade => {
             document.getElementById('upgradesdiv').appendChild(upgrade.obj)
         })
@@ -377,8 +379,9 @@ Game.init = () => {
     console.log("Game Intitalised!")
 }
 
-if (browserName === "MS IE") {
-    
+if (browserName !== "MS IE") {
+    $('#iediv').toggle()
+
 }
 
 Game.init()
