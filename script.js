@@ -70,6 +70,11 @@ Assets.init = () => {
 }
 
 Game.load = () => {
+
+    Game.showChangelog = () => {
+        document.querySelector('#changelogdiv').style.display = 'block'
+    }
+
     f('#clickdiv').appendChild(Assets.clickShape())
     f('#clickdiv').appendChild(Assets.shapeCount())
     f('#clickdiv').appendChild(Assets.spsCount())

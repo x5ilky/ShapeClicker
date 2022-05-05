@@ -13,8 +13,9 @@
     <script src="script.js" defer></script>
     
     <div id="topbar">
-        <span id="version">Shape Clicker v0.0.0</span>
+        <span id="version">Shape Clicker v0.1.0</span>
         <span id="copyright">Copyright Silkyway 2022-2022</span>
+        <span id="changelog" onclick="Game.showChangelog()">Changelog</span>
     </div>
     <div id="clickdiv">
         
@@ -47,6 +48,20 @@
 
     </div>
     <div id="iediv">We don't support Internet Explorer<br>Please Use Firefox or Chrome or anything that supports Javascript ES6</div>
-
+    <div id="changelogdiv">
+        <h1>Changelogs</h1>
+        <div id="changelogclose" onclick="document.querySelector('#changelogdiv').style.display='none';">Close</div>
+        <h2>v0.1.0</h2>
+        <p>
+            Added the changelog!<br>
+            Code is now no longer a giant mess.<br>
+            Complete code refactor.<br>
+        </p>
+        <h2>v0.0.0</h2>
+        <p>
+            Added cursors, rulers, builders, and factories to the game.<br>
+            Also upgrades. Code is looking horrendous.<br>
+        </p>
+    </div>
 </body>
 </html>
