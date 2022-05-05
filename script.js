@@ -22,15 +22,7 @@ function escapeRegExp(string) {
   function replaceAll(str, find, replace) {
     return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
   }
-function save() {
-    prompt("Savecode: ", b64Encode(JSON.stringify(Game)));
-}
 
-function load() {
-    console.log(JSON.parse(b64Decode(prompt('Enter save string:'))));
-    console.log(Game);
-    Game = JSON.parse(b64Decode(prompt('Enter save string:')));
-}
 var browserName = (function (agent) {
     switch (true) {
         case agent.indexOf("edge") > -1: return "MS Edge";
@@ -71,6 +63,8 @@ Assets.init = () => {
 
 Game.load = () => {
 
+    Game.shapeRotation = 0;
+
     Game.showChangelog = () => {
         document.querySelector('#changelogdiv').style.display = 'block'
     }
@@ -87,7 +81,7 @@ Game.load = () => {
             this.baseprice = baseprice
             this.sps = sps
             this.amount = amount
-            this.obj = () => c({ tag: 'div', id: `bot-${name}`, textContent: name, classList: 'bot', children: [c({ tag: 'span', classList: 'botprice', textContent: `${toShortScale(getPrice(baseprice, amount()))} Shapes` }), c({ tag: 'span', classList: 'botamount', textContent: amount() }), c({ tag: 'span', classList: 'spsbot', textContent: `${sps} shapes/s` })] })
+            this.obj = () => c({ tag: 'div', id: `bot-${replaceAll(name, ' ', '')}`, textContent: name, classList: 'bot', children: [c({ tag: 'span', classList: 'botprice', textContent: `${toShortScale(getPrice(baseprice, amount()))} Shapes` }), c({ tag: 'span', classList: 'botamount', textContent: amount() }), c({ tag: 'span', classList: 'spsbot', textContent: `${sps} shapes/s` })] })
             this.buyFunc = buyFunc;
         }
     }
@@ -117,10 +111,10 @@ Game.load = () => {
 
     Game.bots = [
         new Game.bot('Cursor', 15, 0.1, () => Game.cursors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[0].baseprice, Game.cursors)) { Game.shapes -= getPrice(Game.bots[0].baseprice, Game.cursors); Game.cursors++; } }),
-        new Game.bot('Ruler', 100, 1, () => Game.rulers.toString(), () => { if (Game.shapes >= getPrice(Game.bots[0].baseprice, Game.rulers)) { Game.shapes -= getPrice(Game.bots[1].baseprice, Game.rulers); Game.rulers++; } }),
-        new Game.bot('Builder', 1500, 15, () => Game.builders.toString(), () => { if (Game.shapes >= getPrice(Game.bots[0].baseprice, Game.builders)) { Game.shapes -= getPrice(Game.bots[2].baseprice, Game.builders); Game.builders++; } }),
-        new Game.bot('Factory', 30000, 45, () => Game.factorys.toString(), () => { if (Game.shapes >= getPrice(Game.bots[0].baseprice, Game.factorys)) { Game.shapes -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.factorys++; } }),
-        new Game.bot('Distrubution', 150000, 150, () => Game.distrubutions.toString(), () => { if (Game.shapes >= getPrice(Game.bots[0].baseprice, Game.distrubutions)) { Game.shapes -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.distrubutions++; } })
+        new Game.bot('Ruler', 100, 1, () => Game.rulers.toString(), () => { if (Game.shapes >= getPrice(Game.bots[1].baseprice, Game.rulers)) { Game.shapes -= getPrice(Game.bots[1].baseprice, Game.rulers); Game.rulers++; } }),
+        new Game.bot('Builder', 1500, 15, () => Game.builders.toString(), () => { if (Game.shapes >= getPrice(Game.bots[2].baseprice, Game.builders)) { Game.shapes -= getPrice(Game.bots[2].baseprice, Game.builders); Game.builders++; } }),
+        new Game.bot('Factory', 30000, 45, () => Game.factorys.toString(), () => { if (Game.shapes >= getPrice(Game.bots[3].baseprice, Game.factorys)) { Game.shapes -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.factorys++; } }),
+        new Game.bot('Distrubution', 150000, 150, () => Game.distrubutions.toString(), () => { if (Game.shapes >= getPrice(Game.bots[4].baseprice, Game.distrubutions)) { Game.shapes -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.distrubutions++; } })
 
     ]
 
@@ -128,8 +122,12 @@ Game.load = () => {
         new Game.upgrade('Bisect', () => Game.clicks > 5, 100, 'Double the amount of shapes you get per click.', 'img/upgrades/bisect.png', () => { Game.boosts.clickMult *= 2 }),
         new Game.upgrade('Bisect Mk2', () => Game.clicks > 200, 500, 'Double the amount of shapes you get per click.\nTechnology upgraded from the previous version.', 'img/upgrades/bisectmk2.png', () => { Game.boosts.clickMult *= 2}),
         new Game.upgrade('Protractor', () => Game.rulers > 0, 500, 'Make shapes more accurate. Doubles the amount of shapes a ruler produces.', 'img/upgrades/protractor.png', () => {Game.boosts.rulerMult *= 2}),
-        new Game.upgrade('Double Click', () => Game.cursors > 0, 250, 'Makes cursors click twice.', 'img/upgrades/doubleclick.png', () => {Game.cursorMult *= 2}),
-        new Game.upgrade('Better Tools', () => Game.builders > 0, 5000, 'Give builders better tools. Doubles builders\' sps.', 'img/upgrades/bettertools.png', () => {Game.builderMult *= 2})
+        new Game.upgrade('Longer Rulers', () => Game.rulers > 5, 3000, 'Makes rulers longer. Doubles ruler sps.', 'img/upgrades/longerrulers.png', () => {Game.boosts.rulerMult *= 2}),
+        new Game.upgrade('Double Click', () => Game.cursors > 0, 250, 'Makes cursors click twice.', 'img/upgrades/doubleclick.png', () => {Game.boosts.cursorMult *= 2}),
+        new Game.upgrade('Better Tools', () => Game.builders > 0, 5000, 'Give builders better tools. Doubles builders\' sps.', 'img/upgrades/bettertools.png', () => {Game.boosts.builderMult *= 2}),
+        new Game.upgrade('Stronger Machines', () => Game.factorys > 0, 100000, 'Makes machines in factories have more strength. Doubles factories\' sps.', 'img/upgrades/strongermachines.png', () => {Game.boosts.factoryMult *= 2}),
+        new Game.upgrade('Helping Hands', () => Game.distrubutions > 0, 500000, 'Adds helping hands to your distrubutions, doubles distrubution sps.', 'img/upgrades/helpinghands.png', () => {Game.boosts.distrubutionMult *= 2}),
+
     ]
     Game.boughtUpgrades = []
     Game.availUpgrades = []
@@ -143,6 +141,9 @@ Game.load = () => {
         setTimeout(() => { f('#shape > img').classList.add('bounce') }, 1)
         Game.shapes += Game.spc;
         Game.clicks++;
+        Game.shapeRotation += 10;
+        if (Game.shapeRotation >= 360) { Game.shapeRotation = 0;}
+        document.querySelector('#shape').style.transform = `rotate(${Game.shapeRotation}deg)`
     }
 
 
@@ -150,10 +151,18 @@ Game.load = () => {
 
     Game.updateBots = () => {
         f('#botsdiv').setHtml('')
-        Game.bots.forEach(bot => {
+        Game.bots.forEach((bot, index) => {
             f('#botsdiv').appendChild(bot.obj())
-            f(`#bot-${bot.name}`).on('click', () => { bot.buyFunc(); Game.updateBots(); })
-
+            f(`#bot-${replaceAll(bot.name, ' ', '')}`).on('click', () => { bot.buyFunc(); Game.updateBots(); })
+            document.querySelector(`#bot-${replaceAll(bot.name, ' ', '')}`).addEventListener('mouseenter', () => {
+                f('#hover > #hoverheader').setText(bot.name);
+                f('#hover > #hoverpara').setText(`Generates ${toShortScale(eval(`(Game.bots[${index}].sps + Game.boosts.${bot.name.toLowerCase()}Up) * Game.boosts.${bot.name.toLowerCase()}Mult`))} shapes per second.\nYour ${eval(`Game.${bot.name.toLowerCase()}s`)} ${bot.name.toLowerCase()}s produce a total of ${toShortScale(eval(`(Game.bots[${index}].sps + Game.boosts.${bot.name.toLowerCase()}Up) * ${eval(`Game.${bot.name.toLowerCase()}s`)} * Game.boosts.${bot.name.toLowerCase()}Mult`))} shapes per second.`);
+                f('#hover > #hoverprice').setText(`${toShortScale(getPrice(bot.baseprice, bot.amount()))} Shapes`)
+                document.querySelector('#hover').style.display = 'block';
+            })
+            document.querySelector(`#bot-${replaceAll(bot.name, ' ', '')}`).addEventListener('mouseleave', () => {
+                document.querySelector('#hover').style.display = 'none';
+            })
         })
     }
 
