@@ -190,6 +190,23 @@ Game.load = () => {
 
         }
     }
+    Game.achievement = class {
+        constructor(name, requirement, requirementstring, rarity) {
+            this.name = name;
+            this.requirement = requirement;
+            this.rarity = rarity;
+            this.requirementstring = requirementstring;
+            this.obj = () => c({
+                tag: 'span', classList: 'acmt',
+                children: [
+                    c({tag: 'span', classList: `acmt-${rarity} acmt-name`, textContent: requirement() ? name : '???'}),
+                    c({tag: 'span', classList: ``, textContent: ' - '}),
+                    c({tag: 'span', classList: `acmt-require`, textContent: requirement() ? requirementstring : '???'}),
+                    c({tag: 'span', innerHTML: '<br>'})
+                ]
+            })
+        }
+    }
 
     Game.bots = [
         new Game.bot('Cursor', 15, 0.1, () => Game.cursors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[0].baseprice, Game.cursors)) { Game.shapes -= getPrice(Game.bots[0].baseprice, Game.cursors); Game.cursors++; } }),
@@ -214,6 +231,29 @@ Game.load = () => {
     ]
     Game.boughtUpgrades = []
     Game.availUpgrades = []
+
+    Game.achievements = [
+        //Clicks
+
+        new Game.achievement('Clicker Game', () => Game.clicks > 15, 'Click 15 times', 'common'),
+        new Game.achievement('Lots of clicks', () => Game.clicks > 100, 'Click 100 times', 'common'),
+        new Game.achievement('A lot of clicks', () => Game.clicks > 1000, 'Click 1000 times', 'uncommon'),
+        new Game.achievement('Carpal Tunnel', () => Game.clicks > 10000, 'Click 10000 times', 'uncommon'),
+        new Game.achievement('Autoclicker?', () =>  Game.clicks > 50000, 'Click 50000 times', 'rare'),
+
+        //Bots
+        new Game.achievement('Auto Clicker', () => Game.cursors > 0, 'Get a cursor', 'common'),
+        new Game.achievement('10 CPS', () => Game.cursors >= 10, 'Get 10 cursors', 'uncommon'),
+        new Game.achievement('One Ruler', () => Game.rulers > 0, 'Get a ruler', 'common'),
+        new Game.achievement('Ruler Spinner', () => Game.rulers >= 10, 'Get 10 rulers', 'uncommon'),
+        new Game.achievement('Paid Labor', () => Game.builders > 0, 'Get a builder', 'common'),
+        new Game.achievement('Workforce', () => Game.builders >= 10, 'Get 10 builders', 'uncommon'),
+        new Game.achievement('Manufacture', () => Game.factorys > 0, 'Get a factory', 'common'),
+        new Game.achievement('Manufacture Giant', () => Game.factorys >= 10, 'Get 10 factories', 'uncommon'),
+        new Game.achievement('Distrubute', () => Game.distrubutions > 0, 'Get a distribution', 'common'),
+        new Game.achievement('Lots of hands', () => Game.distrubutions >= 10, 'Get 10 distrubutions', 'uncommon'),
+
+    ]
 
     Game.boosts = {}
     Game.cpsTexts = []
@@ -274,6 +314,11 @@ Game.load = () => {
                 Game.cpsTexts = Game.cpsTexts.filter(txt => txt !== text)
             }
         })
+
+        f('#achievementsdiv').setHtml('')
+        Game.achievements.forEach(achievement => {
+            f('#achievementsdiv').appendChild(achievement.obj())
+        })  
 
         Game.boosts.clickUp = 0;
         Game.boosts.clickMult = 1;
@@ -389,7 +434,9 @@ Game.load = () => {
     Game.prevUps = []
     Game.updateBots()
 
-
+    f('#achievementsslide').on('click', () => {
+        f('#achievements').classList.toggle('achievements-out')
+    })
 
     Game.name = Game.name ?? `${get_random(randomfirst)} ${get_random(randomlast)}`
     f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
@@ -419,6 +466,8 @@ Game.load = () => {
     })
     f('#importsave').on('click', loadPrompt);
     f('#exportsave').on('click', savePrompt);
+
+    
 }
 
 if (browserName !== "MS IE") {
@@ -462,7 +511,7 @@ function loadPrompt() {
     Game.distrubutions = thing.distrubutions 
     Game.name = thing.name 
     Game.boughtUpgrades = thing.boughtUpgrades
-    f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
+    try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
 }
 
 function load() {
@@ -476,7 +525,7 @@ function load() {
     Game.distrubutions = thing.distrubutions 
     Game.name = thing.name
     Game.boughtUpgrades = thing.boughtUpgrades
-    f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
+    try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
 
 }
 function reset() {
@@ -501,3 +550,11 @@ if (localStorage.getItem('savecode') === null) {
     load()
     Game.load()
 }
+
+function FinishedLoading() {
+    f('#loadingdiv').classList.add('loadingfin')
+    
+    
+}
+
+setTimeout(FinishedLoading, 0)

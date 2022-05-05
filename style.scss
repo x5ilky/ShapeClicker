@@ -37,6 +37,7 @@ body {
 	height: 97vh;
 	background: #5d4037;
 	border-left: 1rem solid black;
+	z-index: 1000;
 }
 
 #botsdiv {
@@ -106,6 +107,7 @@ body {
 	left: 0%;
 	width: 80vw;
 	height: 97vh;
+	overflow: hidden;
 
 	display: flex;
 	align-items: center;
@@ -123,6 +125,34 @@ div#iediv {
 	text-align: center;
 	position: absolute;
 	background: black;
+}
+
+div#loadingdiv {
+	z-index: 9900;
+	width: 100vw;
+	height: 100vh;
+	color: rgb(255, 255, 255);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	position: absolute;
+	font-size: 4rem;
+	background: black;
+}
+
+@keyframes fade-out {
+	from {
+		opacity: 1 !important;
+	} to {
+		opacity: 0 !important;
+	}
+}
+
+.loadingfin {
+	animation: fade-out 1s linear;
+	display: none !important;
+	opacity: 0;
 }
 
 .spsbot {
@@ -313,7 +343,141 @@ div#iediv {
 	display: none;
 
 	bottom: 0%;
+	z-index: 5000;
 }
 h1 {
 	margin: 0;
+}
+
+
+@keyframes achieve-slide-back {
+	from {
+		right: 20vw;
+	} to {
+		right: 0;
+	}
+}
+@keyframes achieve-slide-over {
+	from {
+		right: 0;
+	} to {
+		right: 20vw;
+	}
+}
+
+
+#achievements.achievements-out {
+	animation: achieve-slide-over 1s ease-in-out;
+	right: 20vw;
+}
+#achievements {
+	position: absolute;
+	display: block;
+	animation: achieve-slide-back 1s ease-in-out;
+	grid-template-columns: repeat(5, 1fr);
+	right: 0;
+	bottom: 0%;
+	width: calc(20vw - 1rem);
+	height: calc(97vh - 2rem);
+	background: #5d4037;
+	border-left: 1rem solid black;
+	z-index: 1000;
+	padding: 1rem;
+	
+}
+#achievementsh1 {
+	color: white;
+	position: absolute;
+	transform: translateY(-5vh);
+
+	
+}
+
+#achievementsdiv {
+	margin-top: 1rem;
+	height: 80vh;
+	overflow-y: scroll;
+}
+.acmt {
+	font-size: 1rem;
+}
+.acmt-name {
+	font-weight: 600;
+}
+
+.acmt-common {
+	color: white;
+}
+.acmt-uncommon {
+	color: rgb(47, 233, 0);
+}
+.acmt-rare {
+	color: rgb(0, 31, 231);
+}
+.acmt-epic {
+	color: rgb(109, 0, 113);
+}
+.acmt-legen {
+	color: rgb(229, 255, 0);
+}
+.acmt-mythic {
+	color: rgb(255, 158, 158);
+}
+
+.acmt-require {
+	color: orange;
+}
+
+#achievementsslide {
+	position: relative;
+	display: block;
+	animation: achieve-slide-back 1s ease-in-out;
+	left: -3vw;
+	top: calc(97vh/2 - 5vh);
+	width: 3vw;
+	height: 10vh;
+	border-radius: 10px;
+	background: rgb(70, 70, 70);
+}
+#slidename {
+	text-align: center;
+	transform: rotate(-90deg) translate(-23px, -10px);
+	position: absolute;
+}
+
+@keyframes alert-slide-out {
+	from {
+		bottom: 0;
+	}
+	to {
+		bottom: -10vh;
+	}
+}
+
+#alert {
+	position: absolute;
+	bottom: -10vh;
+	height: 10vh;
+	background: rgb(255, 255, 255);
+	width: 40vw;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px 10px 0 0;
+	font-size: 1.5rem;
+	animation: alert-slide-out 1s ease-out;
+}
+
+@keyframes alert-slide-in {
+	from {
+		bottom: -10vh;
+	}
+	to {
+		bottom: 0vh;
+	}
+}
+
+#alert.alert-on {
+	bottom: 0;
+	animation: alert-slide-in 1s ease-in;	
 }

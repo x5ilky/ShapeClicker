@@ -14,12 +14,15 @@
     <script src="script.js" defer></script>
     
     <div id="topbar">
-        <span id="version">Shape Clicker v0.3.0</span>
+        <span id="version">Shape Clicker v0.4.0</span>
         <span id="copyright">Copyright Silkyway 2022-2022</span>
         <span id="changelog" onclick="Game.showChangelog()">Changelog</span>
     </div>
     <div id="news"></div>
     <div id="clickdiv">
+        <div id="alert">
+            Game Saved!
+        </div>
         <canvas id="fx" width="2048" height="1050"></canvas>
         <button id="save">Save</button>
     <button id="load">Load</button>
@@ -35,6 +38,17 @@
             Bisects your shape to give double shapes per click!
         </p>
         <h3 id="hoverprice">100 Shapes</h3>
+    </div>
+    <div id="achievements">
+        <div id="achievementsslide">
+            <div id="slidename">Open</div>
+        </div>
+        <h1 id="achievementsh1">Achievements</h1>
+        <div id="achievementsdiv">
+            <span class="acmt"><span class="acmt-name acmt-common">Auto Clicker</span> - <span class="acmt-require">???</span></span>
+        </div>
+        
+        
     </div>
     <div id="upgradediv">
         
@@ -53,12 +67,23 @@
 
         </div>
 
+        
+        
+
     </div>
     
+    
+
     <div id="iediv">We don't support Internet Explorer<br>Please Use Firefox or Chrome or anything that supports Javascript ES6</div>
+    <div id="loadingdiv">Loading...</div>
     <div id="changelogdiv">
         <h1>Changelogs</h1>
         <div id="changelogclose" onclick="document.querySelector('#changelogdiv').style.display='none';">Close</div>
+        <h2>v0.4.0</h2>
+        <p>
+            Achievements!<br>
+            Other small fixes<br>
+        </p>
         <h2>v0.3.0</h2>
         <p>
             Saving and Loading saves.<br>
