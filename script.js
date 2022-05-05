@@ -353,7 +353,7 @@ Game.load = () => {
     Game.tentick = () => {
         Game.availUpgrades = []
         Game.totalUpgrades.forEach(upgrade => {
-            if (Game.boughtUpgrades.includes(upgrade) || upgrade.requirement() === false) {
+            if (Game.boughtUpgrades.map(a => a.name).includes(upgrade.name) || upgrade.requirement() === false) {
 
             } else {
                 Game.availUpgrades.push(upgrade)
@@ -494,7 +494,13 @@ function savePrompt() {
     prompt('Savecode: ', utf8_to_b64(data))
 }
 function save() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, boughtUpgrades: Game.boughtUpgrades, name: Game.name }).toString()
+    var thing = Game.boughtUpgrades
+    var newBoughtUpgrades = []
+    thing.forEach(l => {
+        newBoughtUpgrades.push({name: l.name, requirement: l.requirement.toString(), price: l.price, desc: l.desc, img: l.img, effects: l.effects.toString()})
+    })
+
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, boughtUpgrades: newBoughtUpgrades, name: Game.name }).toString()
 
     console.log('Autosave.')
     return utf8_to_b64(data)
@@ -524,7 +530,11 @@ function load() {
     Game.factorys = thing.factorys
     Game.distrubutions = thing.distrubutions 
     Game.name = thing.name
-    Game.boughtUpgrades = thing.boughtUpgrades
+    var thing2 = []
+    thing.boughtUpgrades.forEach(upgrade => {
+        thing2.push({name: upgrade.name, requirement: new Function(upgrade.requirement), price: upgrade.price, desc: upgrade.desc, img: upgrade.img, effects: new Function(upgrade.effects)})
+    })
+    Game.boughtUpgrades = thing2
     try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
 
 }
