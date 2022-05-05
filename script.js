@@ -462,6 +462,7 @@ function loadPrompt() {
     Game.distrubutions = thing.distrubutions 
     Game.name = thing.name 
     Game.boughtUpgrades = thing.boughtUpgrades
+    f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
 }
 
 function load() {
@@ -475,6 +476,7 @@ function load() {
     Game.distrubutions = thing.distrubutions 
     Game.name = thing.name
     Game.boughtUpgrades = thing.boughtUpgrades
+    f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
 
 }
 function reset() {
