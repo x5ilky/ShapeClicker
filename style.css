@@ -3,20 +3,28 @@
   from {
     width: 12rem;
     height: 12rem;
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
   }
   to {
     width: 10rem;
     height: 10rem;
+    -webkit-transform: rotate(10deg);
+            transform: rotate(10deg);
   }
 }
 @keyframes small {
   from {
     width: 12rem;
     height: 12rem;
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
   }
   to {
     width: 10rem;
     height: 10rem;
+    -webkit-transform: rotate(10deg);
+            transform: rotate(10deg);
   }
 }
 
@@ -32,6 +40,8 @@ body {
 .bounce {
   -webkit-animation: small 0.5s ease-out;
           animation: small 0.5s ease-out;
+  -webkit-transform: rotate(10deg);
+          transform: rotate(10deg);
 }
 
 #upgradediv {
