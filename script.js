@@ -61,12 +61,10 @@ window.convertCssUnit = function (cssValue, target) {
 };
 function b64Encode(str) {
     return window.btoa(unescape(encodeURIComponent(str)));
-}
-;
+};
 function b64Decode(str) {
     return decodeURIComponent(escape(window.atob(str)));
-}
-;
+};
 var instances = 0;
 
 var biglist = ['', 'Thousand', 'Million', 'Billion', 'Trillion', 'Quadrillion', 'Quintillion', 'Sextillion', 'Septillion', 'Octillion', 'Nonillion', 'Decillion'];
