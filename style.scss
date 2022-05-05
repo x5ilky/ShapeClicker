@@ -155,14 +155,14 @@ div#iediv {
 }
 #changelogdiv {
 	width: 100vw;
-	height: 80vh;
+	height: 90vh;
     display: none;
 	background: rgba(59, 59, 59, 0.648);
 	z-index: 9000;
 	position: absolute;
     overflow-y: scroll;
-    padding-top: 20vh;
-	h1, h2, h3, h4, h5, h6, p, span {
+    padding-top: 10vh;
+	h1, h2, h3, h4, h5, h6, p, span, ul, li {
 		color: white;
 		text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000,
 			1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;

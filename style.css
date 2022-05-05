@@ -181,16 +181,16 @@ div#iediv {
 
 #changelogdiv {
   width: 100vw;
-  height: 80vh;
+  height: 90vh;
   display: none;
   background: rgba(59, 59, 59, 0.648);
   z-index: 9000;
   position: absolute;
   overflow-y: scroll;
-  padding-top: 20vh;
+  padding-top: 10vh;
 }
 
-#changelogdiv h1, #changelogdiv h2, #changelogdiv h3, #changelogdiv h4, #changelogdiv h5, #changelogdiv h6, #changelogdiv p, #changelogdiv span {
+#changelogdiv h1, #changelogdiv h2, #changelogdiv h3, #changelogdiv h4, #changelogdiv h5, #changelogdiv h6, #changelogdiv p, #changelogdiv span, #changelogdiv ul, #changelogdiv li {
   color: white;
   text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
   text-align: center;
