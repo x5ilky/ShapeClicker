@@ -172,6 +172,52 @@ div#iediv {
 	align-items: center;
 	justify-content: center;
 }
+#nameSelector {
+	position: absolute;
+	color: white;
+	top: 15%;
+	font-size: 1.3rem;
+}
+#save {
+	position: absolute;
+	right: 6vw;
+	bottom: 1vh;
+	background: white;
+	border: 0.2rem ridge black;
+	border-radius: 16px;
+}
+#load {
+	position: absolute;
+	right: 2vw;
+	bottom: 1vh;
+	background: white;
+	border: 0.2rem ridge black;
+	border-radius: 16px;
+}
+#reset {
+	position: absolute;
+	right: 10vw;
+	bottom: 1vh;
+	background: white;
+	border: 0.2rem ridge black;
+	border-radius: 16px;
+}
+#importsave {
+	position: absolute;
+	left: 2vw;
+	bottom: 1vh;
+	background: white;
+	border: 0.2rem ridge black;
+	border-radius: 16px;
+}
+#exportsave {
+	position: absolute;
+	left: 7vw;
+	bottom: 1vh;
+	background: white;
+	border: 0.2rem ridge black;
+	border-radius: 16px;
+}
 #changelogdiv {
 	width: 100vw;
 	height: 90vh;

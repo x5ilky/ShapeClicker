@@ -10,17 +10,23 @@
 <body>
     <script src="jquery.js" defer></script>
     <script src="fc.js" defer></script>
+    <script src="base64.js" defer></script>
     <script src="script.js" defer></script>
     
     <div id="topbar">
-        <span id="version">Shape Clicker v0.2.0</span>
+        <span id="version">Shape Clicker v0.3.0</span>
         <span id="copyright">Copyright Silkyway 2022-2022</span>
         <span id="changelog" onclick="Game.showChangelog()">Changelog</span>
     </div>
     <div id="news"></div>
     <div id="clickdiv">
         <canvas id="fx" width="2048" height="1050"></canvas>
-    </div>  
+        <button id="save">Save</button>
+    <button id="load">Load</button>
+    <button id="reset">Reset</button>
+    <button id="exportsave">Export</button>
+    <button id="importsave">Import</button>
+</div>  
     <div id="hover">
         <h1 id="hoverheader">
             Bisect
@@ -48,17 +54,26 @@
         </div>
 
     </div>
+    
     <div id="iediv">We don't support Internet Explorer<br>Please Use Firefox or Chrome or anything that supports Javascript ES6</div>
     <div id="changelogdiv">
         <h1>Changelogs</h1>
         <div id="changelogclose" onclick="document.querySelector('#changelogdiv').style.display='none';">Close</div>
+        <h2>v0.3.0</h2>
+        <p>
+            Saving and Loading saves.<br>
+            Importing and exporting saves.<br>
+            Names and more news options.<br>
+            Fixed spc particle being too wide.<br>
+            Adding more content in next update.<br>
+        </p>
         <h2>v0.2.0</h2>
         <p>
             The new update comes and it comes with <del>a lot more</del> <ins>a bit more</ins> then last time!<br>
             News! Specialised news that appears based on what upgrades you have!<br>
             New upgrade - Moral support | Shape<br>
             Gives 1% of your sps every click!<br>
-            The game now tells you how much shapes you generate per click.
+            The game now tells you how much shapes you generate per click.<br>
         </p>
         <h2>v0.1.1</h2>
         <p>

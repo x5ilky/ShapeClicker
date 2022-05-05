@@ -59,6 +59,10 @@ window.convertCssUnit = function (cssValue, target) {
     return cssValue;
 
 };
+
+randomfirst = ['Magic', 'Fantastic', 'Fancy', 'Sassy', 'Snazzy', 'Pretty', 'Cute', 'Pirate', 'Ninja', 'Zombie', 'Robot', 'Radical', 'Urban', 'Cool', 'Hella', 'Sweet', 'Awful', 'Double', 'Triple', 'Turbo', 'Techno', 'Disco', 'Electro', 'Dancing', 'Wonder', 'Mutant', 'Space', 'Science', 'Medieval', 'Future', 'Captain', 'Bearded', 'Lovely', 'Tiny', 'Big', 'Fire', 'Water', 'Frozen', 'Metal', 'Plastic', 'Solid', 'Liquid', 'Moldy', 'Shiny', 'Happy', 'Happy Little', 'Slimy', 'Tasty', 'Delicious', 'Hungry', 'Greedy', 'Lethal', 'Professor', 'Doctor', 'Power', 'Chocolate', 'Crumbly', 'Choklit', 'Righteous', 'Glorious', 'Mnemonic', 'Psychic', 'Frenetic', 'Hectic', 'Crazy', 'Royal', 'El', 'Von']
+randomlast = ['Cookie', 'Biscuit', 'Muffin', 'Scone', 'Cupcake', 'Pancake', 'Chip', 'Sprocket', 'Gizmo', 'Puppet', 'Mitten', 'Sock', 'Teapot', 'Mystery', 'Baker', 'Cook', 'Grandma', 'Click', 'Clicker', 'Spaceship', 'Factory', 'Portal', 'Machine', 'Experiment', 'Monster', 'Panic', 'Burglar', 'Bandit', 'Booty', 'Potato', 'Pizza', 'Burger', 'Sausage', 'Meatball', 'Spaghetti', 'Macaroni', 'Kitten', 'Puppy', 'Giraffe', 'Zebra', 'Parrot', 'Dolphin', 'Duckling', 'Sloth', 'Turtle', 'Goblin', 'Pixie', 'Gnome', 'Computer', 'Pirate', 'Ninja', 'Zombie', 'Robot']
+
 function b64Encode(str) {
     return window.btoa(unescape(encodeURIComponent(str)));
 };
@@ -116,17 +120,27 @@ function toShortScale(number) {
 function getPrice(base, amount) {
     return Math.ceil((1.15 ** amount) * base)
 }
-function get_random (list) {
-    return list[Math.floor((Math.random()*list.length))];
-  }
-  
+function get_random(list) {
+    return list[Math.floor((Math.random() * list.length))];
+}
+
+
+
+
 var Game = {};
 var Assets = {};
 
+function HtmlEncode(s) {
+    var el = document.createElement("div");
+    el.innerText = el.textContent = s;
+    s = el.innerHTML;
+    return s;
+}
 Assets.init = () => {
     Assets.clickShape = () => c({ tag: 'div', id: 'shape', children: [c({ tag: 'img', src: 'img/square.png' })] })
     Assets.shapeCount = () => c({ tag: 'h1', id: 'shapecount' })
     Assets.spsCount = () => c({ tag: 'h2', id: 'sps' })
+    Assets.nameSelector = () => c({ tag: 'h2', id: 'nameSelector' })
 }
 
 Game.load = () => {
@@ -140,7 +154,7 @@ Game.load = () => {
     f('#clickdiv').appendChild(Assets.clickShape())
     f('#clickdiv').appendChild(Assets.shapeCount())
     f('#clickdiv').appendChild(Assets.spsCount())
-
+    f('#clickdiv').appendChild(Assets.nameSelector())
 
 
     Game.bot = class {
@@ -209,7 +223,8 @@ Game.load = () => {
 
         f('#shape > img').classList.remove('bounce')
         setTimeout(() => { f('#shape > img').classList.add('bounce') }, 1)
-        Game.shapes += Game.spc;
+        var thing2 = Math.random() > 0.95
+        Game.shapes += thing2 ? Game.spc * 3 : Game.spc;
         Game.clicks++;
         Game.shapeRotation += 10;
         if (Game.shapeRotation >= 360) { Game.shapeRotation = 0; }
@@ -218,11 +233,10 @@ Game.load = () => {
         // document.querySelector('#fx').setAttribute('width', '100%')
         // document.querySelector('#fx').setAttribute('height', '100%')
         var ctx = document.querySelector('#fx').getContext("2d")
-        ctx.font = 'bold 3rem Poppins'
+        ctx.font = `bold 3rem Poppins`
         ctx.lineWidth = 4;
-        console.log( getMousePos(document.querySelector('#fx'), e))
-        ctx.fillText(`+ ${Game.spc}`, getMousePos(document.querySelector('#fx'), e).x + (Math.random()-0.5) * 10, document.querySelector('#fx').height / 2)
-        Game.cpsTexts.push({ content: `+ ${Game.spc}`, x: getMousePos(document.querySelector('#fx'), e).x + (Math.random()-0.5) * 10, y: document.querySelector('#fx').height / 2, opacity: 1 })
+        ctx.fillText(`+ ${toShortScale(thing2 ? Game.spc * 3 : Game.spc)}`, getMousePos(document.querySelector('#fx'), e).x + (Math.random() - 0.5) * 10, document.querySelector('#fx').height / 2)
+        Game.cpsTexts.push({ content: `+ ${toShortScale(thing2 ? Game.spc * 3 : Game.spc)}`, x: getMousePos(document.querySelector('#fx'), e).x + (Math.random() - 0.5) * 10, y: document.querySelector('#fx').height / 2, opacity: 1 })
     }
 
 
@@ -246,13 +260,15 @@ Game.load = () => {
     }
 
     Game.tick = () => {
+
+
         var ctx = document.querySelector('#fx').getContext("2d")
         ctx.clearRect(0, 0, document.querySelector('#fx').width, document.querySelector('#fx').height)
         Game.cpsTexts.forEach(text => {
-            
+
             if (text.opacity > 0) {
                 ctx.fillStyle = `rgba(0, 0, 0, ${text.opacity -= 0.003})`;
-            
+
                 ctx.fillText(text.content, text.x, text.y -= 0.5)
             } else {
                 Game.cpsTexts = Game.cpsTexts.filter(txt => txt !== text)
@@ -325,37 +341,47 @@ Game.load = () => {
         Game.shapes += Game.sps;
     }
     Game.newstick = () => {
+        const hasUpgrade = (upgradename) => {
+            return Game.boughtUpgrades.includes(Game.totalUpgrades.filter(upgrade => upgrade.name === upgradename)[0])
+        }
         var randnews = () => {
             while (true) {
                 var thing = get_random(
-                [
-                {content: 'Shape sales increased by over 150% over the last week.', requirement: () => true}, 
-                {content: '"Shapes are the newest fad." reports reporter.', requirement: () => true},
-                {content: 'Advanced bots are being made for faster shape manufacturing.', requirement: () => true},
-                {content: 'Shape comptetitors cannot compete with one particular company.', requirement: () => true},
-                {content: 'Buying shapes is as easy as toasting bread, which is, very easy.', requirement: () => true},
-                {content: 'Advanced megaphone, nicknamed "Moral Support", is being used by companies to boost bot performance.', requirement: () => !(Game.boughtUpgrades.includes(Game.totalUpgrades.filter(upgrade => upgrade.name === 'Moral Support')[0]))},
-                {content: 'Genius company uses rulers to improve bot performance. They make ten times more shapes than comptetitors.', requirement: () => Game.rulers > 0},
-                {content: `New company starts using cursors to automate shape production. They are still behind as they only have ${Game.cursors} cursors.`, requirement: () => Game.cursors < 5},
-                {content: `New company starts using cursors to automate shape production. They are beating the comptetion with a staggering ${Game.cursors} cursors!`, requirement: () => Game.cursors >= 5},
-                {content: `Company starts cutting shapes in half with never before seen techonology called 'Bisecting'`, requirement: () => Game.boughtUpgrades.includes(Game.totalUpgrades.filter(upgrade => upgrade.name === 'Bisect')[0])},
-                {content: `The new techonology called 'Bisecting' got its second iteration as it now cut shapes into quarters.`, requirement: () => Game.boughtUpgrades.includes(Game.totalUpgrades.filter(upgrade => upgrade.name === 'Bisect Mk2')[0])},
-                
-            ])
-            if (thing.requirement() === true) {
-                return thing.content;
+                    [
+                        { content: 'Shape sales increased by over 150% over the last week.', requirement: () => true },
+                        { content: '"Shapes are the newest fad." reports reporter.', requirement: () => true },
+                        { content: 'Advanced bots are being made for faster shape manufacturing.', requirement: () => true },
+                        { content: 'Shape comptetitors cannot compete with one particular company.', requirement: () => true },
+                        { content: 'Buying shapes is as easy as toasting bread, which is, very easy.', requirement: () => true },
+                        { content: 'Advanced megaphone, nicknamed "Moral Support", is in development, companies are eager to try it.', requirement: () => !(hasUpgrade('Moral Support')) },
+                        { content: 'Genius company uses rulers to improve bot performance. They make ten times more shapes than comptetitors.', requirement: () => Game.rulers > 0 && Game.builders < 0 },
+                        { content: `New company starts using cursors to automate shape production. They are still behind as they only have ${Game.cursors} cursors.`, requirement: () => Game.cursors > 0 && Game.cursors < 5 && Game.rulers === 0 },
+                        { content: `New company starts using cursors to automate shape production. They are beating the comptetion with a staggering ${Game.cursors} cursors!`, requirement: () => Game.cursors >= 5 && Game.rulers === 0 },
+                        { content: `Company starts cutting shapes in half with never before seen techonology called 'Bisecting'`, requirement: () => hasUpgrade('Bisect') },
+                        { content: `The new techonology called 'Bisecting' got its second iteration as it now cut shapes into quarters.`, requirement: () => hasUpgrade('Bisect Mk2') },
+                        { content: `${Game.name}'s shape empire has invented builders that automatically generate shapes faster than any other bot.`, requirement: () => Game.builders > 0 && Game.factorys === 0 },
+                        { content: `${Game.name}'s shape empire now makes ${Game.sps} every second! They are at the frontier of shape making.`, requirement: () => Game.sps > 10 }
+
+                    ])
+                if (thing.requirement() === true) {
+                    return thing.content;
+                }
             }
-        }
         }
         f('#news').setHtml('News: ' + randnews())
     }
-
+    Game.minutetick = () => {
+        localStorage.setItem('savecode', save('code'))
+    }
     setInterval(Game.tick, 1)
     setInterval(Game.tentick, 10)
     setInterval(Game.slowtick, 500)
     setInterval(Game.second, 1000)
     Game.newstick()
     setInterval(Game.newstick, 10000)
+    setInterval(Game.minutetick, 60000)
+
+
 
 
     //Loading Sequence
@@ -363,7 +389,36 @@ Game.load = () => {
     Game.prevUps = []
     Game.updateBots()
 
-    console.log(get_random(['[=== Looking for bugs or hacking in shapes? ===]', '[=== One should know how to javascript before using it. ===]', '[=== I have never eaten a bagel, is it good? ===]', '[=== i am literally just making up things for this lmao ===]']))
+
+
+    Game.name = Game.name ?? `${get_random(randomfirst)} ${get_random(randomlast)}`
+    f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
+
+    f('#nameSelector').on('click', (e) => {
+        Game.name = prompt('What is your name?') // A little bit unprofessional, will fix later.
+        f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
+    })
+
+    console.log(get_random([
+        '[=== Looking for bugs or hacking in shapes? ===]',
+        '[=== One should know how to javascript before using it. ===]',
+        '[=== I have never eaten a bagel, is it good? ===]',
+        '[=== i am literally just making up things for this lmao ===]'],
+        '[=== Fun fact: like 3% of this code is from Ortiel ===]',
+        ''
+    ))
+
+    f('#save').on('click', () => {localStorage.setItem('savecode', save()); window.alert('Saved!') });
+    f('#load').on('click', () => {load(); window.alert('Loaded!') });
+    f('#reset').on('click', () => {
+        if (window.confirm('Are you sure you want to reset?')) {
+            if (window.confirm('Are you absolutely sure you want to reset?')) {
+                reset();
+            }
+        }
+    })
+    f('#importsave').on('click', loadPrompt);
+    f('#exportsave').on('click', savePrompt);
 }
 
 if (browserName !== "MS IE") {
@@ -383,5 +438,64 @@ Game.init = () => {
     Game.load();
 }
 
+
+
+function savePrompt() {
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, boughtUpgrades: Game.boughtUpgrades, name: Game.name }).toString()
+    prompt('Savecode: ', utf8_to_b64(data))
+}
+function save() {
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, boughtUpgrades: Game.boughtUpgrades, name: Game.name }).toString()
+
+    console.log('Autosave.')
+    return utf8_to_b64(data)
+
+}
+function loadPrompt() {
+    var thing = JSON.parse(b64_to_utf8(prompt('Loadcode: ')))
+    Game.shapes = thing.shapes
+    Game.clicks = thing.clicks
+    Game.cursors = thing.cursors
+    Game.rulers = thing.rulers
+    Game.builders = thing.builders
+    Game.factorys = thing.factorys
+    Game.distrubutions = thing.distrubutions 
+    Game.name = thing.name 
+    Game.boughtUpgrades = thing.boughtUpgrades
+}
+
+function load() {
+    var thing = JSON.parse(b64_to_utf8(localStorage.getItem('savecode')))
+    Game.shapes = thing.shapes
+    Game.clicks = thing.clicks
+    Game.cursors = thing.cursors
+    Game.rulers = thing.rulers
+    Game.builders = thing.builders
+    Game.factorys = thing.factorys
+    Game.distrubutions = thing.distrubutions 
+    Game.name = thing.name
+    Game.boughtUpgrades = thing.boughtUpgrades
+
+}
+function reset() {
+    localStorage.removeItem('savecode')
+    location.reload()
+}
+function utf8_to_b64(str) {
+    try { return Base64.encode(unescape(encodeURIComponent(str))); }
+    catch (err) { return ''; }
+}
+
+function b64_to_utf8(str) {
+    try { return decodeURIComponent(escape(Base64.decode(str))); }
+    catch (err) { return ''; }
+}
+
+
 Assets.init()
-Game.init()
+if (localStorage.getItem('savecode') === null) {
+    Game.init()
+} else {
+    load()
+    Game.load()
+}
