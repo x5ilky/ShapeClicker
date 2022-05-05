@@ -124,6 +124,7 @@ div#iediv {
     left: 60%;
     transform: translate(-40%, -50%);
     font-size: 0.5rem;
+    text-align: right;
 }
 
 .botamount {
