@@ -1,3 +1,64 @@
+/**
+ * Convert absolute CSS numerical values to pixels.
+ *
+ * @link https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units#numbers_lengths_and_percentages
+ *
+ * @param {string} cssValue
+ * @param {null|HTMLElement} target Used for relative units.
+ * @return {*}
+ */
+window.convertCssUnit = function (cssValue, target) {
+
+    target = target || document.body;
+
+    const supportedUnits = {
+
+        // Absolute sizes
+        'px': value => value,
+        'cm': value => value * 38,
+        'mm': value => value * 3.8,
+        'q': value => value * 0.95,
+        'in': value => value * 96,
+        'pc': value => value * 16,
+        'pt': value => value * 1.333333,
+
+        // Relative sizes
+        'rem': value => value * parseFloat(getComputedStyle(document.documentElement).fontSize),
+        'em': value => value * parseFloat(getComputedStyle(target).fontSize),
+        'vw': value => value / 100 * window.innerWidth,
+        'vh': value => value / 100 * window.innerHeight,
+
+        // Times
+        'ms': value => value,
+        's': value => value * 1000,
+
+        // Angles
+        'deg': value => value,
+        'rad': value => value * (180 / Math.PI),
+        'grad': value => value * (180 / 200),
+        'turn': value => value * 360
+
+    };
+
+    // Match positive and negative numbers including decimals with following unit
+    const pattern = new RegExp(`^([\-\+]?(?:\\d+(?:\\.\\d+)?))(${Object.keys(supportedUnits).join('|')})$`, 'i');
+
+    // If is a match, return example: [ "-2.75rem", "-2.75", "rem" ]
+    const matches = String.prototype.toString.apply(cssValue).trim().match(pattern);
+
+    if (matches) {
+        const value = Number(matches[1]);
+        const unit = matches[2].toLocaleLowerCase();
+
+        // Sanity check, make sure unit conversion function exists
+        if (unit in supportedUnits) {
+            return supportedUnits[unit](value);
+        }
+    }
+
+    return cssValue;
+
+};
 function b64Encode(str) {
     return window.btoa(unescape(encodeURIComponent(str)));
 }
@@ -17,12 +78,18 @@ var roundOffTo = function (num, factor) {
 };
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-  }
-  
-  function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
-  }
+}
 
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+        y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+    };
+}
 var browserName = (function (agent) {
     switch (true) {
         case agent.indexOf("edge") > -1: return "MS Edge";
@@ -51,7 +118,10 @@ function toShortScale(number) {
 function getPrice(base, amount) {
     return Math.ceil((1.15 ** amount) * base)
 }
-
+function get_random (list) {
+    return list[Math.floor((Math.random()*list.length))];
+  }
+  
 var Game = {};
 var Assets = {};
 
@@ -120,30 +190,41 @@ Game.load = () => {
 
     Game.totalUpgrades = [
         new Game.upgrade('Bisect', () => Game.clicks > 5, 100, 'Double the amount of shapes you get per click.', 'img/upgrades/bisect.png', () => { Game.boosts.clickMult *= 2 }),
-        new Game.upgrade('Bisect Mk2', () => Game.clicks > 200, 500, 'Double the amount of shapes you get per click.\nTechnology upgraded from the previous version.', 'img/upgrades/bisectmk2.png', () => { Game.boosts.clickMult *= 2}),
-        new Game.upgrade('Protractor', () => Game.rulers > 0, 500, 'Make shapes more accurate. Doubles the amount of shapes a ruler produces.', 'img/upgrades/protractor.png', () => {Game.boosts.rulerMult *= 2}),
-        new Game.upgrade('Longer Rulers', () => Game.rulers > 5, 3000, 'Makes rulers longer. Doubles ruler sps.', 'img/upgrades/longerrulers.png', () => {Game.boosts.rulerMult *= 2}),
-        new Game.upgrade('Double Click', () => Game.cursors > 0, 250, 'Makes cursors click twice.', 'img/upgrades/doubleclick.png', () => {Game.boosts.cursorMult *= 2}),
-        new Game.upgrade('Better Tools', () => Game.builders > 0, 5000, 'Give builders better tools. Doubles builders\' sps.', 'img/upgrades/bettertools.png', () => {Game.boosts.builderMult *= 2}),
-        new Game.upgrade('Stronger Machines', () => Game.factorys > 0, 100000, 'Makes machines in factories have more strength. Doubles factories\' sps.', 'img/upgrades/strongermachines.png', () => {Game.boosts.factoryMult *= 2}),
-        new Game.upgrade('Helping Hands', () => Game.distrubutions > 0, 500000, 'Adds helping hands to your distrubutions, doubles distrubution sps.', 'img/upgrades/helpinghands.png', () => {Game.boosts.distrubutionMult *= 2}),
+        new Game.upgrade('Bisect Mk2', () => Game.clicks > 200, 500, 'Double the amount of shapes you get per click.\nTechnology upgraded from the previous version.', 'img/upgrades/bisectmk2.png', () => { Game.boosts.clickMult *= 2 }),
+        new Game.upgrade('Moral Support', () => Game.cursors > 5 && Game.clicks > 500, 10000, 'Encourages your bots to work harder! Gain +1% of your sps per click.', 'img/upgrades/moralsupport.png', () => { Game.boosts.clickUp += Game.sps * 0.01 }),
+        new Game.upgrade('Protractor', () => Game.rulers > 0, 500, 'Make shapes more accurate. Doubles the amount of shapes a ruler produces.', 'img/upgrades/protractor.png', () => { Game.boosts.rulerMult *= 2 }),
+        new Game.upgrade('Longer Rulers', () => Game.rulers > 5, 3000, 'Makes rulers longer. Doubles ruler sps.', 'img/upgrades/longerrulers.png', () => { Game.boosts.rulerMult *= 2 }),
+        new Game.upgrade('Double Click', () => Game.cursors > 0, 250, 'Makes cursors click twice.', 'img/upgrades/doubleclick.png', () => { Game.boosts.cursorMult *= 2 }),
+        new Game.upgrade('Better Tools', () => Game.builders > 0, 5000, 'Give builders better tools. Doubles builders\' sps.', 'img/upgrades/bettertools.png', () => { Game.boosts.builderMult *= 2 }),
+        new Game.upgrade('Stronger Machines', () => Game.factorys > 0, 100000, 'Makes machines in factories have more strength. Doubles factories\' sps.', 'img/upgrades/strongermachines.png', () => { Game.boosts.factoryMult *= 2 }),
+        new Game.upgrade('Helping Hands', () => Game.distrubutions > 0, 500000, 'Adds helping hands to your distrubutions, doubles distrubution sps.', 'img/upgrades/helpinghands.png', () => { Game.boosts.distrubutionMult *= 2 }),
 
     ]
     Game.boughtUpgrades = []
     Game.availUpgrades = []
 
     Game.boosts = {}
+    Game.cpsTexts = []
 
 
-    Game.clickShape = () => {
+    Game.clickShape = (e) => {
 
         f('#shape > img').classList.remove('bounce')
         setTimeout(() => { f('#shape > img').classList.add('bounce') }, 1)
         Game.shapes += Game.spc;
         Game.clicks++;
         Game.shapeRotation += 10;
-        if (Game.shapeRotation >= 360) { Game.shapeRotation = 0;}
+        if (Game.shapeRotation >= 360) { Game.shapeRotation = 0; }
         document.querySelector('#shape').style.transform = `rotate(${Game.shapeRotation}deg)`
+
+        // document.querySelector('#fx').setAttribute('width', '100%')
+        // document.querySelector('#fx').setAttribute('height', '100%')
+        var ctx = document.querySelector('#fx').getContext("2d")
+        ctx.font = 'bold 3rem Poppins'
+        ctx.lineWidth = 4;
+        console.log( getMousePos(document.querySelector('#fx'), e))
+        ctx.fillText(`+ ${Game.spc}`, getMousePos(document.querySelector('#fx'), e).x + (Math.random()-0.5) * 10, document.querySelector('#fx').height / 2)
+        Game.cpsTexts.push({ content: `+ ${Game.spc}`, x: getMousePos(document.querySelector('#fx'), e).x + (Math.random()-0.5) * 10, y: document.querySelector('#fx').height / 2, opacity: 1 })
     }
 
 
@@ -167,6 +248,19 @@ Game.load = () => {
     }
 
     Game.tick = () => {
+        var ctx = document.querySelector('#fx').getContext("2d")
+        ctx.clearRect(0, 0, document.querySelector('#fx').width, document.querySelector('#fx').height)
+        Game.cpsTexts.forEach(text => {
+            
+            if (text.opacity > 0) {
+                ctx.fillStyle = `rgba(0, 0, 0, ${text.opacity -= 0.003})`;
+            
+                ctx.fillText(text.content, text.x, text.y -= 0.5)
+            } else {
+                Game.cpsTexts = Game.cpsTexts.filter(txt => txt !== text)
+            }
+        })
+
         Game.boosts.clickUp = 0;
         Game.boosts.clickMult = 1;
 
@@ -226,23 +320,52 @@ Game.load = () => {
     Game.slowtick = () => {
 
 
-        
+
 
     }
     Game.second = () => {
         Game.shapes += Game.sps;
+    }
+    Game.newstick = () => {
+        var randnews = () => {
+            while (true) {
+                var thing = get_random(
+                [
+                {content: 'Shape sales increased by over 150% over the last week.', requirement: () => true}, 
+                {content: '"Shapes are the newest fad." reports reporter.', requirement: () => true},
+                {content: 'Advanced bots are being made for faster shape manufacturing.', requirement: () => true},
+                {content: 'Shape comptetitors cannot compete with one particular company.', requirement: () => true},
+                {content: 'Buying shapes is as easy as toasting bread, which is, very easy.', requirement: () => true},
+                {content: 'Advanced megaphone, nicknamed "Moral Support", is being used by companies to boost bot performance.', requirement: () => !(Game.boughtUpgrades.includes(Game.totalUpgrades.filter(upgrade => upgrade.name === 'Moral Support')[0]))},
+                {content: 'Genius company uses rulers to improve bot performance. They make ten times more shapes than comptetitors.', requirement: () => Game.rulers > 0},
+                {content: `New company starts using cursors to automate shape production. They are still behind as they only have ${Game.cursors} cursors.`, requirement: () => Game.cursors < 5},
+                {content: `New company starts using cursors to automate shape production. They are beating the comptetion with a staggering ${Game.cursors} cursors!`, requirement: () => Game.cursors >= 5},
+                {content: `Company starts cutting shapes in half with never before seen techonology called 'Bisecting'`, requirement: () => Game.boughtUpgrades.includes(Game.totalUpgrades.filter(upgrade => upgrade.name === 'Bisect')[0])},
+                {content: `The new techonology called 'Bisecting' got its second iteration as it now cut shapes into quarters.`, requirement: () => Game.boughtUpgrades.includes(Game.totalUpgrades.filter(upgrade => upgrade.name === 'Bisect Mk2')[0])},
+                
+            ])
+            if (thing.requirement() === true) {
+                return thing.content;
+            }
+        }
+        }
+        f('#news').setHtml('News: ' + randnews())
     }
 
     setInterval(Game.tick, 1)
     setInterval(Game.tentick, 10)
     setInterval(Game.slowtick, 500)
     setInterval(Game.second, 1000)
+    Game.newstick()
+    setInterval(Game.newstick, 10000)
 
 
     //Loading Sequence
 
     Game.prevUps = []
     Game.updateBots()
+
+    console.log(get_random(['[=== Looking for bugs or hacking in shapes? ===]', '[=== One should know how to javascript before using it. ===]', '[=== I have never eaten a bagel, is it good? ===]', '[=== i am literally just making up things for this lmao ===]']))
 }
 
 if (browserName !== "MS IE") {
@@ -264,5 +387,3 @@ Game.init = () => {
 
 Assets.init()
 Game.init()
-
-console.log(Game);
