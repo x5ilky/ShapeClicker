@@ -140,7 +140,6 @@ setInterval(() => {
     averageCps = cpss.reduce((a, c) => a + c) / cpss.length;
 }, 1000)
 
-
 var Game = {};
 var Assets = {};
 
@@ -158,6 +157,8 @@ Assets.init = () => {
 }
 
 Game.load = () => {
+
+
 
     Game.alert = (message) => {
         f('#alert').classList.add('alert-on');
@@ -230,12 +231,12 @@ Game.load = () => {
     }
 
     Game.bots = [
-        new Game.bot('Cursor', 15, 0.1, () => Game.cursors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[0].baseprice, Game.cursors)) { Game.shapes -= getPrice(Game.bots[0].baseprice, Game.cursors); Game.cursors++; } }),
-        new Game.bot('Ruler', 100, 1, () => Game.rulers.toString(), () => { if (Game.shapes >= getPrice(Game.bots[1].baseprice, Game.rulers)) { Game.shapes -= getPrice(Game.bots[1].baseprice, Game.rulers); Game.rulers++; } }),
-        new Game.bot('Builder', 1500, 15, () => Game.builders.toString(), () => { if (Game.shapes >= getPrice(Game.bots[2].baseprice, Game.builders)) { Game.shapes -= getPrice(Game.bots[2].baseprice, Game.builders); Game.builders++; } }),
-        new Game.bot('Factory', 30000, 45, () => Game.factorys.toString(), () => { if (Game.shapes >= getPrice(Game.bots[3].baseprice, Game.factorys)) { Game.shapes -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.factorys++; } }),
-        new Game.bot('Distrubution', 150000, 250, () => Game.distrubutions.toString(), () => { if (Game.shapes >= getPrice(Game.bots[4].baseprice, Game.distrubutions)) { Game.shapes -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.distrubutions++; } }),
-        new Game.bot('Bank', 1500000, 1100, () => Game.banks.toString(), () => { if (Game.shapes >= getPrice(Game.bots[5].baseprice, Game.banks)) { Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.banks++; } })
+        new Game.bot('Cursor', 15, 0.1, () => Game.cursors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[0].baseprice, Game.cursors)) { Game.shapes -= getPrice(Game.bots[0].baseprice, Game.cursors);Game.shapesEarned -= getPrice(Game.bots[0].baseprice, Game.cursors); Game.cursors++; } }),
+        new Game.bot('Ruler', 100, 1, () => Game.rulers.toString(), () => { if (Game.shapes >= getPrice(Game.bots[1].baseprice, Game.rulers)) { Game.shapes -= getPrice(Game.bots[1].baseprice, Game.rulers);Game.shapesEarned -= getPrice(Game.bots[1].baseprice, Game.cursors); Game.rulers++; } }),
+        new Game.bot('Builder', 1500, 15, () => Game.builders.toString(), () => { if (Game.shapes >= getPrice(Game.bots[2].baseprice, Game.builders)) { Game.shapes -= getPrice(Game.bots[2].baseprice, Game.builders);Game.shapesEarned -= getPrice(Game.bots[2].baseprice, Game.cursors); Game.builders++; } }),
+        new Game.bot('Factory', 30000, 45, () => Game.factorys.toString(), () => { if (Game.shapes >= getPrice(Game.bots[3].baseprice, Game.factorys)) { Game.shapes -= getPrice(Game.bots[3].baseprice, Game.factorys);Game.shapesEarned -= getPrice(Game.bots[3].baseprice, Game.cursors); Game.factorys++; } }),
+        new Game.bot('Distrubution', 150000, 250, () => Game.distrubutions.toString(), () => { if (Game.shapes >= getPrice(Game.bots[4].baseprice, Game.distrubutions)) { Game.shapes -= getPrice(Game.bots[4].baseprice, Game.distrubutions);Game.shapesEarned -= getPrice(Game.bots[4].baseprice, Game.cursors); Game.distrubutions++; } }),
+        new Game.bot('Bank', 1500000, 1100, () => Game.banks.toString(), () => { if (Game.shapes >= getPrice(Game.bots[5].baseprice, Game.banks)) { Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks);Game.shapes -= getPrice(Game.bots[5].baseprice, Game.cursors); Game.banks++; } })
 
     ]
 
@@ -347,7 +348,8 @@ Game.load = () => {
         //CHEAT ACHIEVEMENTS
 
         new Game.achievement('Autoclicker Enabled', () => Game.usedAutoclicker, 'Have over 40 cps', 'secret'),
-        new Game.achievement('You are not me', () => Game.setNameSilkyway, 'Set your name to \'Silkyway\'', 'secret')
+        new Game.achievement('You are not me', () => Game.setNameSilkyway, 'Set your name to \'Silkyway\'', 'secret'),
+        new Game.achievement("Why are you hacking", () => Game.hacked, 'Hacked in shapes', 'secret'),
     ]
 
     Game.boosts = {}
@@ -360,6 +362,7 @@ Game.load = () => {
         setTimeout(() => { f('#shape > img').classList.add('bounce') }, 1)
         var thing2 = Math.random() > 0.95
         Game.shapes += thing2 ? Game.spc * 3 : Game.spc;
+        Game.shapesEarned += thing2 ? Game.spc * 3 : Game.spc;
         Game.mouseShapes += thing2 ? Game.spc * 3 : Game.spc;
         Game.clicks++;
         Game.shapeRotation += 10;
@@ -396,6 +399,10 @@ Game.load = () => {
     }
 
     Game.tick = () => {
+
+        if (Game.shapes !== Game.shapesEarned) {
+            Game.hacked = true;
+        }
 
         if (Game.name.toLowerCase() === 'silkyway') Game.setNameSilkyway = true;
 
@@ -476,6 +483,7 @@ Game.load = () => {
                 f(`#upgrade-${replaceAll(up2.name, ' ', '')}`).on('click', () => {
                     if (Game.shapes >= up2.price) {
                         Game.shapes -= up2.price
+                        Game.shapesEarned -= up2.price
                         Game.availupgrades = Game.availUpgrades.filter(up => up !== upgrade)
                         Game.boughtUpgrades.push(upgrade)
                     }
@@ -494,6 +502,7 @@ Game.load = () => {
     }
     Game.second = () => {
         Game.shapes += Game.sps;
+        Game.shapesEarned += Game.sps;
         Game.secondsSpent ++;
     }
     Game.newstick = () => {
@@ -597,6 +606,8 @@ Game.init = () => {
     Game.factorys = 0;
     Game.distrubutions = 0;
     Game.banks = 0;
+    Game.shapesEarned = 0;
+    Game.hacked = false;
     
     Game.mouseShapes = 0;
     Game.usedAutoclicker = false;
@@ -610,11 +621,11 @@ Game.init = () => {
 
 
 function savePrompt() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, }).toString()
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked }).toString()
     prompt('Savecode: ', utf8_to_b64(data))
 }
 function save() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, }).toString()
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked }).toString()
 
     return utf8_to_b64(data)
 
@@ -635,6 +646,8 @@ function loadPrompt() {
     Game.usedAutoclicker = thing.usedAutoclicker
     Game.mouseShapes = thing.mouseShapes
     Game.setNameSilkyway = thing.setNameSilkyway
+    Game.shapesEarned = thing.shapesEarned
+    Game.hacked = thing.hacked
     try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
     try {Game.updateBots()} catch {}
 }
@@ -655,6 +668,8 @@ function load() {
     Game.usedAutoclicker = thing.usedAutoclicker
     Game.mouseShapes = thing.mouseShapes
     Game.setNameSilkyway = thing.setNameSilkyway
+    Game.shapesEarned = thing.shapesEarned
+    Game.hacked = thing.hacked
     try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
     try {Game.updateBots()} catch {}
 
