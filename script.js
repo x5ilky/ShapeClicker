@@ -516,7 +516,7 @@ function loadPrompt() {
     Game.name = thing.name 
     Game.boughtUpgrades = thing.boughtUpgrades
     try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
-    Game.updateBots()
+    try {Game.updateBots()} catch {}
 }
 
 function load() {
@@ -531,7 +531,7 @@ function load() {
     Game.name = thing.name
     Game.boughtUpgrades = thing.boughtUpgrades
     try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
-    Game.updateBots()
+    try {Game.updateBots()} catch {}
 
 }
 function reset() {
