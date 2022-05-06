@@ -32,6 +32,56 @@ body {
   margin: 0;
 }
 
+#ascendbtn {
+  background: #bc00bc;
+  position: absolute;
+  z-index: 5000;
+  border: 0.5rem solid #191919;
+  border-radius: 1rem;
+  width: 5vw;
+  height: 5vh;
+  top: calc(5vh + 1rem);
+  left: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+@-webkit-keyframes black-to-white {
+  from {
+    color: black !important;
+  }
+  to {
+    color: white !important;
+  }
+}
+
+@keyframes black-to-white {
+  from {
+    color: black !important;
+  }
+  to {
+    color: white !important;
+  }
+}
+
+.spoiler {
+  color: black !important;
+  background: black;
+}
+
+.spoiler:hover {
+  -webkit-animation: black-to-white 1s ease-in-out;
+          animation: black-to-white 1s ease-in-out;
+  color: white !important;
+}
+
 #shape > img {
   width: 10rem;
   height: auto;
@@ -533,6 +583,10 @@ h1 {
 
 .acmt-require {
   color: orange;
+}
+
+.acmt-secret {
+  color: #a7a7ff;
 }
 
 #achievementsslide {

@@ -17,6 +17,38 @@ body {
 	margin: 0;
 }
 
+#ascendbtn {
+	background: rgb(188, 0, 188);
+	position: absolute;
+	z-index: 5000;
+	border: 0.5rem solid rgb(25, 25, 25);
+	border-radius: 1rem;
+	width: 5vw;
+	height: 5vh;
+	top: calc(5vh + 1rem);
+	left: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+
+@keyframes black-to-white {
+	from {
+		color: black !important;
+	} to {
+		color: white !important;
+	}
+}
+.spoiler {
+	color: black !important;
+	background: black;
+}
+.spoiler:hover {
+	animation: black-to-white 1s ease-in-out;
+	color: white !important;
+}
+
 #shape > img {
 	width: 10rem;
 	height: auto;
