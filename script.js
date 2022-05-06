@@ -125,6 +125,20 @@ function get_random(list) {
 }
 
 
+var cps = 0;
+var cpss = []
+var averageCps = 0;
+
+document.addEventListener('click', () => cps++)
+
+setInterval(() => {
+    cpss.push(cps)
+    cps = 0;
+    if (cpss.length > 5) {
+        cpss.shift()
+    }
+    averageCps = cpss.reduce((a, c) => a + c) / cpss.length;
+}, 1000)
 
 
 var Game = {};
@@ -206,7 +220,7 @@ Game.load = () => {
             this.obj = () => c({
                 tag: 'span', classList: 'acmt',
                 children: [
-                    c({tag: 'span', classList: `acmt-${rarity} acmt-name`, textContent: requirement() ? name : '???'}),
+                    c({tag: 'span', classList: `acmt-${requirement() ? rarity : 'no'} acmt-name`, textContent: rarity === 'secret' ? (requirement() ? 'SECRET: ' + name : 'SECRET: ' + '???') : (requirement() ? name : '???')}),
                     c({tag: 'span', classList: ``, textContent: ' - '}),
                     c({tag: 'span', classList: `acmt-require`, textContent: requirement() ? requirementstring : '???'}),
                     c({tag: 'span', innerHTML: '<br>'})
@@ -228,7 +242,11 @@ Game.load = () => {
     Game.totalUpgrades = [
         new Game.upgrade('Bisect', () => Game.clicks > 5, 100, 'Double the amount of shapes you get per click.', 'img/upgrades/bisect.png', () => { Game.boosts.clickMult *= 2 }),
         new Game.upgrade('Bisect Mk2', () => Game.clicks > 200, 500, 'Double the amount of shapes you get per click.\nTechnology upgraded from the previous version.', 'img/upgrades/bisectmk2.png', () => { Game.boosts.clickMult *= 2 }),
-        new Game.upgrade('Moral Support', () => Game.cursors > 5 && Game.clicks > 500, 10000, 'Encourages your bots to work harder! Gain +1% of your sps per click.', 'img/upgrades/moralsupport.png', () => { Game.boosts.clickUp += Game.sps * 0.01 }),
+        new Game.upgrade('Moral Support', () => Game.clicks > 100, 10000, 'Encourages your bots to work more! Increases sps by 5%', 'img/upgrades/moralsupport.png', () => { Game.boosts.endMult += 0.05}),
+        new Game.upgrade('Wood Mouse', () => Game.cursors > 5 && Game.clicks > 500, 10000, 'Encourages your bots to work harder! Gain +1% of your sps per click.', 'img/upgrades/woodmouse.png', () => { Game.boosts.clickUp += Game.sps * 0.01 }),
+        new Game.upgrade('Iron Mouse', () => Game.cursors > 10 && Game.clicks > 500, 100000, 'Encourages your bots to work eve harder! Gain another +1% of your sps per click.', 'img/upgrades/ironmouse.png', () => {Game.boosts.clickUp += Game.sps * 0.01}),
+        new Game.upgrade('Gold Mouse', () => Game.cursors > 15 && Game.clicks > 500, 1000000, 'Encourages your bots to work eve harder! Gain another +1% of your sps per click.', 'img/upgrades/goldmouse.png', () => { Game.boosts.clickUp += Game.sps * 0.01}),
+        new Game.upgrade('Diamond Mouse', () => Game.cursors > 20 && Game.clicks > 500, 10000000, 'Encourages your bots to work eve harder! Gain another +1% of your sps per click', 'img/upgrades/diamondmouse.png', () => { Game.boosts.clickUp += Game.sps * 0.01}),
 
         new Game.upgrade('Protractor', () => Game.rulers > 0, 500, 'Make shapes more accurate. Doubles the amount of shapes a ruler produces.', 'img/upgrades/protractor.png', () => { Game.boosts.rulerMult *= 2 }),
         new Game.upgrade('Longer Rulers', () => Game.rulers > 5, 3000, 'Makes rulers longer. Doubles ruler sps.', 'img/upgrades/longerrulers.png', () => { Game.boosts.rulerMult *= 2 }),
@@ -261,6 +279,14 @@ Game.load = () => {
         new Game.achievement('A lot of clicks', () => Game.clicks > 1000, 'Click 1000 times', 'uncommon'),
         new Game.achievement('Carpal Tunnel', () => Game.clicks > 10000, 'Click 10000 times', 'uncommon'),
         new Game.achievement('Autoclicker?', () =>  Game.clicks > 50000, 'Click 50000 times', 'rare'),
+
+        //Mouse CPS
+
+        new Game.achievement('Noob Clicker', () => Game.mouseShapes >= 100, 'Get 100 Shapes from clicking', 'common'),
+        new Game.achievement('Better Clicker', () => Game.mouseShapes >= 10000, 'Get 10000 Shapes from', 'common'),
+        new Game.achievement('Clickmachine', () => Game.mouseShapes >= 1000000, 'Get 1 million shapes from clicking', 'uncommon'),
+        new Game.achievement('Clickathon', () => Game.mouseShapes >= 10000000, 'Get 10 million shapes from clicking', 'uncommon'),
+        new Game.achievement('Clickmegeddon', () => Game.mouseShapes >= 100000000, 'Get 100 million shapes from clicking', 'uncommon'),
 
         //Time
 
@@ -318,6 +344,10 @@ Game.load = () => {
         new Game.achievement('Bank Chain', () => Game.banks >= 30, 'Get 30 banks', 'rare'),
         new Game.achievement('Super Bank', () => Game.banks >= 50, 'Get 50 banks', 'rare'),
 
+        //CHEAT ACHIEVEMENTS
+
+        new Game.achievement('Autoclicker Enabled', () => Game.usedAutoclicker, 'Have over 40 cps', 'secret'),
+        new Game.achievement('You are not me', () => Game.setNameSilkyway, 'Set your name to \'Silkyway\'', 'secret')
     ]
 
     Game.boosts = {}
@@ -330,6 +360,7 @@ Game.load = () => {
         setTimeout(() => { f('#shape > img').classList.add('bounce') }, 1)
         var thing2 = Math.random() > 0.95
         Game.shapes += thing2 ? Game.spc * 3 : Game.spc;
+        Game.mouseShapes += thing2 ? Game.spc * 3 : Game.spc;
         Game.clicks++;
         Game.shapeRotation += 10;
         if (Game.shapeRotation >= 360) { Game.shapeRotation = 0; }
@@ -366,6 +397,11 @@ Game.load = () => {
 
     Game.tick = () => {
 
+        if (Game.name.toLowerCase() === 'silkyway') Game.setNameSilkyway = true;
+
+        if ( averageCps >= 40) {
+            Game.usedAutoclicker = true;
+        }
 
         var ctx = document.querySelector('#fx').getContext("2d")
         ctx.clearRect(0, 0, document.querySelector('#fx').width, document.querySelector('#fx').height)
@@ -401,17 +437,21 @@ Game.load = () => {
         Game.boosts.bankUp = 0;
         Game.boosts.bankMult = 1;
 
+        Game.boosts.endUp = 0;
+        Game.boosts.endMult = 1;
+
+
         Game.boughtUpgrades.forEach(upgrade => {
             var up2 = Game.totalUpgrades.filter(up => up.name === upgrade)[0]
             up2.effects()
         })
 
-        Game.sps = (Game.bots[0].sps + Game.boosts.cursorUp) * Game.cursors * Game.boosts.cursorMult +
+        Game.sps = (((Game.bots[0].sps + Game.boosts.cursorUp) * Game.cursors * Game.boosts.cursorMult +
             (Game.bots[1].sps + Game.boosts.rulerUp) * Game.rulers * Game.boosts.rulerMult +
             (Game.bots[2].sps + Game.boosts.builderUp) * Game.builders * Game.boosts.builderMult +
             (Game.bots[3].sps + Game.boosts.factoryUp) * Game.factorys * Game.boosts.factoryMult +
             (Game.bots[4].sps + Game.boosts.distrubutionUp) * Game.distrubutions * Game.boosts.distrubutionMult + 
-            (Game.bots[5].sps + Game.boosts.bankUp) * Game.banks * Game.boosts.bankMult;
+            (Game.bots[5].sps + Game.boosts.bankUp) * Game.banks * Game.boosts.bankMult) + Game.boosts.endUp) * Game.boosts.endMult ;
         Game.spc = (1 + Game.boosts.clickUp) * Game.boosts.clickMult;
 
         f('h1#shapecount').setText(`${toShortScale(Game.shapes)} Shapes`)
@@ -557,6 +597,10 @@ Game.init = () => {
     Game.factorys = 0;
     Game.distrubutions = 0;
     Game.banks = 0;
+    
+    Game.mouseShapes = 0;
+    Game.usedAutoclicker = false;
+    Game.setNameSilkyway = false;
 
     Game.boughtUpgrades = []
 
@@ -566,11 +610,11 @@ Game.init = () => {
 
 
 function savePrompt() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent }).toString()
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, }).toString()
     prompt('Savecode: ', utf8_to_b64(data))
 }
 function save() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent }).toString()
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, }).toString()
 
     return utf8_to_b64(data)
 
@@ -588,6 +632,9 @@ function loadPrompt() {
     Game.name = thing.name 
     Game.boughtUpgrades = thing.boughtUpgrades
     Game.secondsSpent = thing.time
+    Game.usedAutoclicker = thing.usedAutoclicker
+    Game.mouseShapes = thing.mouseShapes
+    Game.setNameSilkyway = thing.setNameSilkyway
     try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
     try {Game.updateBots()} catch {}
 }
@@ -605,6 +652,9 @@ function load() {
     Game.name = thing.name
     Game.boughtUpgrades = thing.boughtUpgrades
     Game.secondsSpent = thing.time
+    Game.usedAutoclicker = thing.usedAutoclicker
+    Game.mouseShapes = thing.mouseShapes
+    Game.setNameSilkyway = thing.setNameSilkyway
     try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
     try {Game.updateBots()} catch {}
 
@@ -631,6 +681,9 @@ if (localStorage.getItem('savecode') === null) {
     load()
     Game.banks = Game.banks ?? 0
     Game.secondsSpent = Game.secondsSpent ?? 0
+    Game.setNameSilkyway = Game.setNameSilkyway ?? false
+    Game.mouseShapes = Game.mouseShapes ?? 0
+    Game.usedAutoclicker = Game.usedAutoclicker ?? false;
     Game.load()
 }
 
