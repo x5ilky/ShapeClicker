@@ -145,6 +145,13 @@ Assets.init = () => {
 
 Game.load = () => {
 
+    Game.alert = (message) => {
+        f('#alert').classList.add('alert-on');
+        f('#alert').setText(message);
+        setTimeout(() => {f('#alert').classList.remove('alert-on')}, 3000)
+    }
+
+
     Game.shapeRotation = 0;
 
     Game.showChangelog = () => {
@@ -213,7 +220,8 @@ Game.load = () => {
         new Game.bot('Ruler', 100, 1, () => Game.rulers.toString(), () => { if (Game.shapes >= getPrice(Game.bots[1].baseprice, Game.rulers)) { Game.shapes -= getPrice(Game.bots[1].baseprice, Game.rulers); Game.rulers++; } }),
         new Game.bot('Builder', 1500, 15, () => Game.builders.toString(), () => { if (Game.shapes >= getPrice(Game.bots[2].baseprice, Game.builders)) { Game.shapes -= getPrice(Game.bots[2].baseprice, Game.builders); Game.builders++; } }),
         new Game.bot('Factory', 30000, 45, () => Game.factorys.toString(), () => { if (Game.shapes >= getPrice(Game.bots[3].baseprice, Game.factorys)) { Game.shapes -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.factorys++; } }),
-        new Game.bot('Distrubution', 150000, 150, () => Game.distrubutions.toString(), () => { if (Game.shapes >= getPrice(Game.bots[4].baseprice, Game.distrubutions)) { Game.shapes -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.distrubutions++; } })
+        new Game.bot('Distrubution', 150000, 250, () => Game.distrubutions.toString(), () => { if (Game.shapes >= getPrice(Game.bots[4].baseprice, Game.distrubutions)) { Game.shapes -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.distrubutions++; } }),
+        new Game.bot('Bank', 1500000, 1100, () => Game.banks.toString(), () => { if (Game.shapes >= getPrice(Game.bots[5].baseprice, Game.banks)) { Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.banks++; } })
 
     ]
 
@@ -221,12 +229,25 @@ Game.load = () => {
         new Game.upgrade('Bisect', () => Game.clicks > 5, 100, 'Double the amount of shapes you get per click.', 'img/upgrades/bisect.png', () => { Game.boosts.clickMult *= 2 }),
         new Game.upgrade('Bisect Mk2', () => Game.clicks > 200, 500, 'Double the amount of shapes you get per click.\nTechnology upgraded from the previous version.', 'img/upgrades/bisectmk2.png', () => { Game.boosts.clickMult *= 2 }),
         new Game.upgrade('Moral Support', () => Game.cursors > 5 && Game.clicks > 500, 10000, 'Encourages your bots to work harder! Gain +1% of your sps per click.', 'img/upgrades/moralsupport.png', () => { Game.boosts.clickUp += Game.sps * 0.01 }),
+
         new Game.upgrade('Protractor', () => Game.rulers > 0, 500, 'Make shapes more accurate. Doubles the amount of shapes a ruler produces.', 'img/upgrades/protractor.png', () => { Game.boosts.rulerMult *= 2 }),
         new Game.upgrade('Longer Rulers', () => Game.rulers > 5, 3000, 'Makes rulers longer. Doubles ruler sps.', 'img/upgrades/longerrulers.png', () => { Game.boosts.rulerMult *= 2 }),
+     
         new Game.upgrade('Double Click', () => Game.cursors > 0, 250, 'Makes cursors click twice.', 'img/upgrades/doubleclick.png', () => { Game.boosts.cursorMult *= 2 }),
+        new Game.upgrade('Faster Fingers', () => Game.cursors > 5, 1000, 'Makes cursors click two times faster', 'img/upgrades/fasterfingers.png', () => { Game.boosts.cursorMult *= 2 }),
+
         new Game.upgrade('Better Tools', () => Game.builders > 0, 5000, 'Give builders better tools. Doubles builders\' sps.', 'img/upgrades/bettertools.png', () => { Game.boosts.builderMult *= 2 }),
+        new Game.upgrade('Stainless Steel Casing', () => Game.builders >= 5, 30000, 'Gives builders a better casing. Doubles builders\' sps.', 'img/upgrades/stainlesssteelcasing.png', () => { Game.boosts.builderMult *= 2 }),
+
         new Game.upgrade('Stronger Machines', () => Game.factorys > 0, 100000, 'Makes machines in factories have more strength. Doubles factories\' sps.', 'img/upgrades/strongermachines.png', () => { Game.boosts.factoryMult *= 2 }),
+        new Game.upgrade('Air Filters', () => Game.factorys >= 5, 500000, 'Removes 10% of greenhouse gasses produced by factories, allowing them to go 2x faster. Doubles factories\' sps.', 'img/upgrades/airfilters.png', () => { Game.factoryMult *= 2 }),
+
         new Game.upgrade('Helping Hands', () => Game.distrubutions > 0, 500000, 'Adds helping hands to your distrubutions, doubles distrubution sps.', 'img/upgrades/helpinghands.png', () => { Game.boosts.distrubutionMult *= 2 }),
+        new Game.upgrade('Bigger Forklifts', () => Game.distrubutions >= 5, 2500000, 'Makes forklifts bigger multiplying distrubution sps by 2.', 'img/upgrades/biggerforklifts.png', () => { Game.boosts.distrubutionMult *= 2 }),
+      
+        new Game.upgrade('Credit Cards', () => Game.banks > 0, 10000000, 'Gives your customers credit cards, doubles bank sps.', 'img/upgrades/creditcards.png', () => {Game.boosts.bankMult *= 2}),
+        new Game.upgrade('Heist Proof Vaults', () => Game.banks >= 5, 50000000, 'Prevents vaults from being breached multiplying bank sps by 2.', 'img/upgrades/heistproofvaults.png', () => {Game.boosts.bankMult *= 2}),
+        
 
     ]
     
@@ -241,17 +262,61 @@ Game.load = () => {
         new Game.achievement('Carpal Tunnel', () => Game.clicks > 10000, 'Click 10000 times', 'uncommon'),
         new Game.achievement('Autoclicker?', () =>  Game.clicks > 50000, 'Click 50000 times', 'rare'),
 
+        //Time
+
+        new Game.achievement('Starting Up', () => Game.secondsSpent > 10, 'Play the game for 10 seconds', 'common'),
+        new Game.achievement('Time flying', () => Game.secondsSpent > 60, 'Play the game for a minute', 'common'),
+        new Game.achievement('Time flying?', () => Game.secondsSpent > 600, 'Play the game for 10 minutes', 'common'),
+        new Game.achievement('A lot of time', () => Game.secondsSpent > 60*60, 'Play the game for an hour', 'uncommon'),
+        new Game.achievement('Dedicated', () => Game.secondsSpent > 60*60*6, "Play the game for 6 hours", 'uncommon'),
+        new Game.achievement('Slightly Addicted', () => Game.secondsSpent > 60*60*12, "Play the game for 12 hours", 'uncommon'),
+        new Game.achievement('Definitely Addicted', () => Game.secondsSpent > 60*60*24, "Play the game for a day", 'uncommon'),
+        new Game.achievement('Caffeine Required', () => Game.secondsSpent > 60*60*48, "Play the game for 2 days", 'rare'),
+        new Game.achievement('Why are you still here', () => Game.secondsSpent > 60*60*24*7, "Play the game for a week", 'rare'),
+
+        //Upgrades
+
+        new Game.achievement('Upgrader', () => Game.boughtUpgrades.length > 0, "Buy an upgrade", 'common'),
+        new Game.achievement('Tier 2', () => Game.boughtUpgrades.length >= 5, 'Buy 5 upgrades', 'common'),
+        new Game.achievement('Mass Upgrader', () => Game.boughtUpgrades.length >= 10, 'Buy 10 upgrades', 'uncommon'),
+
         //Bots
         new Game.achievement('Auto Clicker', () => Game.cursors > 0, 'Get a cursor', 'common'),
+        new Game.achievement('Double Click', () => Game.cursors >= 2, 'Get two cursors', 'common'),
         new Game.achievement('10 CPS', () => Game.cursors >= 10, 'Get 10 cursors', 'uncommon'),
+        new Game.achievement('Butterfly Speed', () => Game.cursors >= 20, 'Get 20 cursors', 'uncommon'),
+        new Game.achievement('Cursorstorm', () => Game.cursors >= 30, 'Get 30 cursors', 'rare'),
+        new Game.achievement('Too many cursors', () => Game.cursors >= 50, 'Get 50 cursors', 'rare'),
+
         new Game.achievement('One Ruler', () => Game.rulers > 0, 'Get a ruler', 'common'),
         new Game.achievement('Ruler Spinner', () => Game.rulers >= 10, 'Get 10 rulers', 'uncommon'),
+        new Game.achievement('Measuring Tape', () => Game.rulers >= 20, 'Get 20 rulers', 'uncommon'),
+        new Game.achievement('Plane of Plastic', () => Game.rulers >= 30, 'Get 30 rulers', 'rare'),
+        new Game.achievement('Flying Plastic', () => Game.rulers >= 50, 'Get 50 rulers', 'rare'),
+
         new Game.achievement('Paid Labor', () => Game.builders > 0, 'Get a builder', 'common'),
         new Game.achievement('Workforce', () => Game.builders >= 10, 'Get 10 builders', 'uncommon'),
+        new Game.achievement('Construction', () => Game.builders >= 20, 'Get 20 builders', 'uncommon'),
+        new Game.achievement('Construction Company', () => Game.builders >= 30, 'Get 30 builders', 'rare'),
+        new Game.achievement('Builder Armageddon', () => Game.builders >= 50, 'Get 50 builders', 'rare'),
+
         new Game.achievement('Manufacture', () => Game.factorys > 0, 'Get a factory', 'common'),
         new Game.achievement('Manufacture Giant', () => Game.factorys >= 10, 'Get 10 factories', 'uncommon'),
+        new Game.achievement('CO2 Bank', () => Game.factorys >= 20, 'Get 20 factories', 'uncommon'),
+        new Game.achievement('Greenhouse', () => Game.factorys >= 30, 'Get 30 factories', 'rare'),
+        new Game.achievement('Global warming', () => Game.factorys >= 50, 'Get 50 factories', 'rare'),
+
         new Game.achievement('Distrubute', () => Game.distrubutions > 0, 'Get a distribution', 'common'),
         new Game.achievement('Lots of hands', () => Game.distrubutions >= 10, 'Get 10 distrubutions', 'uncommon'),
+        new Game.achievement('Food chain', () => Game.distrubutions >= 20, 'Get 20 distrubutions', 'uncommon'),
+        new Game.achievement('Lots of distrubution', () => Game.distrubutions >= 30, 'Get 30 distrubutions', 'rare'),
+        new Game.achievement('Global distrubution', () => Game.distrubutions >= 50, 'Get 50 distrubutions', 'rare'),
+
+        new Game.achievement('Specialised Banking', () => Game.banks > 0, 'Get a bank', 'common'),
+        new Game.achievement('Big Vaults', () => Game.banks >= 10, 'Get 10 banks', 'uncommon'),
+        new Game.achievement('Stashes of Shapes', () => Game.banks >= 20, 'Get 20 banks', 'uncommon'),
+        new Game.achievement('Bank Chain', () => Game.banks >= 30, 'Get 30 banks', 'rare'),
+        new Game.achievement('Super Bank', () => Game.banks >= 50, 'Get 50 banks', 'rare'),
 
     ]
 
@@ -333,6 +398,8 @@ Game.load = () => {
         Game.boosts.factoryMult = 1;
         Game.boosts.distrubutionUp = 0;
         Game.boosts.distrubutionMult = 1;
+        Game.boosts.bankUp = 0;
+        Game.boosts.bankMult = 1;
 
         Game.boughtUpgrades.forEach(upgrade => {
             var up2 = Game.totalUpgrades.filter(up => up.name === upgrade)[0]
@@ -343,7 +410,8 @@ Game.load = () => {
             (Game.bots[1].sps + Game.boosts.rulerUp) * Game.rulers * Game.boosts.rulerMult +
             (Game.bots[2].sps + Game.boosts.builderUp) * Game.builders * Game.boosts.builderMult +
             (Game.bots[3].sps + Game.boosts.factoryUp) * Game.factorys * Game.boosts.factoryMult +
-            (Game.bots[4].sps + Game.boosts.distrubutionUp) * Game.distrubutions * Game.boosts.distrubutionMult;
+            (Game.bots[4].sps + Game.boosts.distrubutionUp) * Game.distrubutions * Game.boosts.distrubutionMult + 
+            (Game.bots[5].sps + Game.boosts.bankUp) * Game.banks * Game.boosts.bankMult;
         Game.spc = (1 + Game.boosts.clickUp) * Game.boosts.clickMult;
 
         f('h1#shapecount').setText(`${toShortScale(Game.shapes)} Shapes`)
@@ -386,10 +454,11 @@ Game.load = () => {
     }
     Game.second = () => {
         Game.shapes += Game.sps;
+        Game.secondsSpent ++;
     }
     Game.newstick = () => {
         const hasUpgrade = (upgradename) => {
-            return Game.boughtUpgrades.includes(Game.totalUpgrades.filter(upgrade => upgrade.name === upgradename)[0])
+            return Game.boughtUpgrades.includes(upgradename)
         }
         var randnews = () => {
             while (true) {
@@ -404,10 +473,10 @@ Game.load = () => {
                         { content: 'Genius company uses rulers to improve bot performance. They make ten times more shapes than comptetitors.', requirement: () => Game.rulers > 0 && Game.builders < 0 },
                         { content: `New company starts using cursors to automate shape production. They are still behind as they only have ${Game.cursors} cursors.`, requirement: () => Game.cursors > 0 && Game.cursors < 5 && Game.rulers === 0 },
                         { content: `New company starts using cursors to automate shape production. They are beating the comptetion with a staggering ${Game.cursors} cursors!`, requirement: () => Game.cursors >= 5 && Game.rulers === 0 },
-                        { content: `Company starts cutting shapes in half with never before seen techonology called 'Bisecting'`, requirement: () => hasUpgrade('Bisect') },
-                        { content: `The new techonology called 'Bisecting' got its second iteration as it now cut shapes into quarters.`, requirement: () => hasUpgrade('Bisect Mk2') },
+                        { content: `Company starts cutting shapes in half with never before seen techonology called 'Bisecting'`, requirement: () => hasUpgrade('Bisect') && !hasUpgrade('Bisect Mk2')},
+                        { content: `The new techonology called 'Bisecting' got its second iteration as it now cut shapes into quarters.`, requirement: () => hasUpgrade('Bisect Mk2') && !hasUpgrade('Moral Support') },
                         { content: `${Game.name}'s shape empire has invented builders that automatically generate shapes faster than any other bot.`, requirement: () => Game.builders > 0 && Game.factorys === 0 },
-                        { content: `${Game.name}'s shape empire now makes ${Game.sps} every second! They are at the frontier of shape making.`, requirement: () => Game.sps > 10 }
+                        { content: `${Game.name}'s shape empire now makes ${Game.sps} shapes every second! They are at the frontier of shape making.`, requirement: () => Game.sps > 10 }
 
                     ])
                 if (thing.requirement() === true) {
@@ -419,6 +488,7 @@ Game.load = () => {
     }
     Game.minutetick = () => {
         localStorage.setItem('savecode', save('code'))
+        try {Game.alert('Game Autosaved.')} catch {}
     }
     setInterval(Game.tick, 1)
     setInterval(Game.tentick, 10)
@@ -457,8 +527,8 @@ Game.load = () => {
         ''
     ))
 
-    f('#save').on('click', () => {localStorage.setItem('savecode', save()); window.alert('Saved!') });
-    f('#load').on('click', () => {load(); window.alert('Loaded!') });
+    f('#save').on('click', () => {localStorage.setItem('savecode', save());     try {Game.alert('Game Saved.')} catch {} });
+    f('#load').on('click', () => {load(); try {Game.alert('Save Loaded.')} catch {}});
     f('#reset').on('click', () => {
         if (window.confirm('Are you sure you want to reset?')) {
             if (window.confirm('Are you absolutely sure you want to reset?')) {
@@ -479,12 +549,14 @@ if (browserName !== "MS IE") {
 Game.init = () => {
     Game.clicks = 0;
     Game.shapes = 0;
+    Game.secondsSpent = 0;
 
     Game.cursors = 0;
     Game.rulers = 0;
     Game.builders = 0;
     Game.factorys = 0;
     Game.distrubutions = 0;
+    Game.banks = 0;
 
     Game.boughtUpgrades = []
 
@@ -494,13 +566,12 @@ Game.init = () => {
 
 
 function savePrompt() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, boughtUpgrades: Game.boughtUpgrades, name: Game.name }).toString()
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent }).toString()
     prompt('Savecode: ', utf8_to_b64(data))
 }
 function save() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, boughtUpgrades: Game.boughtUpgrades, name: Game.name }).toString()
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent }).toString()
 
-    console.log('Autosave.')
     return utf8_to_b64(data)
 
 }
@@ -513,8 +584,10 @@ function loadPrompt() {
     Game.builders = thing.builders
     Game.factorys = thing.factorys
     Game.distrubutions = thing.distrubutions 
+    Game.banks = thing.banks
     Game.name = thing.name 
     Game.boughtUpgrades = thing.boughtUpgrades
+    Game.secondsSpent = thing.time
     try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
     try {Game.updateBots()} catch {}
 }
@@ -528,8 +601,10 @@ function load() {
     Game.builders = thing.builders
     Game.factorys = thing.factorys
     Game.distrubutions = thing.distrubutions 
+    Game.banks = thing.banks
     Game.name = thing.name
     Game.boughtUpgrades = thing.boughtUpgrades
+    Game.secondsSpent = thing.time
     try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
     try {Game.updateBots()} catch {}
 
@@ -554,6 +629,8 @@ if (localStorage.getItem('savecode') === null) {
     Game.init()
 } else {
     load()
+    Game.banks = Game.banks ?? 0
+    Game.secondsSpent = Game.secondsSpent ?? 0
     Game.load()
 }
 
