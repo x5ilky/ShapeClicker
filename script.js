@@ -229,7 +229,7 @@ Game.load = () => {
         new Game.upgrade('Helping Hands', () => Game.distrubutions > 0, 500000, 'Adds helping hands to your distrubutions, doubles distrubution sps.', 'img/upgrades/helpinghands.png', () => { Game.boosts.distrubutionMult *= 2 }),
 
     ]
-    Game.boughtUpgrades = []
+    
     Game.availUpgrades = []
 
     Game.achievements = [
@@ -335,7 +335,8 @@ Game.load = () => {
         Game.boosts.distrubutionMult = 1;
 
         Game.boughtUpgrades.forEach(upgrade => {
-            upgrade.effects()
+            var up2 = Game.totalUpgrades.filter(up => up.name === upgrade)[0]
+            up2.effects()
         })
 
         Game.sps = (Game.bots[0].sps + Game.boosts.cursorUp) * Game.cursors * Game.boosts.cursorMult +
@@ -353,20 +354,21 @@ Game.load = () => {
     Game.tentick = () => {
         Game.availUpgrades = []
         Game.totalUpgrades.forEach(upgrade => {
-            if (Game.boughtUpgrades.map(a => a.name).includes(upgrade.name) || upgrade.requirement() === false) {
+            if (Game.boughtUpgrades.includes(upgrade.name) || upgrade.requirement() === false) {
 
             } else {
-                Game.availUpgrades.push(upgrade)
+                Game.availUpgrades.push(upgrade.name)
             }
         })
         if (JSON.stringify(Game.prevUpgrades) !== JSON.stringify(Game.availUpgrades)) {
             f('#upgradesdiv').setHtml('')
             Game.availUpgrades.forEach(upgrade => {
-                f('#upgradesdiv').appendChild(upgrade.obj())
-                f(`#upgrade-${replaceAll(upgrade.name, ' ', '')}`).on('click', () => {
-                    if (Game.shapes >= upgrade.price) {
-                        Game.shapes -= upgrade.price
-                        Game.availUpgrades = Game.availUpgrades.filter(up => up.name !== upgrade.name)
+                var up2 = Game.totalUpgrades.filter(a => a.name === upgrade)[0]
+                f('#upgradesdiv').appendChild(up2.obj())
+                f(`#upgrade-${replaceAll(up2.name, ' ', '')}`).on('click', () => {
+                    if (Game.shapes >= up2.price) {
+                        Game.shapes -= up2.price
+                        Game.availupgrades = Game.availUpgrades.filter(up => up !== upgrade)
                         Game.boughtUpgrades.push(upgrade)
                     }
                 })
@@ -484,6 +486,8 @@ Game.init = () => {
     Game.factorys = 0;
     Game.distrubutions = 0;
 
+    Game.boughtUpgrades = []
+
     Game.load();
 }
 
@@ -494,13 +498,7 @@ function savePrompt() {
     prompt('Savecode: ', utf8_to_b64(data))
 }
 function save() {
-    var thing = Game.boughtUpgrades
-    var newBoughtUpgrades = []
-    thing.forEach(l => {
-        newBoughtUpgrades.push({name: l.name, requirement: l.requirement.toString(), price: l.price, desc: l.desc, img: l.img, effects: l.effects.toString()})
-    })
-
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, boughtUpgrades: newBoughtUpgrades, name: Game.name }).toString()
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, boughtUpgrades: Game.boughtUpgrades, name: Game.name }).toString()
 
     console.log('Autosave.')
     return utf8_to_b64(data)
@@ -530,11 +528,7 @@ function load() {
     Game.factorys = thing.factorys
     Game.distrubutions = thing.distrubutions 
     Game.name = thing.name
-    var thing2 = []
-    thing.boughtUpgrades.forEach(upgrade => {
-        thing2.push({name: upgrade.name, requirement: new Function(upgrade.requirement), price: upgrade.price, desc: upgrade.desc, img: upgrade.img, effects: new Function(upgrade.effects)})
-    })
-    Game.boughtUpgrades = thing2
+    Game.boughtUpgrades = thing.boughtUpgrades
     try {f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)} catch {}
 
 }
