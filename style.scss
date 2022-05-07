@@ -32,6 +32,42 @@ body {
 	justify-content: center;
 }
 
+#acsensionups {
+	z-index: 15000;
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	background: black;
+	display: none;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-image: url("img/ascendbg.jpg");
+}
+
+.ascensionUpgrade {
+	width: 4rem;
+	height: 4rem;
+	transform: translate(-2rem, -2rem);
+	border-radius: 4rem;
+	background: white;
+}
+
+@keyframes open-ascensions {
+	from {
+		width: 0;
+		height: 0;
+	} to {
+		width: 100vw;
+		height: 100vh;
+	}
+}
+
+.acsensionups-open {
+	display: block !important;
+	animation: open-ascensions 1s ease-in-out;
+	
+}
 
 @keyframes black-to-white {
 	from {
@@ -78,16 +114,23 @@ body {
 	transform: translate(-1%, 0);
 	height: 40vh;
 	width: auto;
-	overflow-y: auto;
 	overflow-x: hidden;
 }
 #upgradesdiv {
 	position: absolute;
-	display: table;
+	display: block;
 	height: 35vh;
+	width: 100%;
+	transform: translate(-1rem, 0);
 	top: 60%;
-	overflow-y: scroll;
+	overflow-y: auto;
+	scrollbar-width: none;
+	
 }
+#upgradesdiv::-webkit-scrollbar {
+	display: none; 
+}
+
 
 .bot {
 	width: calc(18vw - 1rem);
@@ -356,9 +399,11 @@ div#loadingdiv {
 .upgrade {
 	width: 3.8rem;
 	height: 3.8rem;
-	border: 0.2rem ridge rgb(94, 42, 0);
+	border: 0.2rem ridge rgb(47, 0, 0);
+	background: rgb(94, 42, 0);
 	display: inline-grid;
 	image-rendering: pixelated;
+	transform: translate(1rem, 0);
 }
 .upgrade > img {
 	width: 3.8rem;

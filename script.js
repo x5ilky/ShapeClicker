@@ -235,6 +235,26 @@ Game.load = () => {
             })
         }
     }
+    Game.ascensionUpgrade = class {
+        constructor(name, hasUpgrade, desc, price, x, y) {
+            this.name = name;
+            this.hasUpgrade = hasUpgrade === '' ? () => true : () => Game.gottenAscensionUpgrades.filter(a => a.name === hasUpgrade) !== null
+            this.desc = desc;
+            this.price = price;
+            this.x = x;
+            this.y = y;
+            this.obj = () => {var thing = c({
+                tag: 'div',
+                id: `ascension-${replaceAll(name, " ", '').toLowerCase()}`,
+                classList: 'ascensionUpgrade'
+            })
+            thing.style.position = 'absolute'
+            thing.style.top = `${y}vh`;
+            thing.style.left = `${x}vw`;
+            return thing
+        }
+        }
+    }
 
     Game.bots = [
         new Game.bot('Cursor', 15, 0.1, () => Game.cursors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[0].baseprice, Game.cursors)) { Game.shapes -= getPrice(Game.bots[0].baseprice, Game.cursors);Game.shapesEarned -= getPrice(Game.bots[0].baseprice, Game.cursors); Game.cursors++; } }),
@@ -247,34 +267,34 @@ Game.load = () => {
     ]
 
     Game.totalUpgrades = [
-        new Game.upgrade('Bisect', () => Game.clicks > 5, 100, 'Double the amount of shapes you get per click.', 'img/upgrades/bisect.png', () => { Game.boosts.clickMult *= 2 }),
-        new Game.upgrade('Bisect Mk2', () => Game.clicks > 200, 500, 'Double the amount of shapes you get per click.\nTechnology upgraded from the previous version.', 'img/upgrades/bisectmk2.png', () => { Game.boosts.clickMult *= 2 }),
+        new Game.upgrade('Bisect', () => Game.clicks > 5, 100, 'Double the amount of shapes you get per click.', 'img/upgrades/mouses/bisect/bisect1.png', () => { Game.boosts.clickMult *= 2 }),
+        new Game.upgrade('Bisect Mk2', () => Game.clicks > 200, 500, 'Double the amount of shapes you get per click.\nTechnology upgraded from the previous version.', 'img/upgrades/mouses/bisect/bisect2.png', () => { Game.boosts.clickMult *= 2 }),
         new Game.upgrade('Moral Support', () => Game.clicks > 100, 10000, 'Encourages your bots to work more! Increases sps by 5%', 'img/upgrades/moralsupport.png', () => { Game.boosts.endMult += 0.05}),
-        new Game.upgrade('Wood Mouse', () => Game.cursors > 5 && Game.clicks > 500, 10000, 'Encourages your bots to work harder! Gain +1% of your sps per click.', 'img/upgrades/woodmouse.png', () => { Game.boosts.clickUp += Game.sps * 0.01 }),
-        new Game.upgrade('Iron Mouse', () => Game.cursors > 10 && Game.clicks > 500, 100000, 'Encourages your bots to work eve harder! Gain another +1% of your sps per click.', 'img/upgrades/ironmouse.png', () => {Game.boosts.clickUp += Game.sps * 0.01}),
-        new Game.upgrade('Gold Mouse', () => Game.cursors > 15 && Game.clicks > 500, 1000000, 'Encourages your bots to work eve harder! Gain another +1% of your sps per click.', 'img/upgrades/goldmouse.png', () => { Game.boosts.clickUp += Game.sps * 0.01}),
-        new Game.upgrade('Diamond Mouse', () => Game.cursors > 20 && Game.clicks > 500, 10000000, 'Encourages your bots to work eve harder! Gain another +1% of your sps per click', 'img/upgrades/diamondmouse.png', () => { Game.boosts.clickUp += Game.sps * 0.01}),
+        new Game.upgrade('Wood Mouse', () => Game.cursors > 5 && Game.clicks > 500, 10000, 'Encourages your bots to work harder! Gain +1% of your sps per click.', 'img/upgrades/mouses/woodmouse.png', () => { Game.boosts.clickUp += Game.sps * 0.01 }),
+        new Game.upgrade('Iron Mouse', () => Game.cursors > 10 && Game.clicks > 500, 100000, 'Encourages your bots to work eve harder! Gain another +1% of your sps per click.', 'img/upgrades/mouses/ironmouse.png', () => {Game.boosts.clickUp += Game.sps * 0.01}),
+        new Game.upgrade('Gold Mouse', () => Game.cursors > 15 && Game.clicks > 500, 1000000, 'Encourages your bots to work eve harder! Gain another +1% of your sps per click.', 'img/upgrades/mouses/goldmouse.png', () => { Game.boosts.clickUp += Game.sps * 0.01}),
+        new Game.upgrade('Diamond Mouse', () => Game.cursors > 20 && Game.clicks > 500, 10000000, 'Encourages your bots to work eve harder! Gain another +1% of your sps per click', 'img/upgrades/mouses/diamondmouse.png', () => { Game.boosts.clickUp += Game.sps * 0.01}),
 
-        new Game.upgrade('Protractor', () => Game.rulers > 0, 500, 'Make shapes more accurate. Doubles the amount of shapes a ruler produces.', 'img/upgrades/protractor.png', () => { Game.boosts.rulerMult *= 2 }),
-        new Game.upgrade('Longer Rulers', () => Game.rulers > 5, 3000, 'Makes rulers longer. Doubles ruler sps.', 'img/upgrades/longerrulers.png', () => { Game.boosts.rulerMult *= 2 }),
-     
-        new Game.upgrade('Double Click', () => Game.cursors > 0, 250, 'Makes cursors click twice.', 'img/upgrades/doubleclick.png', () => { Game.boosts.cursorMult *= 2 }),
-        new Game.upgrade('Faster Fingers', () => Game.cursors > 5, 1000, 'Makes cursors click two times faster', 'img/upgrades/fasterfingers.png', () => { Game.boosts.cursorMult *= 2 }),
+        new Game.upgrade('Double Click', () => Game.cursors > 0, 250, 'Makes cursors click twice.', 'img/upgrades/cursor/cursor1.png', () => { Game.boosts.cursorMult *= 2 }),
+        new Game.upgrade('Faster Fingers', () => Game.cursors > 5, 1000, 'Makes cursors click two times faster', 'img/upgrades/cursor/cursor2.png', () => { Game.boosts.cursorMult *= 2 }),
 
-        new Game.upgrade('Better Tools', () => Game.builders > 0, 5000, 'Give builders better tools. Doubles builders\' sps.', 'img/upgrades/bettertools.png', () => { Game.boosts.builderMult *= 2 }),
-        new Game.upgrade('Stainless Steel Casing', () => Game.builders >= 5, 30000, 'Gives builders a better casing. Doubles builders\' sps.', 'img/upgrades/stainlesssteelcasing.png', () => { Game.boosts.builderMult *= 2 }),
+        new Game.upgrade('Protractor', () => Game.rulers > 0, 500, 'Make shapes more accurate. Doubles the amount of shapes a ruler produces.', 'img/upgrades/ruler/ruler1.png', () => { Game.boosts.rulerMult *= 2 }),
+        new Game.upgrade('Longer Rulers', () => Game.rulers > 5, 3000, 'Makes rulers longer. Doubles ruler sps.', 'img/upgrades/ruler/ruler2.png', () => { Game.boosts.rulerMult *= 2 }),
 
-        new Game.upgrade('Stronger Machines', () => Game.factorys > 0, 100000, 'Makes machines in factories have more strength. Doubles factories\' sps.', 'img/upgrades/strongermachines.png', () => { Game.boosts.factoryMult *= 2 }),
-        new Game.upgrade('Air Filters', () => Game.factorys >= 5, 500000, 'Removes 10% of greenhouse gasses produced by factories, allowing them to go 2x faster. Doubles factories\' sps.', 'img/upgrades/airfilters.png', () => { Game.factoryMult *= 2 }),
+        new Game.upgrade('Better Tools', () => Game.builders > 0, 5000, 'Give builders better tools. Doubles builders\' sps.', 'img/upgrades/builder/builder1.png', () => { Game.boosts.builderMult *= 2 }),
+        new Game.upgrade('Stainless Steel Casing', () => Game.builders >= 5, 30000, 'Gives builders a better casing. Doubles builders\' sps.', 'img/upgrades/builder/builder2.png', () => { Game.boosts.builderMult *= 2 }),
 
-        new Game.upgrade('Helping Hands', () => Game.distrubutions > 0, 500000, 'Adds helping hands to your distrubutions, doubles distrubution sps.', 'img/upgrades/helpinghands.png', () => { Game.boosts.distrubutionMult *= 2 }),
-        new Game.upgrade('Bigger Forklifts', () => Game.distrubutions >= 5, 2500000, 'Makes forklifts bigger multiplying distrubution sps by 2.', 'img/upgrades/biggerforklifts.png', () => { Game.boosts.distrubutionMult *= 2 }),
+        new Game.upgrade('Stronger Machines', () => Game.factorys > 0, 100000, 'Makes machines in factories have more strength. Doubles factories\' sps.', 'img/upgrades/factory/factory1.png', () => { Game.boosts.factoryMult *= 2 }),
+        new Game.upgrade('Air Filters', () => Game.factorys >= 5, 500000, 'Removes 10% of greenhouse gasses produced by factories, allowing them to go 2x faster. Doubles factories\' sps.', 'img/upgrades/factory/factory2.png', () => { Game.factoryMult *= 2 }),
+
+        new Game.upgrade('Helping Hands', () => Game.distrubutions > 0, 500000, 'Adds helping hands to your distrubutions, doubles distrubution sps.', 'img/upgrades/distrubution/distrubution1.png', () => { Game.boosts.distrubutionMult *= 2 }),
+        new Game.upgrade('Bigger Forklifts', () => Game.distrubutions >= 5, 2500000, 'Makes forklifts bigger multiplying distrubution sps by 2.', 'img/upgrades/distrubution/distrubution2.png', () => { Game.boosts.distrubutionMult *= 2 }),
       
-        new Game.upgrade('Credit Cards', () => Game.banks > 0, 10000000, 'Gives your customers credit cards, doubles bank sps.', 'img/upgrades/creditcards.png', () => {Game.boosts.bankMult *= 2}),
-        new Game.upgrade('Heist Proof Vaults', () => Game.banks >= 5, 50000000, 'Prevents vaults from being breached multiplying bank sps by 2.', 'img/upgrades/heistproofvaults.png', () => {Game.boosts.bankMult *= 2}),
+        new Game.upgrade('Credit Cards', () => Game.banks > 0, 10000000, 'Gives your customers credit cards, doubles bank sps.', 'img/upgrades/bank/bank1.png', () => {Game.boosts.bankMult *= 2}),
+        new Game.upgrade('Heist Proof Vaults', () => Game.banks >= 5, 50000000, 'Prevents vaults from being breached multiplying bank sps by 2.', 'img/upgrades/bank/bank2.png', () => {Game.boosts.bankMult *= 2}),
         
-        new Game.upgrade('Faster Construction', () => Game.polystructors > 0, 60000000, 'Makes polystructors construct polygons 2 times faster.', 'img/upgrades/fasterconstruction.png', () => {Game.boosts.polystructorMult *= 2}),
-        new Game.upgrade('Angle Accuracy', () => Game.polystructors >= 5, 300000000, 'Makes polystructors 2 times more accurate doubling polystructor sps.', 'img/upgrades/angleaccuracy.png', () => {Game.boosts.polystructorMult *= 2}),
+        new Game.upgrade('Faster Construction', () => Game.polystructors > 0, 60000000, 'Makes polystructors construct polygons 2 times faster.', 'img/upgrades/polystructor/polystructor1.png', () => {Game.boosts.polystructorMult *= 2}),
+        new Game.upgrade('Angle Accuracy', () => Game.polystructors >= 5, 300000000, 'Makes polystructors 2 times more accurate doubling polystructor sps.', 'img/upgrades/polystructor/polystructor2.png', () => {Game.boosts.polystructorMult *= 2}),
     ]
     
     Game.availUpgrades = []
@@ -295,6 +315,10 @@ Game.load = () => {
         new Game.achievement('Clickmachine', () => Game.mouseShapes >= 1000000, 'Get 1 million shapes from clicking', 'uncommon'),
         new Game.achievement('Clickathon', () => Game.mouseShapes >= 10000000, 'Get 10 million shapes from clicking', 'uncommon'),
         new Game.achievement('Clickmegeddon', () => Game.mouseShapes >= 100000000, 'Get 100 million shapes from clicking', 'uncommon'),
+
+        //acsensions
+
+        new Game.achievement('Ascend beyong the mortal realm', () => Game.acsensions > 0, 'Ascension', 'uncommon'),
 
         //Time
 
@@ -352,12 +376,23 @@ Game.load = () => {
         new Game.achievement('Bank Chain', () => Game.banks >= 30, 'Get 30 banks', 'rare'),
         new Game.achievement('Super Bank', () => Game.banks >= 50, 'Get 50 banks', 'rare'),
 
+        new Game.achievement('Polystructor', () => Game.polystructors > 0, 'Get a polystructor', 'common'),
+        new Game.achievement('Polygon Constructor', () => Game.polystructors >= 10, 'Get 10 polystructors', 'uncommon'),
+        new Game.achievement('gonCon', () => Game.polystructors >= 20, 'Get 20 polystructors', 'uncommon'),
+        new Game.achievement('Poconlystructgonor', () => Game.polystructors >= 30, 'Get 30 polystructors', 'rare'),
+        new Game.achievement('rotcurtsyloP', () => Game.polystructors >= 50, 'Get 50 polystructors', 'rare'),
+
         //CHEAT ACHIEVEMENTS
 
         new Game.achievement('Autoclicker Enabled', () => Game.usedAutoclicker, 'Have over 40 cps', 'secret'),
         new Game.achievement('You are not me', () => Game.setNameSilkyway, 'Set your name to \'Silkyway\'', 'secret'),
         new Game.achievement("Why are you hacking", () => Game.hacked, 'Hacked in shapes', 'secret'),
     ]
+
+    Game.ascensionUpgrades = [
+        new Game.ascensionUpgrade("Pentagon", '', "Doubles your base SPC and triples your base SPS", 1, 50, 50)
+    ]
+    Game.gottenAscensionUpgrades = []
 
     Game.boosts = {}
     Game.cpsTexts = []
@@ -597,14 +632,15 @@ Game.load = () => {
     })
     document.querySelector('#ascendbtn').addEventListener('mouseenter', () => {
         f('#hover > #hoverheader').setText('Ascension');
-        f('#hover > #hoverpara').setText(`Resets your progress, but granting you +50% sps permanently.\nYou have ascended ${Game.acsensions} times, granting you +${Game.acsensions * 0.5}% sps.`);
+        f('#hover > #hoverpara').setText(`Resets your progress, but granting you +50% sps permanently.\nYou have ascended ${Game.acsensions} times, granting you +${Game.acsensions * 50}% sps.`);
         f('#hover > #hoverprice').setText(`${toShortScale(getAcsensionPrice())} Shapes`)
         document.querySelector('#hover').style.display = 'block';
     })
     document.querySelector('#ascendbtn').addEventListener('mouseleave', () => {
         document.querySelector('#hover').style.display = 'none';
     })
-    f('#ascendbtn').on('click', () => {
+
+    function resetAcsension() {
         if (Game.shapes >= getAcsensionPrice()) {
             Game.shapes -= getAcsensionPrice();
             Game.acsensions++;
@@ -616,6 +652,23 @@ Game.load = () => {
             })
             Game.boughtUpgrades = []
         }
+    }
+
+    f('#ascendbtn').on('click', () => {
+        // f('#acsensionups').classList.add('acsensionups-open')
+        // Game.gottenAscensionUpgrades = []
+        // Game.ascensionUpgrades.forEach(upgrade => {
+        //     if (upgrade.hasUpgrade()) {
+        //         Game.gottenAscensionUpgrades.push(upgrade)
+        //     }
+        // })
+        // f('#acsensionups').setHtml('')
+        // Game.gottenAscensionUpgrades.forEach(item => {
+        //     f('#acsensionups').appendChild(item.obj())
+        // })
+
+        resetAcsension()
+        
     })
     f('#importsave').on('click', loadPrompt);
     f('#exportsave').on('click', savePrompt);
