@@ -15,6 +15,7 @@
 
 body {
 	margin: 0;
+	overflow: hidden;
 }
 
 #ascendbtn {
@@ -32,7 +33,20 @@ body {
 	justify-content: center;
 }
 
-#acsensionups {
+#ascensionlabel {
+	z-index: 21000;
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	font-size: 2rem;
+	color: white;
+	display: none;
+}
+#ascensionlabel.ascensionlabelon {
+	display: block;
+}
+
+#ascensionups {
 	z-index: 15000;
 	position: absolute;
 	width: 100vw;
@@ -43,6 +57,32 @@ body {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background-image: url("img/ascendbg.jpg");
+
+	
+}
+
+#ascensionclose {
+	left: 50%;
+	transform: translate(-50%, 0);
+	bottom: 0;
+
+	width: 10vw;
+	height: 10vh;
+
+	background: rgb(161, 0, 194);
+	
+	position: absolute;
+
+	z-index: 22000;
+
+	display: none;
+	align-items: center;
+	justify-content: center;
+	
+	color: white;
+}
+#ascensionclose.ascensioncloseclose {
+	display: flex;
 }
 
 .ascensionUpgrade {
@@ -50,29 +90,55 @@ body {
 	height: 4rem;
 	transform: translate(-2rem, -2rem);
 	border-radius: 4rem;
-	background: white;
+
+	background: rgba(255, 255, 255, 0.208);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	img {
+		width: 3rem;
+		height: 3rem;
+		image-rendering: pixelated;
+	}
 }
+#hover-ascension {
+	position: absolute;
+	background-color: rgb(138, 0, 0);
+	color: white;
+	padding: 1rem;
+	margin: 0;
+	right: 0;
+	width: 20vw;
+
+	display: none;
+
+	bottom: 0%;
+	z-index: 21000;
+}
+
 
 @keyframes open-ascensions {
 	from {
 		width: 0;
 		height: 0;
-	} to {
+	}
+	to {
 		width: 100vw;
 		height: 100vh;
 	}
 }
 
-.acsensionups-open {
+.ascensionups-open {
 	display: block !important;
 	animation: open-ascensions 1s ease-in-out;
-	
 }
 
 @keyframes black-to-white {
 	from {
 		color: black !important;
-	} to {
+	}
+	to {
 		color: white !important;
 	}
 }
@@ -125,12 +191,10 @@ body {
 	top: 60%;
 	overflow-y: auto;
 	scrollbar-width: none;
-	
 }
 #upgradesdiv::-webkit-scrollbar {
-	display: none; 
+	display: none;
 }
-
 
 .bot {
 	width: calc(18vw - 1rem);
@@ -219,7 +283,8 @@ div#loadingdiv {
 @keyframes fade-out {
 	from {
 		opacity: 1 !important;
-	} to {
+	}
+	to {
 		opacity: 0 !important;
 	}
 }
@@ -250,20 +315,20 @@ div#loadingdiv {
 	font-size: 0.3rem;
 }
 #changelogclose {
-    font-size: 2rem;
-    color: rgb(167, 167, 255);
-    position: absolute;
-    top: 3vw;
-    left: 3vw;
-    text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000,
-    1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
+	font-size: 2rem;
+	color: rgb(167, 167, 255);
+	position: absolute;
+	top: 3vw;
+	left: 3vw;
+	text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000,
+		1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
 }
 #fx {
 	z-index: 8900;
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	pointer-events:none; 
+	pointer-events: none;
 }
 #news {
 	position: absolute;
@@ -326,30 +391,39 @@ div#loadingdiv {
 #changelogdiv {
 	width: 100vw;
 	height: 90vh;
-    display: none;
+	display: none;
 	background: rgba(59, 59, 59, 0.648);
 	z-index: 9000;
 	position: absolute;
-    overflow-y: scroll;
-    padding-top: 10vh;
-	h1, h2, h3, h4, h5, h6, p, span, ul, li {
+	overflow-y: scroll;
+	padding-top: 10vh;
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	span,
+	ul,
+	li {
 		color: white;
 		text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000,
 			1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
-        text-align: center;
+		text-align: center;
 	}
-    h1 {
-        font-size: 3rem;
-    }
-    h2 {
-        font-size: 2rem;
-    }
-    h3 {
-        font-size: 1.5rem;
-    }
-    h4 {
-        font-size: 1rem;
-    }
+	h1 {
+		font-size: 3rem;
+	}
+	h2 {
+		font-size: 2rem;
+	}
+	h3 {
+		font-size: 1.5rem;
+	}
+	h4 {
+		font-size: 1rem;
+	}
 }
 
 .botamount {
@@ -399,11 +473,22 @@ div#loadingdiv {
 .upgrade {
 	width: 3.8rem;
 	height: 3.8rem;
-	border: 0.2rem ridge rgb(47, 0, 0);
-	background: rgb(94, 42, 0);
+	border: 0.2rem outset rgb(105, 49, 0);
+	background-image: url("img/upgradebg.png");
+	background-size: 100%;
 	display: inline-grid;
 	image-rendering: pixelated;
 	transform: translate(1rem, 0);
+}
+.upgrade:hover {
+	border: 0.2rem inset rgb(105, 49, 0);
+}
+.upgrade.disabled::after {
+	content: "";
+	width: 3.8rem;
+	height: 3.8rem;
+	background: rgba(0, 0, 0, 0.431);
+	position: absolute;
 }
 .upgrade > img {
 	width: 3.8rem;
@@ -423,26 +508,27 @@ div#loadingdiv {
 	bottom: 0%;
 	z-index: 5000;
 }
+
 h1 {
 	margin: 0;
 }
 
-
 @keyframes achieve-slide-back {
 	from {
 		right: 20vw;
-	} to {
+	}
+	to {
 		right: 0;
 	}
 }
 @keyframes achieve-slide-over {
 	from {
 		right: 0;
-	} to {
+	}
+	to {
 		right: 20vw;
 	}
 }
-
 
 #achievements.achievements-out {
 	animation: achieve-slide-over 1s ease-in-out;
@@ -461,14 +547,11 @@ h1 {
 	border-left: 1rem solid black;
 	z-index: 1000;
 	padding: 1rem;
-	
 }
 #achievementsh1 {
 	color: white;
 	position: absolute;
 	transform: translateY(-5vh);
-
-	
 }
 
 #achievementsdiv {
@@ -514,7 +597,7 @@ h1 {
 	display: block;
 	animation: achieve-slide-back 1s ease-in-out;
 	left: -3vw;
-	top: calc(97vh/2 - 5vh);
+	top: calc(97vh / 2 - 5vh);
 	width: 3vw;
 	height: 10vh;
 	border-radius: 10px;
@@ -546,7 +629,7 @@ h1 {
 	justify-content: center;
 	border-radius: 10px 10px 0 0;
 	font-size: 1.5rem;
-	animation: alert-slide-out 1s ease-out;
+	animation: alert-slide-out 0.5s ease-in;
 }
 
 @keyframes alert-slide-in {
@@ -560,5 +643,5 @@ h1 {
 
 #alert.alert-on {
 	bottom: 0;
-	animation: alert-slide-in 1s ease-in;	
+	animation: alert-slide-in 0.5s ease-out;
 }

@@ -30,6 +30,7 @@
 
 body {
   margin: 0;
+  overflow: hidden;
 }
 
 #ascendbtn {
@@ -53,7 +54,21 @@ body {
           justify-content: center;
 }
 
-#acsensionups {
+#ascensionlabel {
+  z-index: 21000;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  font-size: 2rem;
+  color: white;
+  display: none;
+}
+
+#ascensionlabel.ascensionlabelon {
+  display: block;
+}
+
+#ascensionups {
   z-index: 15000;
   position: absolute;
   width: 100vw;
@@ -67,13 +82,71 @@ body {
   background-image: url("img/ascendbg.jpg");
 }
 
+#ascensionclose {
+  left: 50%;
+  -webkit-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
+  bottom: 0;
+  width: 10vw;
+  height: 10vh;
+  background: #a100c2;
+  position: absolute;
+  z-index: 22000;
+  display: none;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  color: white;
+}
+
+#ascensionclose.ascensioncloseclose {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 .ascensionUpgrade {
   width: 4rem;
   height: 4rem;
   -webkit-transform: translate(-2rem, -2rem);
           transform: translate(-2rem, -2rem);
   border-radius: 4rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.208);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.ascensionUpgrade img {
+  width: 3rem;
+  height: 3rem;
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
+}
+
+#hover-ascension {
+  position: absolute;
+  background-color: #8a0000;
+  color: white;
+  padding: 1rem;
+  margin: 0;
+  right: 0;
+  width: 20vw;
+  display: none;
+  bottom: 0%;
+  z-index: 21000;
 }
 
 @-webkit-keyframes open-ascensions {
@@ -98,7 +171,7 @@ body {
   }
 }
 
-.acsensionups-open {
+.ascensionups-open {
   display: block !important;
   -webkit-animation: open-ascensions 1s ease-in-out;
           animation: open-ascensions 1s ease-in-out;
@@ -424,7 +497,16 @@ div#loadingdiv {
   padding-top: 10vh;
 }
 
-#changelogdiv h1, #changelogdiv h2, #changelogdiv h3, #changelogdiv h4, #changelogdiv h5, #changelogdiv h6, #changelogdiv p, #changelogdiv span, #changelogdiv ul, #changelogdiv li {
+#changelogdiv h1,
+#changelogdiv h2,
+#changelogdiv h3,
+#changelogdiv h4,
+#changelogdiv h5,
+#changelogdiv h6,
+#changelogdiv p,
+#changelogdiv span,
+#changelogdiv ul,
+#changelogdiv li {
   color: white;
   text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
   text-align: center;
@@ -503,8 +585,9 @@ div#loadingdiv {
 .upgrade {
   width: 3.8rem;
   height: 3.8rem;
-  border: 0.2rem ridge #2f0000;
-  background: #5e2a00;
+  border: 0.2rem outset #693100;
+  background-image: url("img/upgradebg.png");
+  background-size: 100%;
   display: -ms-inline-grid;
   display: inline-grid;
   -ms-interpolation-mode: nearest-neighbor;
@@ -514,6 +597,18 @@ div#loadingdiv {
       image-rendering: pixelated;
   -webkit-transform: translate(1rem, 0);
           transform: translate(1rem, 0);
+}
+
+.upgrade:hover {
+  border: 0.2rem inset #693100;
+}
+
+.upgrade.disabled::after {
+  content: "";
+  width: 3.8rem;
+  height: 3.8rem;
+  background: rgba(0, 0, 0, 0.431);
+  position: absolute;
 }
 
 .upgrade > img {
@@ -656,7 +751,7 @@ h1 {
   -webkit-animation: achieve-slide-back 1s ease-in-out;
           animation: achieve-slide-back 1s ease-in-out;
   left: -3vw;
-  top: calc(97vh/2 - 5vh);
+  top: calc(97vh / 2 - 5vh);
   width: 3vw;
   height: 10vh;
   border-radius: 10px;
@@ -705,8 +800,8 @@ h1 {
           justify-content: center;
   border-radius: 10px 10px 0 0;
   font-size: 1.5rem;
-  -webkit-animation: alert-slide-out 1s ease-out;
-          animation: alert-slide-out 1s ease-out;
+  -webkit-animation: alert-slide-out 0.5s ease-in;
+          animation: alert-slide-out 0.5s ease-in;
 }
 
 @-webkit-keyframes alert-slide-in {
@@ -729,7 +824,7 @@ h1 {
 
 #alert.alert-on {
   bottom: 0;
-  -webkit-animation: alert-slide-in 1s ease-in;
-          animation: alert-slide-in 1s ease-in;
+  -webkit-animation: alert-slide-in 0.5s ease-out;
+          animation: alert-slide-in 0.5s ease-out;
 }
 /*# sourceMappingURL=style.css.map */
