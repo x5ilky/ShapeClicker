@@ -745,6 +745,7 @@ Game.load = () => {
     function resetAcsension() {
         if (Game.shapes >= getAcsensionPrice()) {
             Game.shapes -= getAcsensionPrice();
+            Game.shapesEarned -= getAcsensionPrice();
             Game.acsensions++;
             Game.higherPolygons += 2 ** Game.acsensions;
             Game.shapes = 0;
