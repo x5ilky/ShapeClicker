@@ -230,9 +230,9 @@ Game.load = () => {
                 return c({
                     tag: 'span', classList: 'acmt',
                     children: [
-                        c({ tag: 'span', classList: `acmt-${requirement() ? rarity : 'no'} acmt-name`, textContent: rarity === 'secret' ? (requirement() ? 'SECRET: ' + name : 'SECRET: ' + '???') : (requirement() ? name : '???') }),
+                        c({ tag: 'span', classList: `acmt-${Game.gottenAchievements.includes(this.name) ? rarity : 'no'} acmt-name`, textContent: rarity === 'secret' ? (Game.gottenAchievements.includes(this.name) ? 'SECRET: ' + name : 'SECRET: ' + '???') : (Game.gottenAchievements.includes(this.name) ? name : '???') }),
                         c({ tag: 'span', classList: ``, textContent: ' - ' }),
-                        c({ tag: 'span', classList: `acmt-require`, textContent: requirement() ? requirementstring : '???' }),
+                        c({ tag: 'span', classList: `acmt-require`, textContent: Game.gottenAchievements.includes(this.name) ? requirementstring : '???' }),
                         c({ tag: 'span', innerHTML: '<br>' })
                     ]
                 })
@@ -275,8 +275,8 @@ Game.load = () => {
         new Game.bot('Builder', 1500, 15, () => Game.builders.toString(), () => { if (Game.shapes >= getPrice(Game.bots[2].baseprice, Game.builders)) { Game.shapes -= getPrice(Game.bots[2].baseprice, Game.builders); Game.shapesEarned -= getPrice(Game.bots[2].baseprice, Game.builders); Game.builders++; } }),
         new Game.bot('Factory', 30000, 45, () => Game.factorys.toString(), () => { if (Game.shapes >= getPrice(Game.bots[3].baseprice, Game.factorys)) { Game.shapes -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.shapesEarned -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.factorys++; } }),
         new Game.bot('Distrubution', 150000, 250, () => Game.distrubutions.toString(), () => { if (Game.shapes >= getPrice(Game.bots[4].baseprice, Game.distrubutions)) { Game.shapes -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.shapesEarned -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.distrubutions++; } }),
-        new Game.bot('Bank', 1500000, 1100, () => Game.banks.toString(), () => { if (Game.shapes >= getPrice(Game.bots[5].baseprice, Game.banks)) { Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.banks++; } }),
-        new Game.bot('Polystructor', 15000000, 7000, () => Game.polystructors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[6].baseprice, Game.polystructors)) { Game.shapes -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.shapes -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.polystructors++; } })
+        new Game.bot('Bank', 1500000, 1100, () => Game.banks.toString(), () => { if (Game.shapes >= getPrice(Game.bots[5].baseprice, Game.banks)) { Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.earnedShapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.banks++; } }),
+        new Game.bot('Polystructor', 15000000, 7000, () => Game.polystructors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[6].baseprice, Game.polystructors)) { Game.shapes -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.shapesEarned -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.polystructors++; } })
     ]
 
     Game.totalUpgrades = [
@@ -481,7 +481,12 @@ Game.load = () => {
         f('#achievementsdiv').setHtml('')
         Game.achieved = 0;
         Game.achievements.forEach(achievement => {
-            f('#achievementsdiv').appendChild(achievement.obj())
+            var obj = achievement.obj()
+            if (achievement.requirement() && !Game.gottenAchievements.includes(achievement.name)) {
+                Game.gottenAchievements.push(achievement.name)
+            }
+            f('#achievementsdiv').appendChild(obj)
+
         })
 
         Game.boosts.clickUp = 0;
@@ -771,6 +776,7 @@ Game.init = () => {
 
     Game.boughtUpgrades = []
     Game.gottenAscensionUpgrades = []
+    Game.gottenAchievements = []
 
     Game.load();
 }
@@ -778,11 +784,11 @@ Game.init = () => {
 
 
 function savePrompt() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades }).toString()
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades, gottenAchievements: Game.gottenAchievements }).toString()
     prompt('Savecode: ', utf8_to_b64(data))
 }
 function save() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades }).toString()
+    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades, gottenAchievements: Game.gottenAchievements }).toString()
 
     return utf8_to_b64(data)
 
@@ -809,6 +815,7 @@ function loadPrompt() {
     Game.acsensions = thing.acsensions
     Game.higherPolygons = thing.higherPolygons
     Game.gottenAscensionUpgrades = thing.gottenAscensionUpgrades
+    Game.gottenAchievements = thing.gottenAchievements
     try { f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`) } catch { }
     try { Game.updateBots() } catch { }
 }
@@ -835,6 +842,7 @@ function load() {
     Game.acsensions = thing.acsensions
     Game.higherPolygons = thing.higherPolygons
     Game.gottenAscensionUpgrades = thing.gottenAscensionUpgrades
+    Game.gottenAchievements = thing.gottenAchievements
     try { f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`) } catch { }
     try { Game.updateBots() } catch { }
 
@@ -868,6 +876,7 @@ if (localStorage.getItem('savecode') === null) {
     Game.acsensions = Game.acsensions ?? 0
     Game.higherPolygons = Game.higherPolygons ?? 0;
     Game.gottenAscensionUpgrades = Game.gottenAscensionUpgrades ?? [];
+    Game.gottenAchievements = Game.gottenAchievements ?? [];
     Game.load()
 }
 
