@@ -77,7 +77,7 @@ function b64Decode(str) {
 };
 var instances = 0;
 
-var biglist = ['', 'Thousand', 'Million', 'Billion', 'Trillion', 'Quadrillion', 'Quintillion', 'Sextillion', 'Septillion', 'Octillion', 'Nonillion', 'Decillion'];
+var biglist = ['', 'Thousand', 'Million', 'Billion', 'Trillion', 'Quadrillion', 'Quintillion', 'Sextillion', 'Septillion', 'Octillion', 'Nonillion', 'Decillion', 'Undecillion', 'Duodecillion', 'Tredecillion', 'Quattordecillion', 'Quindecillion', 'Sexdecillion', 'Septendecillion', 'Octodecillion', 'Novembecillion', 'Vigintillion'];
 var roundOffTo = function (num, factor) {
     if (factor === void 0) { factor = 1; }
     var quotient = num / factor;
@@ -89,7 +89,7 @@ function escapeRegExp(string) {
 }
 
 function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    return str.replace(new RegExp((find), 'g'), replace);
 }
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
@@ -115,7 +115,7 @@ var browserName = (function (agent) {
 
 function toShortScale(number) {
     var rounded = Math.floor(number);
-    var length = rounded.toString().length;
+    var length = rounded.toLocaleString('fullwide', {useGrouping:false}).length;
     var index = roundOffTo(length - 1, 3) / 3;
     var numbertodivide = '1';
     for (var i = 0; i < roundOffTo(length - 1, 3); i++) {
@@ -164,12 +164,43 @@ Assets.init = () => {
 
 Game.load = () => {
 
+    Game.promptreturn = ''
 
+    Game.prompt = async (prompt, message) => {
+        
+        
+        return new Promise(async resolve => {
+            f('#prompt').classList.add('prompton')
+            f('.promptheader').setText(prompt)
+            if (message) {
+                f('.promptinput').setText(message)
+            } else {
+                f('.promptinput').setText('')
+            }
+            var thing = Game.promptreturn
+            const ok = () => {
+                f('#prompt').classList.remove('prompton')
+                document.querySelector('.promptok').removeEventListener('click', ok)
+                resolve(document.querySelector('.promptinput').value)
+            }
+            var cancel = () => {
+                f('#prompt').classList.remove('prompton')
+                document.querySelector('.promptcancel').removeEventListener('click', cancel)
+                resolve(null)
+            }
+            document.querySelector('.promptok').addEventListener('click', ok)
+            document.querySelector('.promptcancel').addEventListener('click', cancel)
+        })
+    }   
+
+    Game.alerts = []
 
     Game.alert = (message) => {
+        Game.alerts.forEach(alert => {clearTimeout(alert)})
         f('#alert').classList.add('alert-on');
         f('#alert').setText(message);
-        setTimeout(() => { f('#alert').classList.remove('alert-on') }, 3000)
+        Game.alerts.push(setTimeout(() => { f('#alert').classList.remove('alert-on') }, 3000))
+        
     }
 
 
@@ -203,7 +234,7 @@ Game.load = () => {
             this.requirement = requirement;
             this.effects = effects;
             this.obj = () => {
-                var newObj = c({ tag: 'div', classList: 'upgrade', id: `upgrade-${replaceAll(name, ' ', '')}`, children: [c({ tag: 'img', src: img })] });
+                var newObj = c({ tag: 'div', classList: 'upgrade', id: `upgrade-${replaceAll(name, '( |\\(|\\)|\\:)', '')}`, children: [c({ tag: 'img', src: img })] });
                 newObj.addEventListener('mouseenter', () => {
                     f('#hover > #hoverheader').setText(name);
                     f('#hover > #hoverpara').setText(desc);
@@ -252,7 +283,7 @@ Game.load = () => {
             this.obj = () => {
                 var thing = c({
                     tag: 'div',
-                    id: `ascension-${replaceAll(name, " ", '').toLowerCase()}`,
+                    id: `ascension-${replaceAll(name, "( |\\(|\\)|\\:)", '').toLowerCase()}`,
                     classList: 'ascensionUpgrade',
                     children: [
                         c({
@@ -276,8 +307,16 @@ Game.load = () => {
         new Game.bot('Factory', 30000, 45, () => Game.factorys.toString(), () => { if (Game.shapes >= getPrice(Game.bots[3].baseprice, Game.factorys)) { Game.shapes -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.shapesEarned -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.factorys++; } }),
         new Game.bot('Distrubution', 150000, 250, () => Game.distrubutions.toString(), () => { if (Game.shapes >= getPrice(Game.bots[4].baseprice, Game.distrubutions)) { Game.shapes -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.shapesEarned -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.distrubutions++; } }),
         new Game.bot('Bank', 1500000, 1100, () => Game.banks.toString(), () => { if (Game.shapes >= getPrice(Game.bots[5].baseprice, Game.banks)) { Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.earnedShapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.banks++; } }),
-        new Game.bot('Polystructor', 15000000, 7000, () => Game.polystructors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[6].baseprice, Game.polystructors)) { Game.shapes -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.shapesEarned -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.polystructors++; } })
+        new Game.bot('Polystructor', 15000000, 7000, () => Game.polystructors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[6].baseprice, Game.polystructors)) { Game.shapes -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.shapesEarned -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.polystructors++; } }),
+        new Game.bot('Wizard Tower', 300_000_000, 45000, () => Game.wizardtowers.toString(), () => { if (Game.shapes >= getPrice(Game.bots[7].baseprice, Game.wizardtowers)) { Game.shapes -= getPrice(Game.bots[7].baseprice, Game.wizardtowers); Game.shapesEarned -= getPrice(Game.bots[7].baseprice, Game.wizardtowers); Game.wizardtowers++; } })
     ]
+
+    function hAU (upname) {
+        return Game.gottenAscensionUpgrades.includes(upname)
+    }
+    function hU(upname) {
+        return Game.boughtUpgrades.includes(upname)
+    }
 
     Game.totalUpgrades = [
         new Game.upgrade('Bisect', () => Game.clicks > 5, 100, 'Double the amount of shapes you get per click.', 'img/upgrades/mouses/bisect/bisect1.png', () => { Game.boosts.clickMult *= 2 }),
@@ -289,25 +328,43 @@ Game.load = () => {
         new Game.upgrade('Diamond Mouse', () => Game.cursors > 20 && Game.clicks > 500, 10000000, 'Encourages your bots to work eve harder! Gain another +1% of your sps per click', 'img/upgrades/mouses/diamondmouse.png', () => { Game.boosts.clickUp += Game.sps * 0.01 }),
 
         new Game.upgrade('Double Click', () => Game.cursors > 0, 250, 'Makes cursors click twice.', 'img/upgrades/cursor/cursor1.png', () => { Game.boosts.cursorMult *= 2 }),
-        new Game.upgrade('Faster Fingers', () => Game.cursors > 5, 1000, 'Makes cursors click two times faster', 'img/upgrades/cursor/cursor2.png', () => { Game.boosts.cursorMult *= 2 }),
+        new Game.upgrade('Faster Fingers', () => Game.cursors >= 10, 1000, 'Makes cursors click two times faster', 'img/upgrades/cursor/cursor2.png', () => { Game.boosts.cursorMult *= 2 }),
+        new Game.upgrade('Autoclicker', () => Game.cursors >= 20, 10000, 'Lets cursors autoclick the shape, doubling cursor sps.', 'img/upgrades/cursor/cursor3.png', () => { Game.boosts.cursorMult *= 2 }),
 
         new Game.upgrade('Protractor', () => Game.rulers > 0, 500, 'Make shapes more accurate. Doubles the amount of shapes a ruler produces.', 'img/upgrades/ruler/ruler1.png', () => { Game.boosts.rulerMult *= 2 }),
-        new Game.upgrade('Longer Rulers', () => Game.rulers > 5, 3000, 'Makes rulers longer. Doubles ruler sps.', 'img/upgrades/ruler/ruler2.png', () => { Game.boosts.rulerMult *= 2 }),
+        new Game.upgrade('Longer Rulers', () => Game.rulers >= 10, 3000, 'Makes rulers longer. Doubles ruler sps.', 'img/upgrades/ruler/ruler2.png', () => { Game.boosts.rulerMult *= 2 }),
+        new Game.upgrade('Laser Cut Rulers', () => Game.rulers >= 20, 20000, 'Makes rulers more accurate then ever doubling ruler sps.', 'img/upgrades/ruler/ruler3.png', () => { Game.boosts.rulerMult *= 2 }),
 
         new Game.upgrade('Better Tools', () => Game.builders > 0, 5000, 'Give builders better tools. Doubles builders\' sps.', 'img/upgrades/builder/builder1.png', () => { Game.boosts.builderMult *= 2 }),
-        new Game.upgrade('Stainless Steel Casing', () => Game.builders >= 5, 30000, 'Gives builders a better casing. Doubles builders\' sps.', 'img/upgrades/builder/builder2.png', () => { Game.boosts.builderMult *= 2 }),
+        new Game.upgrade('Stainless Steel Casing', () => Game.builders >= 10, 30000, 'Gives builders a better casing. Doubles builders\' sps.', 'img/upgrades/builder/builder2.png', () => { Game.boosts.builderMult *= 2 }),
+        new Game.upgrade('Aluminum Helmets', () => Game.builders >= 20, 150000, 'Gives workers stronger helmets making them two times better.', 'img/upgrades/builder/builder3.png', () => { Game.boosts.builderMult *= 2}),
 
         new Game.upgrade('Stronger Machines', () => Game.factorys > 0, 100000, 'Makes machines in factories have more strength. Doubles factories\' sps.', 'img/upgrades/factory/factory1.png', () => { Game.boosts.factoryMult *= 2 }),
-        new Game.upgrade('Air Filters', () => Game.factorys >= 5, 500000, 'Removes 10% of greenhouse gasses produced by factories, allowing them to go 2x faster. Doubles factories\' sps.', 'img/upgrades/factory/factory2.png', () => { Game.factoryMult *= 2 }),
+        new Game.upgrade('Air Filters', () => Game.factorys >= 10, 500000, 'Removes 10% of greenhouse gasses produced by factories, allowing them to go 2x faster. Doubles factories\' sps.', 'img/upgrades/factory/factory2.png', () => { Game.factoryMult *= 2 }),
+        new Game.upgrade('Better Masks', () => Game.factorys >= 20, 1500000, 'Gives factory workers better masks doubling factory sps', 'img/upgrades/factory/factory3.png', () => { Game.boosts.factoryMult *= 2 }),
 
         new Game.upgrade('Helping Hands', () => Game.distrubutions > 0, 500000, 'Adds helping hands to your distrubutions, doubles distrubution sps.', 'img/upgrades/distrubution/distrubution1.png', () => { Game.boosts.distrubutionMult *= 2 }),
-        new Game.upgrade('Bigger Forklifts', () => Game.distrubutions >= 5, 2500000, 'Makes forklifts bigger multiplying distrubution sps by 2.', 'img/upgrades/distrubution/distrubution2.png', () => { Game.boosts.distrubutionMult *= 2 }),
+        new Game.upgrade('Bigger Forklifts', () => Game.distrubutions >= 10, 2500000, 'Makes forklifts bigger multiplying distrubution sps by 2.', 'img/upgrades/distrubution/distrubution2.png', () => { Game.boosts.distrubutionMult *= 2 }),
+        new Game.upgrade('ForkBots', () => Game.distrubutions >= 20, 15_000_000, 'Creates bots that automatically carry items to the forklifts for you! Doubles distrubution sps.', 'img/upgrades/distrubution/distrubution3.png', () => { Game.boosts.distrubutionMult *= 2 }),
 
         new Game.upgrade('Credit Cards', () => Game.banks > 0, 10000000, 'Gives your customers credit cards, doubles bank sps.', 'img/upgrades/bank/bank1.png', () => { Game.boosts.bankMult *= 2 }),
-        new Game.upgrade('Heist Proof Vaults', () => Game.banks >= 5, 50000000, 'Prevents vaults from being breached multiplying bank sps by 2.', 'img/upgrades/bank/bank2.png', () => { Game.boosts.bankMult *= 2 }),
+        new Game.upgrade('Heist Proof Vaults', () => Game.banks >= 10, 50000000, 'Prevents vaults from being breached multiplying bank sps by 2.', 'img/upgrades/bank/bank2.png', () => { Game.boosts.bankMult *= 2 }),
+        new Game.upgrade('Modern Lobbies', () => Game.banks >= 20, 150_000_000, 'Give banks modern lobbies, keeping customers for longer, doubling bank sps.', 'img/upgrades/bank/bank3.png', () => { Game.boosts.bankMult *= 2 }),
 
         new Game.upgrade('Faster Construction', () => Game.polystructors > 0, 60000000, 'Makes polystructors construct polygons 2 times faster.', 'img/upgrades/polystructor/polystructor1.png', () => { Game.boosts.polystructorMult *= 2 }),
-        new Game.upgrade('Angle Accuracy', () => Game.polystructors >= 5, 300000000, 'Makes polystructors 2 times more accurate doubling polystructor sps.', 'img/upgrades/polystructor/polystructor2.png', () => { Game.boosts.polystructorMult *= 2 }),
+        new Game.upgrade('Angle Accuracy', () => Game.polystructors >= 10, 300_000_000, 'Makes polystructors 2 times more accurate doubling polystructor sps.', 'img/upgrades/polystructor/polystructor2.png', () => { Game.boosts.polystructorMult *= 2 }),
+        new Game.upgrade('Sapphire Lasers', () => Game.polystructors >= 20, 1_000_000_000, 'Upgrades the polystructors\'s lasers, doubling polystructor sps.', 'img/upgrades/polystructor/polystructor3.png', () => { Game.boosts.polystructorMult *= 2 }),
+    
+        new Game.upgrade('Book of Constants (Volume 1)', () => Game.shapes >= 100000, 300000, 'Allows you to get constants that increase sps. Contains 9 constants.', 'img/upgrades/constants/bookofconstants1.png', () => {}),
+        new Game.upgrade('Constant: Pi', () => Game.shapes >= 100000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/pi.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: e', () => Game.shapes >= 500000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/e.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: sqrt(2)', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/sqrt(2).png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: sqrt(3)', () => Game.shapes >= 2000000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/sqrt(3).png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: sqrt(5)', () => Game.shapes >= 5000000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/sqrt(5).png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: Phi', () => Game.shapes >= 10000000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/phi.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: 0', () => Game.shapes >= 20_000_000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/zero.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: 1', () => Game.shapes >= 50_000_000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/one.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: i', () => Game.shapes >= 100_000_000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/i.png', () => { Game.boosts.endMult += 0.1 }),
     ]
 
     Game.availUpgrades = []
@@ -405,6 +462,7 @@ Game.load = () => {
     Game.ascensionUpgrades = [
         new Game.ascensionUpgrade("Pentagon", '', "Doubles your base SPC and multiplies your sps by 1.5", 1, 'img/pentagon.png', () => { Game.boosts.clickMult *= 2; Game.boosts.endMult *= 1.5; document.querySelector('#shape > img').src = 'img/pentagon.png' }, 50, 50),
         new Game.ascensionUpgrade("Achievement Synthesiser", 'Pentagon', 'Adds +5% sps for every 10 achievements you have.', 5, 'img/ascended/achievementsynthesiser.png', () => { Game.boosts.endMult += Math.floor(Game.achieved / 10) * 0.05 }, 42, 45),
+        new Game.ascensionUpgrade("Book of Constants (Volume 2)", "Pentagon", 'Unlocks more constants to boost your sps. Level 2 Constants (boosts 2% per)', 3, 'img/upgrades/constants/bookofconstants2.png', () => {}, 60, 52),
     ]
 
     Game.boosts = {}
@@ -429,8 +487,8 @@ Game.load = () => {
         var ctx = document.querySelector('#fx').getContext("2d")
         ctx.font = `bold 3rem Poppins`
         ctx.lineWidth = 4;
-        ctx.fillText(`+ ${toShortScale(thing2 ? Game.spc * 3 : Game.spc)}`, getMousePos(document.querySelector('#fx'), e).x + (Math.random() - 0.5) * 10, document.querySelector('#fx').height / 2)
-        Game.cpsTexts.push({ content: `+ ${toShortScale(thing2 ? Game.spc * 3 : Game.spc)}`, x: getMousePos(document.querySelector('#fx'), e).x + (Math.random() - 0.5) * 10, y: document.querySelector('#fx').height / 2, opacity: 1 })
+        ctx.fillText(`+ ${toShortScale(thing2 ? Game.spc * 3 : Game.spc)}`, getMousePos(document.querySelector('#fx'), e).x + (Math.random() - 0.5) * 10, getMousePos(document.querySelector('#fx'), e).y + (Math.random() - 0.5) * 10)
+        Game.cpsTexts.push({ content: `+ ${toShortScale(thing2 ? Game.spc * 3 : Game.spc)}`, x: getMousePos(document.querySelector('#fx'), e).x + (Math.random() - 0.5) * 10, y: getMousePos(document.querySelector('#fx'), e).y + (Math.random() - 0.5) * 10, opacity: 1 })
     }
 
 
@@ -441,9 +499,9 @@ Game.load = () => {
         Game.bots.forEach((bot, index) => {
             f('#botsdiv').appendChild(bot.obj())
             f(`#bot-${replaceAll(bot.name, ' ', '')}`).on('click', () => { bot.buyFunc(); Game.updateBots(); })
-            document.querySelector(`#bot-${replaceAll(bot.name, ' ', '')}`).addEventListener('mouseenter', () => {
+            document.querySelector(`#bot-${replaceAll(bot.name, '( |\\(|\\))', '')}`).addEventListener('mouseenter', () => {
                 f('#hover > #hoverheader').setText(bot.name);
-                f('#hover > #hoverpara').setText(`Generates ${toShortScale(eval(`(Game.bots[${index}].sps + Game.boosts.${bot.name.toLowerCase()}Up) * Game.boosts.${bot.name.toLowerCase()}Mult`))} shapes per second.\nYour ${eval(`Game.${bot.name.toLowerCase()}s`)} ${bot.name.toLowerCase()}s produce a total of ${toShortScale(eval(`(Game.bots[${index}].sps + Game.boosts.${bot.name.toLowerCase()}Up) * ${eval(`Game.${bot.name.toLowerCase()}s`)} * Game.boosts.${bot.name.toLowerCase()}Mult`))} shapes per second.`);
+                f('#hover > #hoverpara').setText(`Generates ${toShortScale(eval(`(Game.bots[${index}].sps + Game.boosts.${replaceAll(bot.name.toLowerCase(), " ", '')}Up) * Game.boosts.${replaceAll(bot.name.toLowerCase(), " ", '')}Mult`))} shapes per second.\nYour ${eval(`Game.${replaceAll(bot.name.toLowerCase(), " ", '')}s`)} ${bot.name.toLowerCase()}s produce a total of ${toShortScale(eval(`(Game.bots[${index}].sps + Game.boosts.${replaceAll(bot.name.toLowerCase(), " ", '')}Up) * ${eval(`Game.${replaceAll(bot.name.toLowerCase(), " ", '')}s`)} * Game.boosts.${replaceAll(bot.name.toLowerCase(), " ", '')}Mult`))} shapes per second.`);
                 f('#hover > #hoverprice').setText(`${toShortScale(getPrice(bot.baseprice, bot.amount()))} Shapes`)
                 document.querySelector('#hover').style.display = 'block';
             })
@@ -484,6 +542,7 @@ Game.load = () => {
             var obj = achievement.obj()
             if (achievement.requirement() && !Game.gottenAchievements.includes(achievement.name)) {
                 Game.gottenAchievements.push(achievement.name)
+                Game.alert(`New ${achievement.rarity} achievement got!\n${achievement.name}`)
             }
             f('#achievementsdiv').appendChild(obj)
 
@@ -506,6 +565,8 @@ Game.load = () => {
         Game.boosts.bankMult = 1;
         Game.boosts.polystructorUp = 0;
         Game.boosts.polystructorMult = 1;
+        Game.boosts.wizardtowerUp = 0;
+        Game.boosts.wizardtowerMult = 1;
 
         Game.boosts.endUp = 0;
         Game.boosts.endMult = 1;
@@ -527,7 +588,8 @@ Game.load = () => {
             (Game.bots[3].sps + Game.boosts.factoryUp) * Game.factorys * Game.boosts.factoryMult +
             (Game.bots[4].sps + Game.boosts.distrubutionUp) * Game.distrubutions * Game.boosts.distrubutionMult +
             (Game.bots[5].sps + Game.boosts.bankUp) * Game.banks * Game.boosts.bankMult +
-            (Game.bots[6].sps + Game.boosts.polystructorUp) * Game.polystructors * Game.boosts.polystructorMult) + Game.boosts.endUp) * Game.boosts.endMult;
+            (Game.bots[6].sps + Game.boosts.polystructorUp) * Game.polystructors * Game.boosts.polystructorMult + 
+            (Game.bots[7].sps + Game.boosts.wizardtowerUp) * Game.wizardtowers * Game.boosts.wizardtowerMult) + Game.boosts.endUp) * Game.boosts.endMult;
         Game.spc = (1 + Game.boosts.clickUp) * Game.boosts.clickMult;
 
         f('h1#shapecount').setText(`${toShortScale(Game.shapes)} Shapes`)
@@ -550,7 +612,7 @@ Game.load = () => {
             Game.availUpgrades.forEach(upgrade => {
                 var up2 = Game.totalUpgrades.filter(a => a.name === upgrade)[0]
                 f('#upgradesdiv').appendChild(up2.obj())
-                f(`#upgrade-${replaceAll(up2.name, ' ', '')}`).on('click', () => {
+                f(`#upgrade-${replaceAll(upgrade, '( |\\(|\\)|\\:)', '')}`).on('click', () => {
                     if (Game.shapes >= up2.price) {
                         Game.shapes -= up2.price
                         Game.shapesEarned -= up2.price
@@ -565,9 +627,9 @@ Game.load = () => {
         Game.availUpgrades.forEach(upgrade => {
             var up2 = Game.totalUpgrades.filter(a => a.name === upgrade)[0]
             if (Game.shapes >= up2.price) {
-                f(`#upgrade-${replaceAll(upgrade, " ", "")}`).classList.remove('disabled')
+                f(`#upgrade-${replaceAll(up2.name, '( |\\(|\\)|\\:)', '')}`).classList.remove('disabled')
             } else {
-                f(`#upgrade-${replaceAll(upgrade, " ", "")}`).classList.add('disabled')
+                f(`#upgrade-${replaceAll(up2.name, '( |\\(|\\)|\\:)', '')}`).classList.add('disabled')
             }
         })
         Game.prevUpgrades = Game.availUpgrades
@@ -640,9 +702,16 @@ Game.load = () => {
     Game.name = Game.name ?? `${get_random(randomfirst)} ${get_random(randomlast)}`
     f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
 
-    f('#nameSelector').on('click', (e) => {
-        Game.name = prompt('What is your name?') // A little bit unprofessional, will fix later.
-        f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
+    f('#nameSelector').on('click', async (e) => {
+        await Game.prompt('What is your name?').then(obj => {
+            if (obj !== null) {
+                Game.name = obj
+            f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
+            }
+            
+        }) // No longer not profess\ional :D
+        
+        
     })
 
     console.log(get_random([
@@ -703,16 +772,16 @@ Game.load = () => {
         Game.availAscensionUpgrades.forEach(item => {
             if (item.hasUpgrade()) {
                 f('#ascensionups').appendChild(item.obj())
-                document.querySelector(`#ascension-${replaceAll(item.name, " ", '').toLowerCase()}`).addEventListener('mouseenter', () => {
+                document.querySelector(`#ascension-${replaceAll(item.name, "( |\\(|\\)|\\:)", '').toLowerCase()}`).addEventListener('mouseenter', () => {
                     f('#hover-ascension > #hoverheader').setText(item.name);
                     f('#hover-ascension > #hoverpara').setHtml(item.desc + `<br>${Game.gottenAscensionUpgrades.includes(item.name) ? 'Bought' : 'Not Bought'}`);
                     f('#hover-ascension > #hoverprice').setText(`${toShortScale(item.price)} Higher Polygons`)
                     document.querySelector('#hover-ascension').style.display = 'block';
                 })
-                document.querySelector(`#ascension-${replaceAll(item.name, " ", '').toLowerCase()}`).addEventListener('mouseleave', () => {
+                document.querySelector(`#ascension-${replaceAll(item.name, "( |\\(|\\)|\\:)", '').toLowerCase()}`).addEventListener('mouseleave', () => {
                     document.querySelector('#hover-ascension').style.display = 'none';
                 })
-                f(`#ascension-${replaceAll(item.name, " ", '').toLowerCase()}`).on('click', () => {
+                f(`#ascension-${replaceAll(item.name, "( |\\(|\\)|\\:)", '').toLowerCase()}`).on('click', () => {
                     if (Game.higherPolygons >= item.price && !Game.gottenAscensionUpgrades.includes(item.name)) {
                         Game.higherPolygons -= item.price;
 
@@ -752,7 +821,11 @@ if (browserName !== "MS IE") {
     $('#iediv').toggle();
 }
 
+const version = '0.9.1'
+
 Game.init = () => {
+    Game.version = '0.9.1'
+
     Game.clicks = 0;
     Game.shapes = 0;
     Game.secondsSpent = 0;
@@ -765,7 +838,10 @@ Game.init = () => {
     Game.distrubutions = 0;
     Game.banks = 0;
     Game.polystructors = 0;
+    Game.wizardtowers = 0;
+
     Game.shapesEarned = 0;
+
     Game.hacked = false;
 
     Game.higherPolygons = 0;
@@ -783,66 +859,68 @@ Game.init = () => {
 
 
 
-function savePrompt() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades, gottenAchievements: Game.gottenAchievements }).toString()
-    prompt('Savecode: ', utf8_to_b64(data))
+async function savePrompt() {
+    var data = JSON.stringify({ version: Game.version, shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, wizardtowers: Game.wizardtowers, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades, gottenAchievements: Game.gottenAchievements }).toString()
+    await Game.prompt('Savecode: ', utf8_to_b64(data))
 }
 function save() {
-    var data = JSON.stringify({ shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades, gottenAchievements: Game.gottenAchievements }).toString()
+    var data = JSON.stringify({ version: Game.version, shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, wizardtowers: Game.wizardtowers, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades, gottenAchievements: Game.gottenAchievements }).toString()
 
     return utf8_to_b64(data)
 
 }
-function loadPrompt() {
-    var thing = JSON.parse(b64_to_utf8(prompt('Loadcode: ')))
-    Game.shapes = thing.shapes
-    Game.clicks = thing.clicks
-    Game.cursors = thing.cursors
-    Game.rulers = thing.rulers
-    Game.builders = thing.builders
-    Game.factorys = thing.factorys
-    Game.distrubutions = thing.distrubutions
-    Game.banks = thing.banks
-    Game.polystructors = thing.polystructors
-    Game.name = thing.name
-    Game.boughtUpgrades = thing.boughtUpgrades
-    Game.secondsSpent = thing.time
-    Game.usedAutoclicker = thing.usedAutoclicker
-    Game.mouseShapes = thing.mouseShapes
-    Game.setNameSilkyway = thing.setNameSilkyway
-    Game.shapesEarned = thing.shapesEarned
-    Game.hacked = thing.hacked
-    Game.acsensions = thing.acsensions
-    Game.higherPolygons = thing.higherPolygons
-    Game.gottenAscensionUpgrades = thing.gottenAscensionUpgrades
-    Game.gottenAchievements = thing.gottenAchievements
+async function loadPrompt() {
+    var thing = JSON.parse(b64_to_utf8(await Game.prompt('Loadcode: ')))
+    Game.shapes = thing.shapes ?? 0;
+    Game.clicks = thing.clicks ?? 0;
+    Game.cursors = thing.cursors ?? 0;
+    Game.rulers = thing.rulers ?? 0;
+    Game.builders = thing.builders ?? 0;
+    Game.factorys = thing.factorys ?? 0;
+    Game.distrubutions = thing.distrubutions ?? 0;
+    Game.banks = thing.banks ?? 0;
+    Game.polystructors = thing.polystructors ?? 0;
+    Game.wizardtowers = thing.wizardtowers ?? 0;
+    Game.name = thing.name ?? `${get_random(randomfirst)} ${get_random(randomlast)}`;
+    Game.boughtUpgrades = thing.boughtUpgrades ?? []
+    Game.secondsSpent = thing.time ?? 0
+    Game.usedAutoclicker = thing.usedAutoclicker ?? false;
+    Game.mouseShapes = thing.mouseShapes ?? 0;
+    Game.setNameSilkyway = thing.setNameSilkyway ?? false;
+    Game.shapesEarned = thing.shapesEarned ?? 0;
+    Game.hacked = thing.hacked ?? false;
+    Game.acsensions = thing.acsensions ?? 0;
+    Game.higherPolygons = thing.higherPolygons ?? 0;
+    Game.gottenAscensionUpgrades = thing.gottenAscensionUpgrades ?? []
+    Game.gottenAchievements = thing.gottenAchievements ?? []
     try { f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`) } catch { }
     try { Game.updateBots() } catch { }
 }
 
 function load() {
     var thing = JSON.parse(b64_to_utf8(localStorage.getItem('savecode')))
-    Game.shapes = thing.shapes
-    Game.clicks = thing.clicks
-    Game.cursors = thing.cursors
-    Game.rulers = thing.rulers
-    Game.builders = thing.builders
-    Game.factorys = thing.factorys
-    Game.distrubutions = thing.distrubutions
-    Game.banks = thing.banks
-    Game.polystructors = thing.polystructors
-    Game.name = thing.name
-    Game.boughtUpgrades = thing.boughtUpgrades
-    Game.secondsSpent = thing.time
-    Game.usedAutoclicker = thing.usedAutoclicker
-    Game.mouseShapes = thing.mouseShapes
-    Game.setNameSilkyway = thing.setNameSilkyway
-    Game.shapesEarned = thing.shapesEarned
-    Game.hacked = thing.hacked
-    Game.acsensions = thing.acsensions
-    Game.higherPolygons = thing.higherPolygons
-    Game.gottenAscensionUpgrades = thing.gottenAscensionUpgrades
-    Game.gottenAchievements = thing.gottenAchievements
+    Game.shapes = thing.shapes ?? 0;
+    Game.clicks = thing.clicks ?? 0;
+    Game.cursors = thing.cursors ?? 0;
+    Game.rulers = thing.rulers ?? 0;
+    Game.builders = thing.builders ?? 0;
+    Game.factorys = thing.factorys ?? 0;
+    Game.distrubutions = thing.distrubutions ?? 0;
+    Game.banks = thing.banks ?? 0;
+    Game.polystructors = thing.polystructors ?? 0;
+    Game.wizardtowers = thing.wizardtowers ?? 0;
+    Game.name = thing.name ?? `${get_random(randomfirst)} ${get_random(randomlast)}`;
+    Game.boughtUpgrades = thing.boughtUpgrades ?? []
+    Game.secondsSpent = thing.time ?? 0
+    Game.usedAutoclicker = thing.usedAutoclicker ?? false;
+    Game.mouseShapes = thing.mouseShapes ?? 0;
+    Game.setNameSilkyway = thing.setNameSilkyway ?? false;
+    Game.shapesEarned = thing.shapesEarned ?? 0;
+    Game.hacked = thing.hacked ?? false;
+    Game.acsensions = thing.acsensions ?? 0;
+    Game.higherPolygons = thing.higherPolygons ?? 0;
+    Game.gottenAscensionUpgrades = thing.gottenAscensionUpgrades ?? []
+    Game.gottenAchievements = thing.gottenAchievements ?? []
     try { f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`) } catch { }
     try { Game.updateBots() } catch { }
 
@@ -869,6 +947,7 @@ if (localStorage.getItem('savecode') === null) {
     load()
     Game.banks = Game.banks ?? 0
     Game.polystructors = Game.polystructors ?? 0
+    Game.wizardtowers = Game.wizardtowers ?? 0
     Game.secondsSpent = Game.secondsSpent ?? 0
     Game.setNameSilkyway = Game.setNameSilkyway ?? false
     Game.mouseShapes = Game.mouseShapes ?? 0
@@ -877,6 +956,7 @@ if (localStorage.getItem('savecode') === null) {
     Game.higherPolygons = Game.higherPolygons ?? 0;
     Game.gottenAscensionUpgrades = Game.gottenAscensionUpgrades ?? [];
     Game.gottenAchievements = Game.gottenAchievements ?? [];
+    Game.version = Game.version ?? version
     Game.load()
 }
 

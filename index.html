@@ -14,11 +14,19 @@
     <script src="script.js" defer></script>
     
     <div id="topbar">
-        <span id="version">Shape Clicker v0.9.1</span>
+        <span id="version">Shape Clicker v0.10.0</span>
         <span id="copyright">Copyright Silkyway 2022-2022</span>
         <span id="changelog" onclick="Game.showChangelog()">Changelog</span>
     </div>
     <div id="news"></div>
+    <div id="prompt">
+        <div id="promptin">
+            <h1 class="promptheader">Lorem ipsum: </h1>
+            <textarea name="promptinput" id="" cols="30" rows="10" class="promptinput">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum, obcaecati.</textarea>
+            <button class="promptok">Done</button>
+            <button class="promptcancel">Cancel</button>
+        </div>
+    </div>
     <div id="clickdiv">
         <div id="alert">
             Game Saved!
@@ -98,6 +106,18 @@
     <div id="changelogdiv">
         <h1>Changelogs</h1>
         <div id="changelogclose" onclick="document.querySelector('#changelogdiv').style.display='none';">Close</div>
+        <h2>v0.10.0 - May 9th 2022</h2>
+        <p>
+            MAJOR CONTENT UPDATE: <br>
+            New bot: wizard tower<br>
+            No upgrades or achievements right now because it's 10:50 PM as I write this<br>
+            Third tier upgrade for every bot (except wizard tower) <br>
+            New upgrade! Book of Constants - Volume 1<br>
+            New type of upgrade: Constants<br>
+            9 new constants that boost sps!<br>
+            also FANCY PROMPT POPPUPS!<br>
+            <span class="spoiler">and message when you get a new achievement</span>
+        </p>
         <h2>v0.9.1 - May 9th 2022</h2>
         <p>
             minor bug fix - fixed ascension upgrades not saving.<br>

@@ -102,6 +102,40 @@ body {
 		image-rendering: pixelated;
 	}
 }
+
+#prompt {
+	position: absolute;
+	z-index: 19000;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.211);
+	display: none;
+
+	&.prompton {
+		display: block !important;
+	}
+}
+#promptin {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 20vw;
+	height: 50vh;
+	background: rgb(111, 39, 0);
+	border: 1rem outset rgb(41, 41, 41);
+	position: absolute;
+	padding: 1rem;
+	color: white;
+}
+.promptheader {
+	padding-bottom: 1rem;
+}
+.promptinput {
+	resize: none;
+	width: 100%;
+
+}
+
 #hover-ascension {
 	position: absolute;
 	background-color: rgb(138, 0, 0);
@@ -154,6 +188,7 @@ body {
 #shape > img {
 	width: 10rem;
 	height: auto;
+	cursor: pointer;
 }
 
 .bounce {
