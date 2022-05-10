@@ -354,17 +354,21 @@ Game.load = () => {
         new Game.upgrade('Faster Construction', () => Game.polystructors > 0, 60000000, 'Makes polystructors construct polygons 2 times faster.', 'img/upgrades/polystructor/polystructor1.png', () => { Game.boosts.polystructorMult *= 2 }),
         new Game.upgrade('Angle Accuracy', () => Game.polystructors >= 10, 300_000_000, 'Makes polystructors 2 times more accurate doubling polystructor sps.', 'img/upgrades/polystructor/polystructor2.png', () => { Game.boosts.polystructorMult *= 2 }),
         new Game.upgrade('Sapphire Lasers', () => Game.polystructors >= 20, 1_000_000_000, 'Upgrades the polystructors\'s lasers, doubling polystructor sps.', 'img/upgrades/polystructor/polystructor3.png', () => { Game.boosts.polystructorMult *= 2 }),
+
+        new Game.upgrade('Wizard Hats', () => Game.wizardtowers > 0, 1_000_000_000, 'Gives wizards more hats doubling wizard tower efficiency.', 'img/upgrades/wizardtower/wizardtower1.png', () => { Game.boosts.wizardtowerMult *= 2}),
+        new Game.upgrade('Cultist Group', () => Game.wizardtowers >= 10, 5_000_000_000, 'Allows wizards to create cults doubling wizard tower sps.', 'img/upgrades/wizardtower/wizardtower2.png', () => {Game.boosts.wizardtowerMult *= 2}),
+        new Game.upgrade('Higher Quality Wands', () => Game.wizardtowers >= 20, 20_000_000_000, 'Makes wands have higher quality wood doubling wizard tower sps.', 'img/upgrades/wizardtower/wizardtower3.png', () => { Game.boosts.wizardtowerMult *= 2 }),
     
         new Game.upgrade('Book of Constants (Volume 1)', () => Game.shapes >= 100000, 300000, 'Allows you to get constants that increase sps. Contains 9 constants.', 'img/upgrades/constants/bookofconstants1.png', () => {}),
-        new Game.upgrade('Constant: Pi', () => Game.shapes >= 100000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/pi.png', () => { Game.boosts.endMult += 0.1 }),
-        new Game.upgrade('Constant: e', () => Game.shapes >= 500000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/e.png', () => { Game.boosts.endMult += 0.1 }),
-        new Game.upgrade('Constant: sqrt(2)', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/sqrt(2).png', () => { Game.boosts.endMult += 0.1 }),
-        new Game.upgrade('Constant: sqrt(3)', () => Game.shapes >= 2000000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/sqrt(3).png', () => { Game.boosts.endMult += 0.1 }),
-        new Game.upgrade('Constant: sqrt(5)', () => Game.shapes >= 5000000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/sqrt(5).png', () => { Game.boosts.endMult += 0.1 }),
-        new Game.upgrade('Constant: Phi', () => Game.shapes >= 10000000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/phi.png', () => { Game.boosts.endMult += 0.1 }),
-        new Game.upgrade('Constant: 0', () => Game.shapes >= 20_000_000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/zero.png', () => { Game.boosts.endMult += 0.1 }),
-        new Game.upgrade('Constant: 1', () => Game.shapes >= 50_000_000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/one.png', () => { Game.boosts.endMult += 0.1 }),
-        new Game.upgrade('Constant: i', () => Game.shapes >= 100_000_000 && hU('Book of Constants (Volume 1)'), 300000, 'Increases sps by 1%', 'img/upgrades/constants/i.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: Pi', () => Game.shapes >= 50000 && hU('Book of Constants (Volume 1)'), 100000, 'Increases sps by 1%', 'img/upgrades/constants/pi.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: e', () => Game.shapes >= 250000 && hU('Book of Constants (Volume 1)'), 500000, 'Increases sps by 1%', 'img/upgrades/constants/e.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: sqrt(2)', () => Game.shapes >= 500000 && hU('Book of Constants (Volume 1)'), 1000000, 'Increases sps by 1%', 'img/upgrades/constants/sqrt(2).png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: sqrt(3)', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 1)'), 2000000, 'Increases sps by 1%', 'img/upgrades/constants/sqrt(3).png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: sqrt(5)', () => Game.shapes >= 2500000 && hU('Book of Constants (Volume 1)'), 5000000, 'Increases sps by 1%', 'img/upgrades/constants/sqrt(5).png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: Phi', () => Game.shapes >= 5000000 && hU('Book of Constants (Volume 1)'), 10000000, 'Increases sps by 1%', 'img/upgrades/constants/phi.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: 0', () => Game.shapes >= 10_000_000 && hU('Book of Constants (Volume 1)'), 20000000, 'Increases sps by 1%', 'img/upgrades/constants/zero.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: 1', () => Game.shapes >= 25_000_000 && hU('Book of Constants (Volume 1)'), 50000000, 'Increases sps by 1%', 'img/upgrades/constants/one.png', () => { Game.boosts.endMult += 0.1 }),
+        new Game.upgrade('Constant: i', () => Game.shapes >= 50_000_000 && hU('Book of Constants (Volume 1)'), 100_000_000, 'Increases sps by 1%。 Unlocks the imaginary suite.', 'img/upgrades/constants/i.png', () => { Game.boosts.endMult += 0.1 }),
     ]
 
     Game.availUpgrades = []
@@ -451,6 +455,12 @@ Game.load = () => {
         new Game.achievement('gonCon', () => Game.polystructors >= 20, 'Get 20 polystructors', 'uncommon'),
         new Game.achievement('Poconlystructgonor', () => Game.polystructors >= 30, 'Get 30 polystructors', 'rare'),
         new Game.achievement('rotcurtsyloP', () => Game.polystructors >= 50, 'Get 50 polystructors', 'rare'),
+
+        new Game.achievement('Magical Shapes', () => Game.wizardtowers > 0, 'Get a wizard tower', 'common'),
+        new Game.achievement('Tower of Doom', () => Game.wizardtowers >= 10, 'Get 10 wizard towers', 'uncommon'),
+        new Game.achievement('Alakazam', () => Game.wizardtowers >= 20, 'Get 20 wizard towers', 'uncommon'),
+        new Game.achievement('Parellelogram', () => Game.wizardtowers >= 30, 'Get 30 wizard towers', 'rare'),
+        new Game.achievement('Tower of Towers', () => Game.wizardtowers >= 50, 'Get 50 wizard towers', 'rare'),
 
         //CHEAT ACHIEVEMENTS
 
@@ -709,7 +719,7 @@ Game.load = () => {
             f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
             }
             
-        }) // No longer not profess\ional :D
+        }) // No longer not professional :D
         
         
     })
