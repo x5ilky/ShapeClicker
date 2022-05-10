@@ -761,7 +761,7 @@ Game.load = () => {
             Game.shapes = 0;
 
             Game.bots.forEach(bot => {
-                eval(`Game.${bot.name.toLowerCase()}s = 0;`)
+                eval(`Game.${replaceAll(bot.name.toLowerCase(), '( |\\(|\\)|\\:)', '')}s = 0;`)
 
             })
             Game.boughtUpgrades = []
