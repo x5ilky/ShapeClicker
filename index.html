@@ -11,17 +11,20 @@
     <script src="jquery.js" defer></script>
     <script src="fc.js" defer></script>
     <script src="base64.js" defer></script>
-    <script src="script.js" defer></script>
+    <script>
+        //Using this to reload cache because browsers like to cache things way too much.
+        document.write(`<script src="script.js?=${Math.floor(Math.random() * 10000)}" defer>\<\/script\>`)
+    </script>
     
     <div id="topbar">
-        <span id="version">Shape Clicker v0.11.0</span>
+        <span id="version">Shape Clicker v0.11.1</span>
         <span id="copyright">Copyright Silkyway 2022-2022</span>
         <span id="changelog" onclick="Game.showChangelog()">Changelog</span>
         <span id="dropdown">Misc</span>
     </div>
 
     <div id="dropdowncontent">
-        <a href="/" onclick="convertOldCodeToNew()">Convert < v0.11.0 save codes to new codes. (DOESNT WORK YET)</a>
+        <a onclick="convertOldCodeToNew()">Convert < v0.11.0 save codes to new codes. (DOESNT WORK YET)</a>
     </div>
 
     <div id="news"></div>
@@ -116,8 +119,14 @@
     <div id="changelogdiv">
         <h1>Changelogs</h1>
         <div id="changelogclose" onclick="document.querySelector('#changelogdiv').style.display='none';">Close</div>
+        <h2>v0.11.1</h2>
+        <p>
+            Added tiny bit of code so js file caches are reloaded.
+        </p>
         <h2>v0.11.0</h2>
         <p>
+            Fixed Ascensions so that you can get multiple higher polygons in one run.<br>
+            
             Shorter Save strings with string compression so saves from versions smaller then 0.11.0 no longer work.
         </p>
         <h2>v0.10.1 - May 10th 2022</h2>
