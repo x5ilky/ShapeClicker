@@ -529,6 +529,37 @@ div#loadingdiv {
 	width: 3.8rem;
 	height: 3.8rem;
 }
+
+#dropdown {
+	position: absolute;
+	right: 1rem;
+	
+}
+#dropdowncontent {
+	position: absolute;
+	right: 0;
+	height: 50vh;
+	top: 3vh;
+	width: 20vw;
+	background: black;
+	padding: 1rem;
+	z-index: 19000;
+	color: white;
+	
+
+	display: none;
+	&.dropdownon {
+		display: block;	
+	}
+
+	a {
+		color: white !important;
+		text-decoration: none;
+	}
+
+
+}
+
 #hover {
 	position: absolute;
 	background-color: rgb(138, 0, 0);

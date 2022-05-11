@@ -14,10 +14,16 @@
     <script src="script.js" defer></script>
     
     <div id="topbar">
-        <span id="version">Shape Clicker v0.10.1</span>
+        <span id="version">Shape Clicker v0.11.0</span>
         <span id="copyright">Copyright Silkyway 2022-2022</span>
         <span id="changelog" onclick="Game.showChangelog()">Changelog</span>
+        <span id="dropdown">Misc</span>
     </div>
+
+    <div id="dropdowncontent">
+        <a href="/" onclick="convertOldCodeToNew()">Convert < v0.11.0 save codes to new codes. (DOESNT WORK YET)</a>
+    </div>
+
     <div id="news"></div>
     <div id="prompt">
         <div id="promptin">
@@ -102,10 +108,18 @@
     </div>
 
     <div id="iediv">We don't support Internet Explorer<br>Please Use Firefox or Chrome or anything that supports Javascript ES6</div>
-    <div id="loadingdiv">Loading...<br><span style="font-size: 1rem; position: absolute; top: 10vh;">If this is going on for a while you need to check if your javascript is on and if it is then its probably an error.</span></div>
+    <div id="loadingdiv">Loading...<br><span style="font-size: 1rem; position: absolute; top: 10vh;">If this is going on for a while you need to check if your javascript is on and if it is then its probably an error.</span>
+        <span onclick="reset()" style="position: absolute; font-size: 1rem; bottom: 1rem; left: 1rem;">
+            Reset File
+        </span>
+    </div>
     <div id="changelogdiv">
         <h1>Changelogs</h1>
         <div id="changelogclose" onclick="document.querySelector('#changelogdiv').style.display='none';">Close</div>
+        <h2>v0.11.0</h2>
+        <p>
+            Shorter Save strings with string compression so saves from versions smaller then 0.11.0 no longer work.
+        </p>
         <h2>v0.10.1 - May 10th 2022</h2>
         <p>
             Added upgrades and achievements for wizard towers.<br>

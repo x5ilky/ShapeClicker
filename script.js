@@ -1,3 +1,8 @@
+
+//string compression from https://raw.githubusercontent.com/pieroxy/lz-string/master/libs/lz-string.min.js
+var LZString = function () { function o(o, r) { if (!t[o]) { t[o] = {}; for (var n = 0; n < o.length; n++)t[o][o.charAt(n)] = n } return t[o][r] } var r = String.fromCharCode, n = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", e = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$", t = {}, i = { compressToBase64: function (o) { if (null == o) return ""; var r = i._compress(o, 6, function (o) { return n.charAt(o) }); switch (r.length % 4) { default: case 0: return r; case 1: return r + "==="; case 2: return r + "=="; case 3: return r + "=" } }, decompressFromBase64: function (r) { return null == r ? "" : "" == r ? null : i._decompress(r.length, 32, function (e) { return o(n, r.charAt(e)) }) }, compressToUTF16: function (o) { return null == o ? "" : i._compress(o, 15, function (o) { return r(o + 32) }) + " " }, decompressFromUTF16: function (o) { return null == o ? "" : "" == o ? null : i._decompress(o.length, 16384, function (r) { return o.charCodeAt(r) - 32 }) }, compressToUint8Array: function (o) { for (var r = i.compress(o), n = new Uint8Array(2 * r.length), e = 0, t = r.length; t > e; e++) { var s = r.charCodeAt(e); n[2 * e] = s >>> 8, n[2 * e + 1] = s % 256 } return n }, decompressFromUint8Array: function (o) { if (null === o || void 0 === o) return i.decompress(o); for (var n = new Array(o.length / 2), e = 0, t = n.length; t > e; e++)n[e] = 256 * o[2 * e] + o[2 * e + 1]; var s = []; return n.forEach(function (o) { s.push(r(o)) }), i.decompress(s.join("")) }, compressToEncodedURIComponent: function (o) { return null == o ? "" : i._compress(o, 6, function (o) { return e.charAt(o) }) }, decompressFromEncodedURIComponent: function (r) { return null == r ? "" : "" == r ? null : (r = r.replace(/ /g, "+"), i._decompress(r.length, 32, function (n) { return o(e, r.charAt(n)) })) }, compress: function (o) { return i._compress(o, 16, function (o) { return r(o) }) }, _compress: function (o, r, n) { if (null == o) return ""; var e, t, i, s = {}, p = {}, u = "", c = "", a = "", l = 2, f = 3, h = 2, d = [], m = 0, v = 0; for (i = 0; i < o.length; i += 1)if (u = o.charAt(i), Object.prototype.hasOwnProperty.call(s, u) || (s[u] = f++, p[u] = !0), c = a + u, Object.prototype.hasOwnProperty.call(s, c)) a = c; else { if (Object.prototype.hasOwnProperty.call(p, a)) { if (a.charCodeAt(0) < 256) { for (e = 0; h > e; e++)m <<= 1, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++; for (t = a.charCodeAt(0), e = 0; 8 > e; e++)m = m << 1 | 1 & t, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++, t >>= 1 } else { for (t = 1, e = 0; h > e; e++)m = m << 1 | t, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++, t = 0; for (t = a.charCodeAt(0), e = 0; 16 > e; e++)m = m << 1 | 1 & t, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++, t >>= 1 } l--, 0 == l && (l = Math.pow(2, h), h++), delete p[a] } else for (t = s[a], e = 0; h > e; e++)m = m << 1 | 1 & t, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++, t >>= 1; l--, 0 == l && (l = Math.pow(2, h), h++), s[c] = f++, a = String(u) } if ("" !== a) { if (Object.prototype.hasOwnProperty.call(p, a)) { if (a.charCodeAt(0) < 256) { for (e = 0; h > e; e++)m <<= 1, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++; for (t = a.charCodeAt(0), e = 0; 8 > e; e++)m = m << 1 | 1 & t, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++, t >>= 1 } else { for (t = 1, e = 0; h > e; e++)m = m << 1 | t, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++, t = 0; for (t = a.charCodeAt(0), e = 0; 16 > e; e++)m = m << 1 | 1 & t, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++, t >>= 1 } l--, 0 == l && (l = Math.pow(2, h), h++), delete p[a] } else for (t = s[a], e = 0; h > e; e++)m = m << 1 | 1 & t, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++, t >>= 1; l--, 0 == l && (l = Math.pow(2, h), h++) } for (t = 2, e = 0; h > e; e++)m = m << 1 | 1 & t, v == r - 1 ? (v = 0, d.push(n(m)), m = 0) : v++, t >>= 1; for (; ;) { if (m <<= 1, v == r - 1) { d.push(n(m)); break } v++ } return d.join("") }, decompress: function (o) { return null == o ? "" : "" == o ? null : i._decompress(o.length, 32768, function (r) { return o.charCodeAt(r) }) }, _decompress: function (o, n, e) { var t, i, s, p, u, c, a, l, f = [], h = 4, d = 4, m = 3, v = "", w = [], A = { val: e(0), position: n, index: 1 }; for (i = 0; 3 > i; i += 1)f[i] = i; for (p = 0, c = Math.pow(2, 2), a = 1; a != c;)u = A.val & A.position, A.position >>= 1, 0 == A.position && (A.position = n, A.val = e(A.index++)), p |= (u > 0 ? 1 : 0) * a, a <<= 1; switch (t = p) { case 0: for (p = 0, c = Math.pow(2, 8), a = 1; a != c;)u = A.val & A.position, A.position >>= 1, 0 == A.position && (A.position = n, A.val = e(A.index++)), p |= (u > 0 ? 1 : 0) * a, a <<= 1; l = r(p); break; case 1: for (p = 0, c = Math.pow(2, 16), a = 1; a != c;)u = A.val & A.position, A.position >>= 1, 0 == A.position && (A.position = n, A.val = e(A.index++)), p |= (u > 0 ? 1 : 0) * a, a <<= 1; l = r(p); break; case 2: return "" }for (f[3] = l, s = l, w.push(l); ;) { if (A.index > o) return ""; for (p = 0, c = Math.pow(2, m), a = 1; a != c;)u = A.val & A.position, A.position >>= 1, 0 == A.position && (A.position = n, A.val = e(A.index++)), p |= (u > 0 ? 1 : 0) * a, a <<= 1; switch (l = p) { case 0: for (p = 0, c = Math.pow(2, 8), a = 1; a != c;)u = A.val & A.position, A.position >>= 1, 0 == A.position && (A.position = n, A.val = e(A.index++)), p |= (u > 0 ? 1 : 0) * a, a <<= 1; f[d++] = r(p), l = d - 1, h--; break; case 1: for (p = 0, c = Math.pow(2, 16), a = 1; a != c;)u = A.val & A.position, A.position >>= 1, 0 == A.position && (A.position = n, A.val = e(A.index++)), p |= (u > 0 ? 1 : 0) * a, a <<= 1; f[d++] = r(p), l = d - 1, h--; break; case 2: return w.join("") }if (0 == h && (h = Math.pow(2, m), m++), f[l]) v = f[l]; else { if (l !== d) return null; v = s + s.charAt(0) } w.push(v), f[d++] = s + v.charAt(0), h--, s = v, 0 == h && (h = Math.pow(2, m), m++) } } }; return i }(); "function" == typeof define && define.amd ? define(function () { return LZString }) : "undefined" != typeof module && null != module && (module.exports = LZString);
+
+
 /**
  * Convert absolute CSS numerical values to pixels.
  *
@@ -60,11 +65,7 @@ window.convertCssUnit = function (cssValue, target) {
 
 };
 
-const acsensionBasevalue = 1_000_000_000;
 
-function getAcsensionPrice() {
-    return acsensionBasevalue * ((Game.acsensions + 1) ** 2)
-}
 
 randomfirst = ['Magic', 'Fantastic', 'Fancy', 'Sassy', 'Snazzy', 'Pretty', 'Cute', 'Pirate', 'Ninja', 'Zombie', 'Robot', 'Radical', 'Urban', 'Cool', 'Hella', 'Sweet', 'Awful', 'Double', 'Triple', 'Turbo', 'Techno', 'Disco', 'Electro', 'Dancing', 'Wonder', 'Mutant', 'Space', 'Science', 'Medieval', 'Future', 'Captain', 'Bearded', 'Lovely', 'Tiny', 'Big', 'Fire', 'Water', 'Frozen', 'Metal', 'Plastic', 'Solid', 'Liquid', 'Moldy', 'Shiny', 'Happy', 'Happy Little', 'Slimy', 'Tasty', 'Delicious', 'Hungry', 'Greedy', 'Lethal', 'Professor', 'Doctor', 'Power', 'Chocolate', 'Crumbly', 'Choklit', 'Righteous', 'Glorious', 'Mnemonic', 'Psychic', 'Frenetic', 'Hectic', 'Crazy', 'Royal', 'El', 'Von']
 randomlast = ['Cookie', 'Biscuit', 'Muffin', 'Scone', 'Cupcake', 'Pancake', 'Chip', 'Sprocket', 'Gizmo', 'Puppet', 'Mitten', 'Sock', 'Teapot', 'Mystery', 'Baker', 'Cook', 'Grandma', 'Click', 'Clicker', 'Spaceship', 'Factory', 'Portal', 'Machine', 'Experiment', 'Monster', 'Panic', 'Burglar', 'Bandit', 'Booty', 'Potato', 'Pizza', 'Burger', 'Sausage', 'Meatball', 'Spaghetti', 'Macaroni', 'Kitten', 'Puppy', 'Giraffe', 'Zebra', 'Parrot', 'Dolphin', 'Duckling', 'Sloth', 'Turtle', 'Goblin', 'Pixie', 'Gnome', 'Computer', 'Pirate', 'Ninja', 'Zombie', 'Robot']
@@ -115,7 +116,7 @@ var browserName = (function (agent) {
 
 function toShortScale(number) {
     var rounded = Math.floor(number);
-    var length = rounded.toLocaleString('fullwide', {useGrouping:false}).length;
+    var length = rounded.toLocaleString('fullwide', { useGrouping: false }).length;
     var index = roundOffTo(length - 1, 3) / 3;
     var numbertodivide = '1';
     for (var i = 0; i < roundOffTo(length - 1, 3); i++) {
@@ -167,8 +168,8 @@ Game.load = () => {
     Game.promptreturn = ''
 
     Game.prompt = async (prompt, message) => {
-        
-        
+
+
         return new Promise(async resolve => {
             f('#prompt').classList.add('prompton')
             f('.promptheader').setText(prompt)
@@ -191,16 +192,16 @@ Game.load = () => {
             document.querySelector('.promptok').addEventListener('click', ok)
             document.querySelector('.promptcancel').addEventListener('click', cancel)
         })
-    }   
+    }
 
     Game.alerts = []
 
     Game.alert = (message) => {
-        Game.alerts.forEach(alert => {clearTimeout(alert)})
+        Game.alerts.forEach(alert => { clearTimeout(alert) })
         f('#alert').classList.add('alert-on');
         f('#alert').setText(message);
         Game.alerts.push(setTimeout(() => { f('#alert').classList.remove('alert-on') }, 3000))
-        
+
     }
 
 
@@ -306,12 +307,12 @@ Game.load = () => {
         new Game.bot('Builder', 1500, 15, () => Game.builders.toString(), () => { if (Game.shapes >= getPrice(Game.bots[2].baseprice, Game.builders)) { Game.shapes -= getPrice(Game.bots[2].baseprice, Game.builders); Game.shapesEarned -= getPrice(Game.bots[2].baseprice, Game.builders); Game.builders++; } }),
         new Game.bot('Factory', 30000, 45, () => Game.factorys.toString(), () => { if (Game.shapes >= getPrice(Game.bots[3].baseprice, Game.factorys)) { Game.shapes -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.shapesEarned -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.factorys++; } }),
         new Game.bot('Distrubution', 150000, 250, () => Game.distrubutions.toString(), () => { if (Game.shapes >= getPrice(Game.bots[4].baseprice, Game.distrubutions)) { Game.shapes -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.shapesEarned -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.distrubutions++; } }),
-        new Game.bot('Bank', 1500000, 1100, () => Game.banks.toString(), () => { if (Game.shapes >= getPrice(Game.bots[5].baseprice, Game.banks)) { Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.earnedShapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.banks++; } }),
+        new Game.bot('Bank', 1500000, 1100, () => Game.banks.toString(), () => { if (Game.shapes >= getPrice(Game.bots[5].baseprice, Game.banks)) { Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.shapesEarned -= getPrice(Game.bots[5].baseprice, Game.banks); Game.banks++; } }),
         new Game.bot('Polystructor', 15000000, 7000, () => Game.polystructors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[6].baseprice, Game.polystructors)) { Game.shapes -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.shapesEarned -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.polystructors++; } }),
         new Game.bot('Wizard Tower', 300_000_000, 45000, () => Game.wizardtowers.toString(), () => { if (Game.shapes >= getPrice(Game.bots[7].baseprice, Game.wizardtowers)) { Game.shapes -= getPrice(Game.bots[7].baseprice, Game.wizardtowers); Game.shapesEarned -= getPrice(Game.bots[7].baseprice, Game.wizardtowers); Game.wizardtowers++; } })
     ]
 
-    function hAU (upname) {
+    function hAU(upname) {
         return Game.gottenAscensionUpgrades.includes(upname)
     }
     function hU(upname) {
@@ -337,7 +338,7 @@ Game.load = () => {
 
         new Game.upgrade('Better Tools', () => Game.builders > 0, 5000, 'Give builders better tools. Doubles builders\' sps.', 'img/upgrades/builder/builder1.png', () => { Game.boosts.builderMult *= 2 }),
         new Game.upgrade('Stainless Steel Casing', () => Game.builders >= 10, 30000, 'Gives builders a better casing. Doubles builders\' sps.', 'img/upgrades/builder/builder2.png', () => { Game.boosts.builderMult *= 2 }),
-        new Game.upgrade('Aluminum Helmets', () => Game.builders >= 20, 150000, 'Gives workers stronger helmets making them two times better.', 'img/upgrades/builder/builder3.png', () => { Game.boosts.builderMult *= 2}),
+        new Game.upgrade('Aluminum Helmets', () => Game.builders >= 20, 150000, 'Gives workers stronger helmets making them two times better.', 'img/upgrades/builder/builder3.png', () => { Game.boosts.builderMult *= 2 }),
 
         new Game.upgrade('Stronger Machines', () => Game.factorys > 0, 100000, 'Makes machines in factories have more strength. Doubles factories\' sps.', 'img/upgrades/factory/factory1.png', () => { Game.boosts.factoryMult *= 2 }),
         new Game.upgrade('Air Filters', () => Game.factorys >= 10, 500000, 'Removes 10% of greenhouse gasses produced by factories, allowing them to go 2x faster. Doubles factories\' sps.', 'img/upgrades/factory/factory2.png', () => { Game.factoryMult *= 2 }),
@@ -355,11 +356,11 @@ Game.load = () => {
         new Game.upgrade('Angle Accuracy', () => Game.polystructors >= 10, 300_000_000, 'Makes polystructors 2 times more accurate doubling polystructor sps.', 'img/upgrades/polystructor/polystructor2.png', () => { Game.boosts.polystructorMult *= 2 }),
         new Game.upgrade('Sapphire Lasers', () => Game.polystructors >= 20, 1_000_000_000, 'Upgrades the polystructors\'s lasers, doubling polystructor sps.', 'img/upgrades/polystructor/polystructor3.png', () => { Game.boosts.polystructorMult *= 2 }),
 
-        new Game.upgrade('Wizard Hats', () => Game.wizardtowers > 0, 1_000_000_000, 'Gives wizards more hats doubling wizard tower efficiency.', 'img/upgrades/wizardtower/wizardtower1.png', () => { Game.boosts.wizardtowerMult *= 2}),
-        new Game.upgrade('Cultist Group', () => Game.wizardtowers >= 10, 5_000_000_000, 'Allows wizards to create cults doubling wizard tower sps.', 'img/upgrades/wizardtower/wizardtower2.png', () => {Game.boosts.wizardtowerMult *= 2}),
+        new Game.upgrade('Wizard Hats', () => Game.wizardtowers > 0, 1_000_000_000, 'Gives wizards more hats doubling wizard tower efficiency.', 'img/upgrades/wizardtower/wizardtower1.png', () => { Game.boosts.wizardtowerMult *= 2 }),
+        new Game.upgrade('Cultist Group', () => Game.wizardtowers >= 10, 5_000_000_000, 'Allows wizards to create cults doubling wizard tower sps.', 'img/upgrades/wizardtower/wizardtower2.png', () => { Game.boosts.wizardtowerMult *= 2 }),
         new Game.upgrade('Higher Quality Wands', () => Game.wizardtowers >= 20, 20_000_000_000, 'Makes wands have higher quality wood doubling wizard tower sps.', 'img/upgrades/wizardtower/wizardtower3.png', () => { Game.boosts.wizardtowerMult *= 2 }),
-    
-        new Game.upgrade('Book of Constants (Volume 1)', () => Game.shapes >= 100000, 300000, 'Allows you to get constants that increase sps. Contains 9 constants.', 'img/upgrades/constants/bookofconstants1.png', () => {}),
+
+        new Game.upgrade('Book of Constants (Volume 1)', () => Game.shapes >= 100000, 300000, 'Allows you to get constants that increase sps. Contains 9 constants.', 'img/upgrades/constants/bookofconstants1.png', () => { }),
         new Game.upgrade('Constant: Pi', () => Game.shapes >= 50000 && hU('Book of Constants (Volume 1)'), 100000, 'Increases sps by 1%', 'img/upgrades/constants/pi.png', () => { Game.boosts.endMult += 0.1 }),
         new Game.upgrade('Constant: e', () => Game.shapes >= 250000 && hU('Book of Constants (Volume 1)'), 500000, 'Increases sps by 1%', 'img/upgrades/constants/e.png', () => { Game.boosts.endMult += 0.1 }),
         new Game.upgrade('Constant: sqrt(2)', () => Game.shapes >= 500000 && hU('Book of Constants (Volume 1)'), 1000000, 'Increases sps by 1%', 'img/upgrades/constants/sqrt(2).png', () => { Game.boosts.endMult += 0.1 }),
@@ -472,7 +473,7 @@ Game.load = () => {
     Game.ascensionUpgrades = [
         new Game.ascensionUpgrade("Pentagon", '', "Doubles your base SPC and multiplies your sps by 1.5", 1, 'img/pentagon.png', () => { Game.boosts.clickMult *= 2; Game.boosts.endMult *= 1.5; document.querySelector('#shape > img').src = 'img/pentagon.png' }, 50, 50),
         new Game.ascensionUpgrade("Achievement Synthesiser", 'Pentagon', 'Adds +5% sps for every 10 achievements you have.', 5, 'img/ascended/achievementsynthesiser.png', () => { Game.boosts.endMult += Math.floor(Game.achieved / 10) * 0.05 }, 42, 45),
-        new Game.ascensionUpgrade("Book of Constants (Volume 2)", "Pentagon", 'Unlocks more constants to boost your sps. Level 2 Constants (boosts 2% per)', 3, 'img/upgrades/constants/bookofconstants2.png', () => {}, 60, 52),
+        new Game.ascensionUpgrade("Book of Constants (Volume 2)", "Pentagon", 'Unlocks more constants to boost your sps. Level 2 Constants (boosts 2% per)', 3, 'img/upgrades/constants/bookofconstants2.png', () => { }, 60, 52),
     ]
 
     Game.boosts = {}
@@ -485,6 +486,7 @@ Game.load = () => {
         setTimeout(() => { f('#shape > img').classList.add('bounce') }, 1)
         var thing2 = Math.random() > 0.95
         Game.shapes += thing2 ? Game.spc * 3 : Game.spc;
+        Game.totalShapesEarned += thing2 ? Game.spc * 3 : Game.spc;
         Game.shapesEarned += thing2 ? Game.spc * 3 : Game.spc;
         Game.mouseShapes += thing2 ? Game.spc * 3 : Game.spc;
         Game.clicks++;
@@ -598,7 +600,7 @@ Game.load = () => {
             (Game.bots[3].sps + Game.boosts.factoryUp) * Game.factorys * Game.boosts.factoryMult +
             (Game.bots[4].sps + Game.boosts.distrubutionUp) * Game.distrubutions * Game.boosts.distrubutionMult +
             (Game.bots[5].sps + Game.boosts.bankUp) * Game.banks * Game.boosts.bankMult +
-            (Game.bots[6].sps + Game.boosts.polystructorUp) * Game.polystructors * Game.boosts.polystructorMult + 
+            (Game.bots[6].sps + Game.boosts.polystructorUp) * Game.polystructors * Game.boosts.polystructorMult +
             (Game.bots[7].sps + Game.boosts.wizardtowerUp) * Game.wizardtowers * Game.boosts.wizardtowerMult) + Game.boosts.endUp) * Game.boosts.endMult;
         Game.spc = (1 + Game.boosts.clickUp) * Game.boosts.clickMult;
 
@@ -652,6 +654,7 @@ Game.load = () => {
     }
     Game.second = () => {
         Game.shapes += Game.sps;
+        Game.totalShapesEarned += Game.sps;
         Game.shapesEarned += Game.sps;
         Game.secondsSpent++;
     }
@@ -716,12 +719,12 @@ Game.load = () => {
         await Game.prompt('What is your name?').then(obj => {
             if (obj !== null) {
                 Game.name = obj
-            f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
+                f('#nameSelector').setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`)
             }
-            
+
         }) // No longer not professional :D
-        
-        
+
+
     })
 
     console.log(get_random([
@@ -742,9 +745,17 @@ Game.load = () => {
             }
         }
     })
+    const acsensionBasevalue = 1_000_000_000;
+
+    function getAcsensionPrice() {
+        return acsensionBasevalue * (Game.totalHighersEarned + Math.floor(howMuchAscend()) + 1) ** 2
+    }
+    function howMuchAscend() {
+        return Math.pow(Game.shapes/1_000_000_000, 1/2)
+    }
     document.querySelector('#ascendbtn').addEventListener('mouseenter', () => {
         f('#hover > #hoverheader').setText('Ascension');
-        f('#hover > #hoverpara').setText(`Resets your progress, but granting you higher polygons, granting you permanant upgrades.`);
+        f('#hover > #hoverpara').setText(`Resets your progress, but granting you higher polygons, granting you permanant upgrades. You can ascend ${Math.floor(howMuchAscend())} times. You need ${toShortScale(-(Game.shapes-getAcsensionPrice()))} more shapes to get another heavenly shape.`);
         f('#hover > #hoverprice').setText(`${toShortScale(getAcsensionPrice())} Shapes`)
         document.querySelector('#hover').style.display = 'block';
     })
@@ -753,11 +764,13 @@ Game.load = () => {
     })
 
     function resetAcsension() {
-        if (Game.shapes >= getAcsensionPrice()) {
+        if (howMuchAscend() > 0) {
+            Game.acsensions++;
+            Game.higherPolygons += howMuchAscend();
+            Game.totalHighersEarned += howMuchAscend();
             Game.shapes -= getAcsensionPrice();
             Game.shapesEarned -= getAcsensionPrice();
-            Game.acsensions++;
-            Game.higherPolygons += 2 ** Game.acsensions;
+            
             Game.shapes = 0;
 
             Game.bots.forEach(bot => {
@@ -852,6 +865,8 @@ Game.init = () => {
     Game.wizardtowers = 0;
 
     Game.shapesEarned = 0;
+    Game.totalShapesEarned = 0;
+    Game.totalHighersEarned = 0;
 
     Game.hacked = false;
 
@@ -871,18 +886,20 @@ Game.init = () => {
 
 
 async function savePrompt() {
-    var data = JSON.stringify({ version: Game.version, shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, wizardtowers: Game.wizardtowers, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades, gottenAchievements: Game.gottenAchievements }).toString()
-    await Game.prompt('Savecode: ', utf8_to_b64(data))
+    var data = JSON.stringify({ version: Game.version, shapes: Game.shapes, totalShapesEarned: Game.totalShapesEarned, totalHighersEarned: Game.totalHighersEarned, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, wizardtowers: Game.wizardtowers, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades, gottenAchievements: Game.gottenAchievements }).toString()
+    await Game.prompt('Savecode: ', LZString.compressToBase64(data))
 }
 function save() {
-    var data = JSON.stringify({ version: Game.version, shapes: Game.shapes, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, wizardtowers: Game.wizardtowers, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades, gottenAchievements: Game.gottenAchievements }).toString()
+    var data = JSON.stringify({ version: Game.version, shapes: Game.shapes, totalShapesEarned: Game.totalShapesEarned, totalHighersEarned: Game.totalHighersEarned, clicks: Game.clicks, cursors: Game.cursors, rulers: Game.rulers, builders: Game.builders, factorys: Game.factorys, distrubutions: Game.distrubutions, banks: Game.banks, polystructors: Game.polystructors, wizardtowers: Game.wizardtowers, boughtUpgrades: Game.boughtUpgrades, name: Game.name, time: Game.secondsSpent, mouseShapes: Game.mouseShapes, usedAutoclicker: Game.usedAutoclicker, setNameSilkyway: Game.setNameSilkyway, shapesEarned: Game.shapesEarned, hacked: Game.hacked, acsensions: Game.acsensions, higherPolygons: Game.higherPolygons, gottenAscensionUpgrades: Game.gottenAscensionUpgrades, gottenAchievements: Game.gottenAchievements }).toString()
 
-    return utf8_to_b64(data)
+    return LZString.compressToBase64(data)
 
 }
 async function loadPrompt() {
-    var thing = JSON.parse(b64_to_utf8(await Game.prompt('Loadcode: ')))
+    var thing = JSON.parse(LZString.decompressFromBase64(await Game.prompt('Loadcode: ')))
     Game.shapes = thing.shapes ?? 0;
+    Game.totalShapesEarned = thing.totalShapesEarned ?? 0;
+    Game.totalHighersEarned = thing.totalHighersEarned ?? 0;
     Game.clicks = thing.clicks ?? 0;
     Game.cursors = thing.cursors ?? 0;
     Game.rulers = thing.rulers ?? 0;
@@ -909,8 +926,10 @@ async function loadPrompt() {
 }
 
 function load() {
-    var thing = JSON.parse(b64_to_utf8(localStorage.getItem('savecode')))
+    var thing = JSON.parse(LZString.decompressFromBase64(localStorage.getItem('savecode')))
     Game.shapes = thing.shapes ?? 0;
+    Game.totalShapesEarned = thing.totalShapesEarned ?? 0;
+    Game.totalHighersEarned = thing.totalHighersEarned ?? 0;
     Game.clicks = thing.clicks ?? 0;
     Game.cursors = thing.cursors ?? 0;
     Game.rulers = thing.rulers ?? 0;
@@ -956,6 +975,7 @@ if (localStorage.getItem('savecode') === null) {
     Game.init()
 } else {
     load()
+    Game.gotte
     Game.banks = Game.banks ?? 0
     Game.polystructors = Game.polystructors ?? 0
     Game.wizardtowers = Game.wizardtowers ?? 0
@@ -978,3 +998,25 @@ function FinishedLoading() {
 }
 
 setTimeout(FinishedLoading, 0)
+
+//dropdown things
+
+document.querySelector('#dropdown').addEventListener('click', () => {
+    f('#dropdowncontent').classList.toggle('dropdownon')
+})
+
+async function convertOldCodeToNew() {
+    var oldCode = await Game.prompt("What is the old save code?")
+
+    const thing = async () => {
+        try {
+            JSON.parse(LZString.decompressFromBase64(oldCode))
+            Game.alert(`Save is already in new form`)
+        } catch {
+            Game.prompt("New Code:", LZString.compressToBase64(b64_to_utf8(oldCode)))
+        }
+    }
+
+    await thing();
+
+}
