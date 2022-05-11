@@ -304,12 +304,12 @@ Game.load = () => {
     Game.bots = [
         new Game.bot('Cursor', 15, 0.1, () => Game.cursors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[0].baseprice, Game.cursors)) { Game.shapes -= getPrice(Game.bots[0].baseprice, Game.cursors); Game.shapesEarned -= getPrice(Game.bots[0].baseprice, Game.cursors); Game.cursors++; } }),
         new Game.bot('Ruler', 100, 1, () => Game.rulers.toString(), () => { if (Game.shapes >= getPrice(Game.bots[1].baseprice, Game.rulers)) { Game.shapes -= getPrice(Game.bots[1].baseprice, Game.rulers); Game.shapesEarned -= getPrice(Game.bots[1].baseprice, Game.rulers); Game.rulers++; } }),
-        new Game.bot('Builder', 1500, 15, () => Game.builders.toString(), () => { if (Game.shapes >= getPrice(Game.bots[2].baseprice, Game.builders)) { Game.shapes -= getPrice(Game.bots[2].baseprice, Game.builders); Game.shapesEarned -= getPrice(Game.bots[2].baseprice, Game.builders); Game.builders++; } }),
-        new Game.bot('Factory', 30000, 45, () => Game.factorys.toString(), () => { if (Game.shapes >= getPrice(Game.bots[3].baseprice, Game.factorys)) { Game.shapes -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.shapesEarned -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.factorys++; } }),
+        new Game.bot('Builder', 1500, 10, () => Game.builders.toString(), () => { if (Game.shapes >= getPrice(Game.bots[2].baseprice, Game.builders)) { Game.shapes -= getPrice(Game.bots[2].baseprice, Game.builders); Game.shapesEarned -= getPrice(Game.bots[2].baseprice, Game.builders); Game.builders++; } }),
+        new Game.bot('Factory', 30000, 48, () => Game.factorys.toString(), () => { if (Game.shapes >= getPrice(Game.bots[3].baseprice, Game.factorys)) { Game.shapes -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.shapesEarned -= getPrice(Game.bots[3].baseprice, Game.factorys); Game.factorys++; } }),
         new Game.bot('Distrubution', 150000, 250, () => Game.distrubutions.toString(), () => { if (Game.shapes >= getPrice(Game.bots[4].baseprice, Game.distrubutions)) { Game.shapes -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.shapesEarned -= getPrice(Game.bots[4].baseprice, Game.distrubutions); Game.distrubutions++; } }),
-        new Game.bot('Bank', 1500000, 1100, () => Game.banks.toString(), () => { if (Game.shapes >= getPrice(Game.bots[5].baseprice, Game.banks)) { Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.shapesEarned -= getPrice(Game.bots[5].baseprice, Game.banks); Game.banks++; } }),
-        new Game.bot('Polystructor', 15000000, 7000, () => Game.polystructors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[6].baseprice, Game.polystructors)) { Game.shapes -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.shapesEarned -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.polystructors++; } }),
-        new Game.bot('Wizard Tower', 300_000_000, 45000, () => Game.wizardtowers.toString(), () => { if (Game.shapes >= getPrice(Game.bots[7].baseprice, Game.wizardtowers)) { Game.shapes -= getPrice(Game.bots[7].baseprice, Game.wizardtowers); Game.shapesEarned -= getPrice(Game.bots[7].baseprice, Game.wizardtowers); Game.wizardtowers++; } })
+        new Game.bot('Bank', 1500000, 1400, () => Game.banks.toString(), () => { if (Game.shapes >= getPrice(Game.bots[5].baseprice, Game.banks)) { Game.shapes -= getPrice(Game.bots[5].baseprice, Game.banks); Game.shapesEarned -= getPrice(Game.bots[5].baseprice, Game.banks); Game.banks++; } }),
+        new Game.bot('Polystructor', 15000000, 7500, () => Game.polystructors.toString(), () => { if (Game.shapes >= getPrice(Game.bots[6].baseprice, Game.polystructors)) { Game.shapes -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.shapesEarned -= getPrice(Game.bots[6].baseprice, Game.polystructors); Game.polystructors++; } }),
+        new Game.bot('Wizard Tower', 300_000_000, 40000, () => Game.wizardtowers.toString(), () => { if (Game.shapes >= getPrice(Game.bots[7].baseprice, Game.wizardtowers)) { Game.shapes -= getPrice(Game.bots[7].baseprice, Game.wizardtowers); Game.shapesEarned -= getPrice(Game.bots[7].baseprice, Game.wizardtowers); Game.wizardtowers++; } })
     ]
 
     function hAU(upname) {
@@ -602,7 +602,7 @@ Game.load = () => {
             (Game.bots[5].sps + Game.boosts.bankUp) * Game.banks * Game.boosts.bankMult +
             (Game.bots[6].sps + Game.boosts.polystructorUp) * Game.polystructors * Game.boosts.polystructorMult +
             (Game.bots[7].sps + Game.boosts.wizardtowerUp) * Game.wizardtowers * Game.boosts.wizardtowerMult) + Game.boosts.endUp) * Game.boosts.endMult;
-        Game.spc = (1 + Game.boosts.clickUp) * Game.boosts.clickMult;
+        Game.spc = (1 ) * Game.boosts.clickMult + Game.boosts.clickUp;
 
         f('h1#shapecount').setText(`${toShortScale(Game.shapes)} Shapes`)
         f('#sps').setText(`${toShortScale(Game.sps)} shapes/s`)
