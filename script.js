@@ -370,6 +370,19 @@ Game.load = () => {
         new Game.upgrade('Constant: 0', () => Game.shapes >= 10_000_000 && hU('Book of Constants (Volume 1)'), 20000000, 'Increases sps by 1%', 'img/upgrades/constants/zero.png', () => { Game.boosts.endMult += 0.1 }),
         new Game.upgrade('Constant: 1', () => Game.shapes >= 25_000_000 && hU('Book of Constants (Volume 1)'), 50000000, 'Increases sps by 1%', 'img/upgrades/constants/one.png', () => { Game.boosts.endMult += 0.1 }),
         new Game.upgrade('Constant: i', () => Game.shapes >= 50_000_000 && hU('Book of Constants (Volume 1)'), 100_000_000, 'Increases sps by 1%。 Unlocks the imaginary suite.', 'img/upgrades/constants/i.png', () => { Game.boosts.endMult += 0.1 }),
+
+        new Game.upgrade('Book of Constants (Volume 2)', () => Game.shapes >= 500000 && hAU('Book of Constants (Volume 2)'), 2000000, '(Unlocked from Ascension) Unlocks 9 constants that give +2% sps bonus each.', 'img/upgrades/constants/bookofconstants2.png', () => {}),
+        new Game.upgrade('Constant: Tau', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 2)'), 2_000_000, 'Increases sps by 2%', 'img/constants/tau.png', () => { Game.boosts.endMult += 0.1 }),        
+        new Game.upgrade('Constant: Ramanujan-Soldner constant', () => Game.shapes >= 2000000 && hU('Book of Constants (Volume 2)'), 4_000_000, 'Increases sps by 2%  (I don\'t know what this is i got it from wikipedia)', 'img/constants/micro.png', () => { Game.boosts.endMult += 0.1 }),    
+        new Game.upgrade('Constant: Universal parabolic constant', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 2)'), 2_000_000, 'Increases sps by 2%', 'img/constants/tau.png', () => { Game.boosts.endMult += 0.1 }),    
+        new Game.upgrade('Constant: Cahen\'s constant', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 2)'), 2_000_000, 'Increases sps by 2%', 'img/constants/tau.png', () => { Game.boosts.endMult += 0.1 }),    
+        new Game.upgrade('Constant: Gelfond\'s constant', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 2)'), 2_000_000, 'Increases sps by 2%', 'img/constants/tau.png', () => { Game.boosts.endMult += 0.1 }),    
+        new Game.upgrade('Constant: Gelfond-Schneider constant', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 2)'), 2_000_000, 'Increases sps by 2%', 'img/constants/tau.png', () => { Game.boosts.endMult += 0.1 }),    
+        new Game.upgrade('Constant: Second Favard constant', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 2)'), 2_000_000, 'Increases sps by 2%', 'img/constants/tau.png', () => { Game.boosts.endMult += 0.1 }),    
+        new Game.upgrade('Constant: Golden angle', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 2)'), 2_000_000, 'Increases sps by 2%', 'img/constants/tau.png', () => { Game.boosts.endMult += 0.1 }),    
+        new Game.upgrade('Constant: Sierpinski\'s constant', () => Game.shapes >= 1000000 && hU('Book of Constants (Volume 2)'), 2_000_000, 'Increases sps by 2%', 'img/constants/tau.png', () => { Game.boosts.endMult += 0.1 }),    
+
+        new Game.upgrade('Imaginary Research', () => hU('Constant: i'), 200_000_000, 'Starts research for the imaginary suite (Note: currently in development, this does literally nothing atm)', 'img/upgrades/imaginaryresearch.png', () => {})
     ]
 
     Game.availUpgrades = []
@@ -390,6 +403,16 @@ Game.load = () => {
         new Game.achievement('Clickmachine', () => Game.mouseShapes >= 1000000, 'Get 1 million shapes from clicking', 'uncommon'),
         new Game.achievement('Clickathon', () => Game.mouseShapes >= 10000000, 'Get 10 million shapes from clicking', 'uncommon'),
         new Game.achievement('Clickmegeddon', () => Game.mouseShapes >= 100000000, 'Get 100 million shapes from clicking', 'uncommon'),
+
+        //SPS
+
+        new Game.achievement('DIY Shapes', () => Game.sps >= 1, 'Have 1 sps.', 'common'),
+        new Game.achievement('Shape Enthusiast', () => Game.sps >= 10, 'Get 10 sps', 'common'),
+        new Game.achievement('Shape Stream', () => Game.sps >= 100, 'Get 100 sps', 'common'),
+        new Game.achievement('Shape Machine', () => Game.sps >= 1000, 'Get 1000 sps', 'common'),
+        new Game.achievement('Shape Dupe', () => Game.sps >= 10000, 'Get 10000 sps', 'common'),
+        new Game.achievement('Shape Exploit', () => Game.sps >= 100000, 'Get 100000 sps', 'common'),
+        new Game.achievement('Star Shaped Shape', () => Game.sps >= 1000000, 'Get one million sps', 'uncommon'),
 
         //acsensions
 
@@ -657,6 +680,8 @@ Game.load = () => {
         Game.totalShapesEarned += Game.sps;
         Game.shapesEarned += Game.sps;
         Game.secondsSpent++;
+
+        document.title = `Shape Clicker - ${toShortScale(Game.shapes)} Shapes`
     }
     Game.newstick = () => {
         const hasUpgrade = (upgradename) => {
