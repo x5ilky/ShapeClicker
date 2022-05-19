@@ -94,7 +94,7 @@ function replaceAll(str, find, replace) {
 
 
 const removeSpecials = (input) => {
-    return replaceAll(input, '( |\\(|\\)|\\:)', '')
+    return replaceAll(input, '( |\\(|\\)|\\:|\\\'|\\\")', '').toLowerCase()
 }
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
@@ -231,7 +231,7 @@ Game.load = () => {
             this.baseprice = baseprice
             this.sps = sps
             this.amount = amount
-            this.obj = () => c({ tag: 'div', id: `bot-${replaceAll(name, ' ', '')}`, textContent: name, classList: 'bot', children: [c({ tag: 'span', classList: 'botprice', textContent: `${toShortScale(getPrice(baseprice, amount()))} Shapes` }), c({ tag: 'span', classList: 'botamount', textContent: amount() }), c({ tag: 'span', classList: 'spsbot', textContent: `${sps} shapes/s` })] })
+            this.obj = () => c({ tag: 'div', id: `bot-${removeSpecials(name)}`, textContent: name, classList: 'bot', children: [c({ tag: 'span', classList: 'botprice', textContent: `${toShortScale(getPrice(baseprice, amount()))} Shapes` }), c({ tag: 'span', classList: 'botamount', textContent: amount() }), c({ tag: 'span', classList: 'spsbot', textContent: `${sps} shapes/s` })] })
             this.buyFunc = buyFunc;
         }
     }
@@ -544,9 +544,9 @@ Game.load = () => {
         Game.bots.forEach((bot, index) => {
             f('#botsdiv').appendChild(bot.obj())
             f(`#bot-${removeSpecials(bot.name)}`).on('click', () => { bot.buyFunc(); Game.updateBots(); })
-            document.querySelector(`#bot-${replaceAll(bot.name, '( |\\(|\\))', '')}`).addEventListener('mouseenter', () => {
+            document.querySelector(`#bot-${removeSpecials(bot.name)}`).addEventListener('mouseenter', () => {
                 f('#hover > #hoverheader').setText(bot.name);
-                f('#hover > #hoverpara').setText(`Generates ${toShortScale(eval(`(Game.bots[${index}].sps + Game.boosts.${replaceAll(bot.name.toLowerCase(), " ", '')}Up) * Game.boosts.${replaceAll(bot.name.toLowerCase(), " ", '')}Mult`))} shapes per second.\nYour ${eval(`Game.${replaceAll(bot.name.toLowerCase(), " ", '')}s`)} ${bot.name.toLowerCase()}s produce a total of ${toShortScale(eval(`(Game.bots[${index}].sps + Game.boosts.${replaceAll(bot.name.toLowerCase(), " ", '')}Up) * ${eval(`Game.${replaceAll(bot.name.toLowerCase(), " ", '')}s`)} * Game.boosts.${replaceAll(bot.name.toLowerCase(), " ", '')}Mult`))} shapes per second.`);
+                f('#hover > #hoverpara').setText(`Generates ${toShortScale(eval(`(Game.bots[${index}].sps + Game.boosts.${removeSpecials(bot.name)}Up) * Game.boosts.${removeSpecials(bot.name)}Mult`))} shapes per second.\nYour ${eval(`Game.${removeSpecials(bot.name)}s`)} ${bot.name.toLowerCase()}s produce a total of ${toShortScale(eval(`(Game.bots[${index}].sps + Game.boosts.${removeSpecials(bot.name)}Up) * ${eval(`Game.${removeSpecials(bot.name)}s`)} * Game.boosts.${removeSpecials(bot.name)}Mult`))} shapes per second.`);
                 f('#hover > #hoverprice').setText(`${toShortScale(getPrice(bot.baseprice, bot.amount()))} Shapes`)
                 document.querySelector('#hover').style.display = 'block';
             })
@@ -819,6 +819,8 @@ Game.load = () => {
                 eval(`Game.${removeSpecials(bot.name)}s = 0;`)
 
             })
+
+            Game.updateBots()
             Game.boughtUpgrades = []
 
             return true;
@@ -838,16 +840,16 @@ Game.load = () => {
         Game.availAscensionUpgrades.forEach(item => {
             if (item.hasUpgrade()) {
                 f('#ascensionups').appendChild(item.obj())
-                document.querySelector(`#ascension-${removeSpecials(item)}`).addEventListener('mouseenter', () => {
+                document.querySelector(`#ascension-${removeSpecials(item.name)}`).addEventListener('mouseenter', () => {
                     f('#hover-ascension > #hoverheader').setText(item.name);
                     f('#hover-ascension > #hoverpara').setHtml(item.desc + `<br>${Game.gottenAscensionUpgrades.includes(item.name) ? 'Bought' : 'Not Bought'}`);
                     f('#hover-ascension > #hoverprice').setText(`${toShortScale(item.price)} Higher Polygons`)
                     document.querySelector('#hover-ascension').style.display = 'block';
                 })
-                document.querySelector(`#ascension-${removeSpecials(item)}`).addEventListener('mouseleave', () => {
+                document.querySelector(`#ascension-${removeSpecials(item.name)}`).addEventListener('mouseleave', () => {
                     document.querySelector('#hover-ascension').style.display = 'none';
                 })
-                f(`#ascension-${removeSpecials(item)}`).on('click', () => {
+                f(`#ascension-${removeSpecials(item.name)}`).on('click', () => {
                     if (Game.higherPolygons >= item.price && !Game.gottenAscensionUpgrades.includes(item.name)) {
                         Game.higherPolygons -= item.price;
 
