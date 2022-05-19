@@ -178,9 +178,11 @@ Game.load = () => {
             f('#prompt').classList.add('prompton')
             f('.promptheader').setText(prompt)
             if (message) {
-                f('.promptinput').setText(message)
+                document.querySelector('.promptinput').value = message
+            
             } else {
-                f('.promptinput').setText('')
+                document.querySelector('.promptinput').value = ''
+                
             }
             var thing = Game.promptreturn
             const ok = () => {
@@ -555,10 +557,7 @@ Game.load = () => {
     }
 
     Game.tick = () => {
-
-        if (Game.name.endsWith(' is a dev')) {
-            Game.cheatMenu = true;
-        }
+        Game.cheatMenu = Game.name.endsWith(' is a dev');
 
         if (Game.shapes !== Game.shapesEarned) {
             Game.hacked = true;
@@ -683,6 +682,8 @@ Game.load = () => {
 
         if (Game.cheatMenu) {
             $('#cheating').show()
+        } else {
+            $('#cheating').hide()
         }
     }
     Game.slowtick = () => {
