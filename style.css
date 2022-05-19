@@ -619,6 +619,16 @@ div#loadingdiv {
   font-family: "Poppins", sans-serif;
 }
 
+#cheating {
+  background: grey;
+  position: absolute;
+  z-index: 19999;
+  width: 20vw;
+  height: 30vh;
+  right: 0;
+  top: 0;
+}
+
 .upgrade {
   width: 3.8rem;
   height: 3.8rem;
