@@ -2,7 +2,7 @@ import LZString from "./lzstring.mjs";
 
 import FC from "./fc.mjs";
 
-const version = "0.13.0";
+const version = "0.14.0";
 
 let exposed: { [id: string]: any } = {};
 
@@ -2541,6 +2541,9 @@ function expose(s: any) {
 			alert("Your game will be reset now");
 			reset();
 		}
+		try {
+
+		
 		Game.shapes = thing.shapes ?? 0;
 		Game.totalShapesEarned = thing.totalShapesEarned ?? 0;
 		Game.totalHighersEarned = thing.totalHighersEarned ?? 0;
@@ -2567,6 +2570,15 @@ function expose(s: any) {
 		Game.higherPolygons = thing.higherPolygons ?? 0;
 		Game.gottenAscensionUpgrades = thing.gottenAscensionUpgrades ?? [];
 		Game.gottenAchievements = thing.gottenAchievements ?? [];
+		} catch {
+			alert("Your save code is corrupted!");
+			prompt(
+				"Your save code will be outputted here:",
+				localStorage.getItem("savecode") ?? ""
+			);
+			alert("Your game will be reset now");
+			reset();
+		}
 		try {
 			new f("#nameSelector").setHtml(
 				`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`
