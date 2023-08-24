@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import LZString from "./lzstring.mjs";
 import FC from "./fc.mjs";
-const version = "0.13.0";
+const version = "0.14.0";
 let exposed = {};
 function expose(s) {
     exposed[s.toString()] = s;
@@ -1331,50 +1331,58 @@ function expose(s) {
         });
     }
     function load() {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
         try {
             var thing = JSON.parse((_a = LZString.decompressFromBase64(localStorage.getItem("savecode"))) !== null && _a !== void 0 ? _a : "");
         }
-        catch (_3) {
+        catch (_4) {
             alert("Your save code is corrupted!");
             prompt("Your save code will be outputted here:", (_b = localStorage.getItem("savecode")) !== null && _b !== void 0 ? _b : "");
             alert("Your game will be reset now");
             reset();
         }
-        Game.shapes = (_c = thing.shapes) !== null && _c !== void 0 ? _c : 0;
-        Game.totalShapesEarned = (_d = thing.totalShapesEarned) !== null && _d !== void 0 ? _d : 0;
-        Game.totalHighersEarned = (_e = thing.totalHighersEarned) !== null && _e !== void 0 ? _e : 0;
-        Game.clicks = (_f = thing.clicks) !== null && _f !== void 0 ? _f : 0;
-        Game.botsBought["cursor"] = (_g = thing.cursors) !== null && _g !== void 0 ? _g : 0;
-        Game.botsBought["ruler"] = (_h = thing.rulers) !== null && _h !== void 0 ? _h : 0;
-        Game.botsBought["builder"] = (_j = thing.builders) !== null && _j !== void 0 ? _j : 0;
-        Game.botsBought["factory"] = (_k = thing.factorys) !== null && _k !== void 0 ? _k : 0;
-        Game.botsBought["distrubution"] = (_l = thing.distrubutions) !== null && _l !== void 0 ? _l : 0;
-        Game.botsBought["bank"] = (_m = thing.banks) !== null && _m !== void 0 ? _m : 0;
-        Game.botsBought["polustructor"] = (_o = thing.polystructors) !== null && _o !== void 0 ? _o : 0;
-        Game.botsBought["wizard tower"] = (_p = thing.botsBought["wizard tower"]) !== null && _p !== void 0 ? _p : 0;
-        Game.botsBought["transformer"] = (_q = thing.botsBought["transformer"]) !== null && _q !== void 0 ? _q : 0;
-        Game.name =
-            (_r = thing.name) !== null && _r !== void 0 ? _r : `${get_random(randomfirst)} ${get_random(randomlast)}`;
-        Game.boughtUpgrades = (_s = thing.boughtUpgrades) !== null && _s !== void 0 ? _s : [];
-        Game.secondsSpent = (_t = thing.time) !== null && _t !== void 0 ? _t : 0;
-        Game.usedAutoclicker = (_u = thing.usedAutoclicker) !== null && _u !== void 0 ? _u : false;
-        Game.mouseShapes = (_v = thing.mouseShapes) !== null && _v !== void 0 ? _v : 0;
-        Game.setNameSilkyway = (_w = thing.setNameSilkyway) !== null && _w !== void 0 ? _w : false;
-        Game.shapesEarned = (_x = thing.shapesEarned) !== null && _x !== void 0 ? _x : 0;
-        Game.hacked = (_y = thing.hacked) !== null && _y !== void 0 ? _y : false;
-        Game.acsensions = (_z = thing.acsensions) !== null && _z !== void 0 ? _z : 0;
-        Game.higherPolygons = (_0 = thing.higherPolygons) !== null && _0 !== void 0 ? _0 : 0;
-        Game.gottenAscensionUpgrades = (_1 = thing.gottenAscensionUpgrades) !== null && _1 !== void 0 ? _1 : [];
-        Game.gottenAchievements = (_2 = thing.gottenAchievements) !== null && _2 !== void 0 ? _2 : [];
+        try {
+            Game.shapes = (_c = thing.shapes) !== null && _c !== void 0 ? _c : 0;
+            Game.totalShapesEarned = (_d = thing.totalShapesEarned) !== null && _d !== void 0 ? _d : 0;
+            Game.totalHighersEarned = (_e = thing.totalHighersEarned) !== null && _e !== void 0 ? _e : 0;
+            Game.clicks = (_f = thing.clicks) !== null && _f !== void 0 ? _f : 0;
+            Game.botsBought["cursor"] = (_g = thing.cursors) !== null && _g !== void 0 ? _g : 0;
+            Game.botsBought["ruler"] = (_h = thing.rulers) !== null && _h !== void 0 ? _h : 0;
+            Game.botsBought["builder"] = (_j = thing.builders) !== null && _j !== void 0 ? _j : 0;
+            Game.botsBought["factory"] = (_k = thing.factorys) !== null && _k !== void 0 ? _k : 0;
+            Game.botsBought["distrubution"] = (_l = thing.distrubutions) !== null && _l !== void 0 ? _l : 0;
+            Game.botsBought["bank"] = (_m = thing.banks) !== null && _m !== void 0 ? _m : 0;
+            Game.botsBought["polustructor"] = (_o = thing.polystructors) !== null && _o !== void 0 ? _o : 0;
+            Game.botsBought["wizard tower"] = (_p = thing.botsBought["wizard tower"]) !== null && _p !== void 0 ? _p : 0;
+            Game.botsBought["transformer"] = (_q = thing.botsBought["transformer"]) !== null && _q !== void 0 ? _q : 0;
+            Game.name =
+                (_r = thing.name) !== null && _r !== void 0 ? _r : `${get_random(randomfirst)} ${get_random(randomlast)}`;
+            Game.boughtUpgrades = (_s = thing.boughtUpgrades) !== null && _s !== void 0 ? _s : [];
+            Game.secondsSpent = (_t = thing.time) !== null && _t !== void 0 ? _t : 0;
+            Game.usedAutoclicker = (_u = thing.usedAutoclicker) !== null && _u !== void 0 ? _u : false;
+            Game.mouseShapes = (_v = thing.mouseShapes) !== null && _v !== void 0 ? _v : 0;
+            Game.setNameSilkyway = (_w = thing.setNameSilkyway) !== null && _w !== void 0 ? _w : false;
+            Game.shapesEarned = (_x = thing.shapesEarned) !== null && _x !== void 0 ? _x : 0;
+            Game.hacked = (_y = thing.hacked) !== null && _y !== void 0 ? _y : false;
+            Game.acsensions = (_z = thing.acsensions) !== null && _z !== void 0 ? _z : 0;
+            Game.higherPolygons = (_0 = thing.higherPolygons) !== null && _0 !== void 0 ? _0 : 0;
+            Game.gottenAscensionUpgrades = (_1 = thing.gottenAscensionUpgrades) !== null && _1 !== void 0 ? _1 : [];
+            Game.gottenAchievements = (_2 = thing.gottenAchievements) !== null && _2 !== void 0 ? _2 : [];
+        }
+        catch (_5) {
+            alert("Your save code is corrupted!");
+            prompt("Your save code will be outputted here:", (_3 = localStorage.getItem("savecode")) !== null && _3 !== void 0 ? _3 : "");
+            alert("Your game will be reset now");
+            reset();
+        }
         try {
             new f("#nameSelector").setHtml(`<strong>${HtmlEncode(Game.name)}</strong>'s shape empire`);
         }
-        catch (_4) { }
+        catch (_6) { }
         try {
             Game.updateBots();
         }
-        catch (_5) { }
+        catch (_7) { }
     }
     function reset() {
         localStorage.removeItem("savecode");
