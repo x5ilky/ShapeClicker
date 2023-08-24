@@ -10,10 +10,9 @@
 </head>
 <body>
     <script src="jquery.js" defer></script>
-    <script src="fc.js" defer></script>
     <script>
         //Using this to reload cache because browsers like to cache things way too much.
-        document.write(`<script src="script.js?=${Math.floor(Math.random() * 10000)}" defer>\<\/script\>`)
+        document.write(`<script type="module" src="script.mjs?=${Math.floor(Math.random() * 10000)}" defer>\<\/script\>`)
     </script>
     
     <div id="topbar">
@@ -38,19 +37,19 @@
     </div>
     <div id="clickdiv">
         <div id="cheating" style="display: none">
-            <button onclick="Game.shapes+=10">+10 Shapes</button>
-            <button onclick="Game.shapes+=100">+100 Shapes</button>
-            <button onclick="Game.shapes+=1000">+1000 Shapes</button>
-            <button onclick="Game.shapes+=1000000">+1000000 Shapes</button>
-            <button onclick="Game.shapes+=1000000000">+1 Billion Shapes</button>
-            <button onclick="Game.shapes+=1000000000000">+1 Trillion Shapes</button>
-            <button onclick="Game.shapes+=1000000000000000">+1 Quadrillion Shapes</button>
-            <button onclick="Game.shapes*=10">*10 Shapes</button>
-            <button onclick="Game.shapes*=1000">*1000 Shapes</button>
-            <button onclick="Game.shapes/=10">/10 Shapes</button>
-            <button onclick="Game.shapes/=1000">/1000 Shapes</button>
+            <button id="h1" >+10 Shapes</button>
+            <button id="h2">+100 Shapes</button>
+            <button id="h3">+1000 Shapes</button>
+            <button id="h4">+1000000 Shapes</button>
+            <button id="h5">+1 Billion Shapes</button>
+            <button id="h6">+1 Trillion Shapes</button>
+            <button id="h7">+1 Quadrillion Shapes</button>
+            <button id="h8">*10 Shapes</button>
+            <button id="h9">*1000 Shapes</button>
+            <button id="h10">/10 Shapes</button>
+            <button id="h11">/1000 Shapes</button>
             
-            <button onclick="Game.shapes = 0">shapes = 0</button>
+            <button id="h12">shapes = 0</button>
         </div>
         <div id="alert">
             Game Saved!
@@ -127,7 +126,7 @@
 
     <div id="iediv">We don't support Internet Explorer<br>Please Use Firefox or Chrome or anything that supports Javascript ES6</div>
     <div id="loadingdiv">Loading...<br><span style="font-size: 1rem; position: absolute; top: 10vh;">If this is going on for a while you need to check if your javascript is on and if it is then its probably an error.</span>
-        <span onclick="reset()" style="position: absolute; font-size: 1rem; bottom: 1rem; left: 1rem;">
+        <span id="reset" style="position: absolute; font-size: 1rem; bottom: 1rem; left: 1rem;">
             Reset File
         </span>
     </div>

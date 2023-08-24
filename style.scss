@@ -238,8 +238,14 @@ body {
 	display: flex;
 	position: relative;
 	align-items: center;
-	padding-left: 1rem;
+	border: 0.9rem solid black;
+	border-left: 0.9rem solid black;
 	font-size: 1.2rem;
+	transition: all 0.25s;
+
+	&:hover {
+		border-left: 0.9rem solid rgb(255, 255, 255);
+	}
 }
 
 #auto,
@@ -667,6 +673,18 @@ h1 {
 }
 .acmt-secret {
 	color: rgb(167, 167, 255);
+}
+.bot-disabled {
+	display: none !important;
+}
+.bot-greyed {
+	&::after {
+		position: absolute;
+		content: '';
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+	}
 }
 
 #achievementsslide {
